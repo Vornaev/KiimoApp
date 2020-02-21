@@ -1,0 +1,99 @@
+{
+  "project_info": {
+    "project_number": "917260238004",
+    "firebase_url": "https://kiimomaps.firebaseio.com",
+    "project_id": "kiimomaps",
+    "storage_bucket": "kiimomaps.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:917260238004:android:f178985aaa3ffdc3",
+        "android_client_info": {
+          "package_name": "org.kiimo.me"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "917260238004-5la6ksgkvestgbd7u9cei7s21i7l64af.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "org.kiimo.me",
+            "certificate_hash": "5e0473e59b8327e4300a9d3c2d7937a34c14fd50"
+          }
+        },
+        {
+          "client_id": "917260238004-bej1g99rb69vh1ju65d7ifkhl0jrpdtm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "org.kiimo.me",
+            "certificate_hash": "22feac1487ea1cb4fa7877ec7065a00f734b31f9"
+          }
+        },
+        {
+          "client_id": "917260238004-gejrn72aea0di4n9tnqivmkvrd56ek65.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAa6RHF0TLUDVn2hiJC9h_QUKZ1JBTKDwc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "917260238004-gejrn72aea0di4n9tnqivmkvrd56ek65.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "917260238004-8qt5n20trbpaaqgibnpvqdrfu03bl8kp.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "org.kiimo.me"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:917260238004:android:848bffa66108b4ea61ebe1",
+        "android_client_info": {
+          "package_name": "org.kiimo.test"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "917260238004-gejrn72aea0di4n9tnqivmkvrd56ek65.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAa6RHF0TLUDVn2hiJC9h_QUKZ1JBTKDwc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "917260238004-gejrn72aea0di4n9tnqivmkvrd56ek65.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "917260238004-8qt5n20trbpaaqgibnpvqdrfu03bl8kp.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "org.kiimo.me"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

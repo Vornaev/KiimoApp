@@ -1,0 +1,136 @@
+<resources>
+    <string name="default_notification_channel_id" translatable="false">fcm_kiimo_channel</string>
+
+    <!--    <string name="app_name">Kiimo</string>-->
+    <string name="image">Image</string>
+    <string name="activity_initial_continue">Continue</string>
+    <string name="general_error_no_internet">no network please try again later</string>
+    <string name="push_a_button_get_evertying_deliver_now">Push a button. Get evertying \n delivered
+        <b>Now.</b>
+    </string>
+    <string name="image_view_content_description">content description</string>
+    <string name="enter_your_phone_number">Enter your phone number</string>
+    <string name="we_need_your_phone_number_description">We need your
+        phone number so we can give you updates on your moves.Valid format: +3897*******
+    </string>
+    <string name="phone_number">Phone Number</string>
+    <string name="send_code">Send Code</string>
+    <string name="general_error_message">error occurred</string>
+    <string name="general_error_title">error</string>
+    <string name="general_success_title">success</string>
+    <string name="general_error_button">Ok</string>
+    <string name="general_cancel_button">cancel</string>
+    <string name="activitty_verifaction_code_title">Code</string>
+    <string name="enter_the_code_we_send_you">Enter the 4 digit code that you received on sms</string>
+    <string name="register_enter_code_hint">Enter code</string>
+    <string name="first_name_hint">First Name*</string>
+    <string name="last_name">Last Name*</string>
+    <string name="email">Email*</string>
+    <string name="phone_number_hint">Phone Number*</string>
+    <string name="i_want_to_receive_updates">I want to receive updates</string>
+    <string name="i_agree_to_terms_and_conditons">I agree to terms and conditons</string>
+    <string name="title_activity_kiimo_main_navigation">KiimoMainNavigationActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_home">Home</string>
+    <string name="menu_gallery">Gallery</string>
+    <string name="menu_slideshow">Slideshow</string>
+    <string name="menu_tools">Tools</string>
+    <string name="menu_share">Share</string>
+    <string name="menu_send">Send</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="logout">Logout</string>
+    <string name="name">Name</string>
+    <string name="password">Password</string>
+    <string name="my_profile">My Profile</string>
+
+    <string name="dialog_delivery">Delivery</string>
+    <string name="dialog_alert">Alert</string>
+
+    <string name="dialog_accept">Accept</string>
+    <string name="dialog_decline">Decline</string>
+    <string name="dialog_end">End</string>
+    <string name="dialog_confirm">Confirm</string>
+
+    <string name="potential_earnings">Potential earnings:</string>
+    <string name="package_size">Package size:</string>
+    <string name="payment_method">Payment method:</string>
+    <string name="small">Small</string>
+    <string name="cash_title">Cash</string>
+
+    <string name="price_breakdown">Price breakdown</string>
+    <string name="payment_cash">(Payment in cash)</string>
+    <string name="base_fare">- Base fare</string>
+    <string name="total">Total</string>
+    <string name="you_receive">You receive</string>
+    <string name="have_great_day_message">Have a great day, deliver more and earn more while you walk!"</string>
+
+    <string name="enter_five_digit_code">Enter the five digit code</string>
+    <string name="you_have_entered">You have entered</string>
+    <string name="digits">digits</string>
+
+    <string name="no_data_for">No data for</string>
+    <string name="reset_to_default">Reset to default</string>
+    <!-- content descriptions -->
+    <string name="arrow_back_content_description">Back Arrow</string>
+    <string name="profile_content_description">Profile</string>
+    <string name="online_content_description">Online</string>
+    <string name="my_location_content_description">My locationModel</string>
+
+    <string name="pin_pick_up_content_description">Pin Pick Up</string>
+    <string name="pin_drop_off_content_description">Pin Drop Off</string>
+    <string name="potential_earning_content_description">Potential Earnings</string>
+    <string name="package_size_content_description">Package Size</string>
+    <string name="cash_content_description">Cash</string>
+
+    <string name="delivery_image_content_description">Delivery Image</string>
+
+    <string name="foot_content_description">Foot</string>
+    <string name="scooter_content_description">Scooter</string>
+    <string name="bicycle_content_description">Bicycle</string>
+    <string name="car_content_description">Car</string>
+
+    <string name="google_maps_key">AIzaSyDyltO1r4D2n6teXeF90T_TC4MXz-tY4es</string>
+    <string name="field_is_required">field is required</string>
+    <string name="houne_number_hint">House Number*</string>
+    <string name="zip_cide_hint">Zip Code*</string>
+    <string name="register_place_hint">Place*</string>
+    <string name="county_code_hint">Country Code*</string>
+    <string name="street_hint">Street*</string>
+
+    <string name="confirm_pick_up">Confirm pick-up</string>
+    <string name="confirm_drop_off">Confirm drop off</string>
+    <string name="invalid_code">Invalid code</string>
+    <string name="confirm_damage">I confirm that the package is not damaged</string>
+    <string name="finish_delivery">Finish delivery</string>
+
+    <string name="kilometers">Kilometers</string>
+    <string name="minutes">Minutes</string>
+    <string name="continue_pickup">Continue</string>
+    <string name="confirm_sender_route">Confirm</string>
+    <string name="choose_destination_sender">Choose destination</string>
+    <string name="my_account_menu_item">My Account</string>
+    <string name="menu_profile_fragment_tag">menuProfileFragment</string>
+    <string name="my_delivers_menu_item">My Deliveries</string>
+    <string name="payment_menu_item">Payments</string>
+    <string name="help_menu_item">Help</string>
+    <string name="faqs_menu_item">FAQs</string>
+    <string name="choose_your_preferred_payment_type">Choose your preferred payment method:</string>
+    <string name="cash">Cash</string>
+    <string name="credit_card_title">Credit Card</string>
+    <string name="first_and_last_name">First and Last Name</string>
+    <string name="cardholder">Cardholder</string>
+    <string name="payment_toolber_title">Payment</string>
+    <string name="save_changes">Save</string>
+    <string name="my_orders_title">My Orders</string>
+    <string name="summuty_title">Summary</string>
+    <string name="i_want_to_send_button">I want to send</string>
+    <string name="carrier_not_found">Carrier not found</string>
+</resources>

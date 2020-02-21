@@ -1,0 +1,153 @@
+package org.kiimo.me.service.network.client
+
+import io.reactivex.Observable
+import org.kiimo.me.main.sender.model.request.CreateDeliveryRequest
+import org.kiimo.me.main.sender.model.request.PayRequest
+import org.kiimo.me.main.sender.model.request.pay.PayResponse
+import org.kiimo.me.main.sender.model.response.SenderCreateDeliveryResponse
+import org.kiimo.me.service.network.client.HttpHeaders.ContentTypeHeader
+
+
+import org.kiimo.me.models.DeliveryType
+import org.kiimo.me.models.DestinationData
+import org.kiimo.me.models.DeviceToken
+import org.kiimo.me.models.*
+import org.kiimo.me.models.delivery.CalculateDeliveryRequest
+import org.kiimo.me.models.delivery.CalculateDeliveryResponse
+import org.kiimo.me.models.payment.PreferredPayResponse
+import org.kiimo.me.models.payment.PreferredPaymentUser
+import org.kiimo.me.register.model.SmsValidationRequest
+import org.kiimo.me.register.model.SmsValidationResponse
+import org.kiimo.me.register.model.UserRegisterResponse
+import org.kiimo.me.register.model.UserSmsCodeRequest
+import org.kiimo.me.service.network.client.HttpHeaders.AuthorizationHeader
+import org.kiimo.me.service.network.client.HttpHeaders.jsonHeader
+import retrofit2.Response
+import retrofit2.http.*
+
+object HttpHeaders {
+
+    const val AuthorizationHeader = "Authorization"
+    const val ContentTypeHeader = "Content-Type"
+    const val jsonHeader = "application/json"
+}
+
+interface KiimoDeliverHttpClient {
+
+    @POST("api/sms/send-code")
+    fun sendCode(@Header(AuthorizationHeader) userID: String, @Body smsCodeRequest: UserSmsCodeRequest): Observable<UserRegisterResponse>
+
+
+    @POST("api/sms/validate-code")
+    fun validateSmsCode(@Header(AuthorizationHeader) userID: String, @Body smsCodeRequest: SmsValidationRequest): Observable<SmsValidationResponse>
+
+    @GET("api/self")
+    fun getSelf(
+        @Header("Authorization") token: String
+    ): Observable<Self>
+
+
+    @POST("api/upload")
+    fun uploadPhotoApi(): Observable<String>
+
+    //<<<<<<< HEAD
+//    fun getSelf(@Header(AuthorizationHeader) token: String): Observable<Response<Void>>
+//
+//    @PUT("api/self/location")
+//    fun putLocation(@Header(AuthorizationHeader) token: String, @Body location: Location): Observable<Response<Void>>
+//
+//    @PUT("api/self/delivery-type")
+//    fun putDeliveryType(@Header(AuthorizationHeader) token: String, @Body deliveryType: DeliveryType): Observable<Response<Void>>
+//
+//    @PUT("api/self/deviceToken")
+//    fun putDeviceToken(@Header(AuthorizationHeader) token: String, @Body deviceToken: DeviceToken): Observable<Response<Void>>
+//
+    @POST("api/deliveries/calculate")
+    fun deliveryCalculate(@Header(AuthorizationHeader) token: String, @Body delivryCalculateRequest: CalculateDeliveryRequest): Observable<CalculateDeliveryResponse>
+//
+//    @POST("api/deliveries/{id}/accept")
+//    fun acceptDelivery(token: String, @Path("id") deliveryID: String): Observable<AcceptDeliveryResponse>
+//
+//    @POST("api/deliveries/pickup")
+//    fun pickUpDelivery(token: String): Observable<PickUpDeliveryResponse>
+//
+//    @POST("api/deliveries/drop-off")
+//    fun dropOffDelivery(token: String): Observable<DropOffDeliveryResponse>
+//=======
+
+
+    @PUT("api/self/location")
+    fun putLocation(
+        @Header(ContentTypeHeader) contentType: String = jsonHeader,
+        @Header(AuthorizationHeader) token: String,
+        @Body locationRequest: LocationRequest
+    ): Observable<Response<Void>>
+
+    @PUT("api/self/delivery-type")
+    fun putDeliveryType(
+        @Header(ContentTypeHeader) contentType: String = jsonHeader,
+        @Header(AuthorizationHeader) token: String,
+        @Body deliveryType: DeliveryType
+    ): Observable<Response<Void>>
+
+    @PUT("api/self/deviceToken")
+    fun putDeviceToken(
+        @Header(ContentTypeHeader) contentType: String = jsonHeader,
+        @Header(AuthorizationHeader) token: String,
+        @Body deviceToken: DeviceToken
+    ): Observable<Response<Void>>
+
+    @PUT("api/self/status")
+    fun putStatus(
+        @Header(ContentTypeHeader) contentType: String,
+        @Header(AuthorizationHeader) token: String,
+        @Body status: Status
+    ): Observable<StatusResponse?>
+
+    @POST("api/deliveries/{id}/accept")
+    fun acceptDelivery(
+        @Header(AuthorizationHeader) token: String,
+        @Path("id") id: String
+    ): Observable<Response<Void>>
+
+    @POST("api/deliveries/pick-up")
+    fun pickUp(
+        @Header(AuthorizationHeader) token: String
+    ): Observable<Response<Void>>
+
+    @POST("api/deliveries/validate-code")
+    fun validateCode(
+        @Header(AuthorizationHeader) token: String,
+        @Body code: ValidateCodeRequest
+    ): Observable<ValidateCodeResponse?>
+
+    @POST("api/deliveries/drop-off")
+    fun dropOff(
+        @Header(AuthorizationHeader) token: String,
+        @Body dropOffRequest: DropOffRequest
+    ): Observable<DropOffResponse?>
+
+
+    @GET
+    fun getDestinationData(@Url url: String): Observable<DestinationData?>
+
+    @POST("api/deliveries")
+    fun createPackageForDelivery(@Header(AuthorizationHeader) token: String, @Body request: CreateDeliveryRequest): Observable<SenderCreateDeliveryResponse>
+
+
+    @POST("api/deliveries/pay")
+    fun payForPackage(
+        @Header(ContentTypeHeader) contentType: String = jsonHeader, @Header(
+            AuthorizationHeader
+        ) token: String, @Body payRequest: PayRequest
+    ): Observable<PayResponse>
+
+
+    @POST("api/upload")
+    fun uploadImageToServer(@Header(AuthorizationHeader) token: String, @Body uploadPhotoRequest: UploadPhotoRequest): Observable<UploadImageResponse>
+
+
+    @POST("api/self/preferred-payment")
+    fun savePreferredPayment(@Header(AuthorizationHeader) token: String, @Body preferedPay: PreferredPaymentUser): Observable<PreferredPayResponse>
+
+}

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <include
+            android:id="@+id/layoutRegisterUserStreet"
+            layout="@layout/layout_edit_field_with_validation"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent="0.95" />
+
+    <include
+            android:id="@+id/layoutRegisterUserHouseNumber"
+            layout="@layout/layout_edit_field_with_validation"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/layoutRegisterUserStreet"
+            android:layout_marginTop="@dimen/vertical_spacing_register_fields"
+            app:layout_constraintEnd_toStartOf="@id/layoutRegisterProfileZipCode"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintWidth_percent="0.45" />
+
+
+    <include
+            android:id="@+id/layoutRegisterProfileZipCode"
+            app:layout_constraintTop_toBottomOf="@id/layoutRegisterUserStreet"
+            layout="@layout/layout_edit_field_with_validation"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/vertical_spacing_register_fields"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/layoutRegisterUserHouseNumber"
+            app:layout_constraintWidth_percent="0.45" />
+
+
+    <include
+            android:id="@+id/layoutRegisterProfilePlace"
+            layout="@layout/layout_edit_field_with_validation"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/vertical_spacing_register_fields"
+            app:layout_constraintEnd_toStartOf="@id/layoutRegisterProfileZipCode"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/layoutRegisterUserHouseNumber"
+            app:layout_constraintWidth_percent="0.45" />
+
+
+    <include
+            android:id="@+id/layoutRegisterProfileCountryCode"
+            layout="@layout/layout_edit_field_with_validation"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/vertical_spacing_register_fields"
+            android:inputType="text|number"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/layoutRegisterUserHouseNumber"
+            app:layout_constraintTop_toBottomOf="@id/layoutRegisterProfileZipCode"
+            app:layout_constraintWidth_percent="0.45" />
+
+    <EditText
+            android:id="@+id/activityRegisterProfileVerificationField"
+            style="@style/EditTextRegisterInputStyles"
+            android:layout_width="0dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="14dp"
+            android:focusable="false"
+            android:hint="VERFICATION ID*"
+            android:inputType="text|number"
+            android:padding="0dp"
+            android:textAlignment="center"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/layoutRegisterProfilePlace"
+            app:layout_constraintWidth_percent="0.9" />
+
+    <ImageView
+            android:id="@+id/activityRegisterProfileVerificationImgLogo"
+            android:layout_width="23dp"
+            android:layout_height="23dp"
+            android:src="@drawable/ic_verifiction_upload"
+            app:layout_constraintBottom_toBottomOf="@id/activityRegisterProfileVerificationField"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.26"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/activityRegisterProfileVerificationField" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

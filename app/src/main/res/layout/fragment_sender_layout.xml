@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:bind="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
+
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+                name="isShowMapRoute"
+                type="boolean" />
+
+        <variable
+                name="isPickUpIntearact"
+                type="boolean" />
+
+        <variable
+                name="isButtonEnabled"
+                type="boolean" />
+
+        <variable
+                name="notificationPickUPReceived"
+                type="boolean" />
+
+        <variable
+                name="notificationCodeReceived"
+                type="boolean" />
+
+        <variable
+                name="model"
+                type="org.kiimo.me.main.menu.mainViewModel.MainMenuViewModel.SenderProperties" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+        <ImageView
+                android:id="@+id/imageViewProfileDrawer"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginStart="@dimen/margin_medium_large"
+                android:layout_marginTop="@dimen/margin_medium_large"
+                android:elevation="10dp"
+                android:src="@drawable/ic_user_profile"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        <fragment
+                android:id="@+id/senderMap"
+                android:name="com.google.android.gms.maps.SupportMapFragment"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toTopOf="@id/pin_layout_constraint_layout"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:context=".main.sender.SenderKiimoActivity" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/pin_layout_constraint_layout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:paddingBottom="4dp"
+                android:visibility="@{notificationPickUPReceived ? View.GONE: View.VISIBLE}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
+
+            <include
+                    android:id="@+id/layout_pin"
+                    layout="@layout/layout_pin"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/margin_medium"
+                    android:visibility="@{isPickUpIntearact ? View.GONE : View.VISIBLE}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            <include
+                    android:id="@+id/initialSenderLayout"
+                    layout="@layout/layout_initial_sender_bottom_view"
+                    android:visibility="@{isPickUpIntearact ? View.VISIBLE : View.GONE}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    bind:senderPickUpAddress="@{model.pickUpAddressPoint.address}" />
+
+            <Button
+                    android:id="@+id/confirm_button"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/big_button_height"
+                    android:layout_gravity="bottom"
+                    android:layout_margin="@dimen/margin_small"
+                    android:background="@drawable/button_cornered_background_orange"
+                    android:enabled="@{isButtonEnabled}"
+                    android:paddingStart="@dimen/margin_medium"
+                    android:paddingEnd="@dimen/margin_medium"
+                    android:text="@string/confirm_sender_route"
+                    android:textAllCaps="false"
+                    android:textColor="@android:color/white"
+                    android:visibility="@{isPickUpIntearact ? View.GONE : View.VISIBLE}"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/layout_pin" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/notificationDropOffLayout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@color/colorWhite"
+                android:paddingBottom="12dp"
+                android:visibility="@{notificationPickUPReceived ? View.VISIBLE : View.GONE}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
+
+
+            <ImageView
+                    android:id="@+id/imageViewCarrier"
+                    android:layout_width="55dp"
+                    android:layout_height="55dp"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginTop="8dp"
+                    android:src="@drawable/ic_user_profile"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                    android:id="@+id/carrierName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="3dp"
+                    android:fontFamily="@font/roboto_bold"
+                    android:text="User"
+                    android:textSize="13sp"
+                    app:layout_constraintStart_toEndOf="@id/imageViewCarrier"
+                    app:layout_constraintTop_toTopOf="@id/imageViewCarrier" />
+
+            <TextView
+                    android:id="@+id/carrierNameDescription"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="2dp"
+                    android:fontFamily="@font/roboto_regular"
+                    android:text="User is on his way"
+                    android:textSize="11sp"
+                    app:layout_constraintStart_toEndOf="@id/imageViewCarrier"
+                    app:layout_constraintTop_toBottomOf="@id/carrierName" />
+
+
+            <include
+                    android:id="@+id/pinLayoutDropOffPacakgeCarrier"
+                    layout="@layout/layout_pin"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/margin_medium"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/imageViewCarrier" />
+
+
+            <TextView
+                    android:id="@+id/carrierPickUpCodeTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginTop="@dimen/margin_medium"
+                    android:text="Pickup Code:"
+                    android:visibility="@{notificationCodeReceived ? View.VISIBLE : View.GONE}"
+                    app:layout_constraintEnd_toStartOf="@id/carrierPickUpCodeValue"
+                    app:layout_constraintHorizontal_chainStyle="packed"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/pinLayoutDropOffPacakgeCarrier" />
+
+            <TextView
+                    android:id="@+id/carrierPickUpCodeValue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/margin_medium"
+                    android:text="45687"
+                    android:fontFamily="@font/roboto_medium"
+                    android:textSize="15sp"
+                    android:visibility="@{notificationCodeReceived ? View.VISIBLE : View.GONE}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/carrierPickUpCodeTitle"
+                    app:layout_constraintTop_toBottomOf="@id/pinLayoutDropOffPacakgeCarrier" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

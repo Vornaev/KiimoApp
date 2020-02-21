@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/nav_header_height"
+        android:background="@color/colorWhite"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="@dimen/margin_medium"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark">
+
+    <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="60dp"
+            android:layout_height="65dp"
+            android:layout_gravity="center_horizontal"
+            android:contentDescription="@string/nav_header_desc"
+            android:scaleType="centerCrop"
+            app:srcCompat="@drawable/ic_user_profile" />
+
+    <TextView
+            android:id="@+id/userNameHeader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center_horizontal"
+            android:paddingTop="@dimen/nav_header_vertical_spacing"
+            android:text=""
+            android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+            android:textSize="16sp" />
+
+    <Button
+            android:id="@+id/buttonChangeAccountTypeUser"
+            android:layout_width="140dp"
+            android:layout_height="27dp"
+            android:padding="8dp"
+            android:layout_marginTop="@dimen/margin_medium_large"
+            android:background="@drawable/button_cornered_background_orange"
+            android:text="i want to deliver"
+            android:textAllCaps="true"
+            android:textColor="@color/colorWhite"
+            android:textSize="8sp" />
+
+</LinearLayout>

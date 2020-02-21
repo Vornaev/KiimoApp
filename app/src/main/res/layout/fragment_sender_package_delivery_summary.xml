@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
+
+    <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorWhite"
+                android:orientation="vertical">
+
+
+            <include
+                    android:id="@+id/toolbar"
+                    layout="@layout/toolbar_back_button_title" />
+
+            <!--        <ImageView-->
+            <!--                android:id="@+id/activity_register_choose_type_back_button"-->
+            <!--                android:layout_width="@dimen/general_icon_size"-->
+            <!--                android:layout_height="@dimen/general_icon_size"-->
+            <!--                android:layout_marginStart="@dimen/horizontal_margin_large"-->
+            <!--                android:layout_marginTop="@dimen/margin_medium"-->
+            <!--                android:scaleType="centerCrop"-->
+            <!--                android:adjustViewBounds="true"-->
+            <!--                android:padding="7dp"-->
+            <!--                android:src="@drawable/ic_back_arrow"-->
+            <!--                app:layout_constraintStart_toStartOf="parent"-->
+            <!--                app:layout_constraintTop_toTopOf="parent"-->
+            <!--                tools:ignore="ContentDescription" />-->
+
+            <!--        <TextView-->
+            <!--                android:id="@+id/activity_register_choose_type_title"-->
+            <!--                android:layout_width="wrap_content"-->
+            <!--                android:layout_height="0dp"-->
+            <!--                android:gravity="center_vertical"-->
+            <!--                android:text="Register"-->
+            <!--                android:textStyle="bold"-->
+            <!--                android:textAllCaps="true"-->
+            <!--                android:textColor="@color/colorPrimary"-->
+            <!--                app:layout_constraintEnd_toEndOf="parent"-->
+            <!--                app:layout_constraintStart_toStartOf="parent"-->
+            <!--                app:layout_constraintBottom_toBottomOf="@id/activity_register_choose_type_back_button"-->
+            <!--                app:layout_constraintTop_toTopOf="@id/activity_register_choose_type_back_button" />-->
+
+            <ImageView
+                    android:id="@+id/sender_package_summary_image"
+                    android:layout_width="180dp"
+                    android:layout_height="130dp"
+                    android:layout_marginTop="30dp"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/ic_register_handshake"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.1"
+                    tools:ignore="ContentDescription" />
+
+
+            <include
+                    android:id="@+id/sender_package_summary_pin"
+                    layout="@layout/layout_pin"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_medium_large"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/sender_package_summary_image"
+                    app:layout_constraintWidth_percent="0.85" />
+
+
+            <TextView
+                    android:id="@+id/priceDeliveryPackage"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_medium_large"
+                    android:gravity="center"
+                    android:text="0"
+                    android:textAllCaps="true"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    app:layout_constraintTop_toBottomOf="@id/sender_package_summary_pin" />
+
+            <TextView
+                    android:id="@+id/summaryCreatePackagePaymentDateCreated"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_medium_large"
+                    android:background="@color/mediumLightGray"
+                    android:padding="@dimen/padding_text_view_background"
+                    app:layout_constraintTop_toBottomOf="@id/priceDeliveryPackage" />
+
+            <TextView
+                    android:id="@+id/summaryCreatePackageTextViewPaymentType"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorLightGray"
+                    android:padding="@dimen/padding_text_view_background"
+                    app:layout_constraintTop_toBottomOf="@id/summaryCreatePackagePaymentDateCreated" />
+
+
+            <Button
+                    android:id="@+id/createPackgeButtonConfirm"
+                    style="@style/ButtonStyleDefaultOrange"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/big_button_height"
+                    android:layout_marginBottom="@dimen/margin_medium_large"
+                    android:text="@string/confirm_sender_route"
+                    android:layout_marginTop="@dimen/margin_medium_large"
+                    app:layout_constraintTop_toBottomOf="@id/summaryCreatePackageTextViewPaymentType"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintWidth_percent="0.9" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+</layout>

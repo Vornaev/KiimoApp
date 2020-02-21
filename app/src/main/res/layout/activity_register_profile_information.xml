@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fillViewport="true">
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:context=".register.RegisterProfileSenderInformationActivity">
+
+<!--        <EditText-->
+<!--                android:id="@+id/activityRegisterProfileFirstNameEditText"-->
+<!--                style="@style/EditTextRegisterInputStyles"-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginTop="@dimen/margin_large"-->
+<!--                android:hint="@string/first_name"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toTopOf="parent"-->
+<!--                app:layout_constraintWidth_percent="0.8" />-->
+
+        <include
+                android:id="@+id/layoutRegisterUserFirstName"
+                layout="@layout/layout_edit_field_with_validation"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_large"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintWidth_percent="@dimen/width_percent_register" />
+
+
+            <include
+                    android:id="@+id/layoutRegisterUserLastName"
+                    layout="@layout/layout_edit_field_with_validation"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_medium"
+                    app:layout_constraintTop_toBottomOf="@id/layoutRegisterUserFirstName"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintWidth_percent="@dimen/width_percent_register" />
+
+
+        <include
+                android:id="@+id/layoutRegisterUserEmail"
+                layout="@layout/layout_edit_field_with_validation"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/vertical_spacing_register_fields"
+                app:layout_constraintTop_toBottomOf="@id/layoutRegisterUserLastName"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintWidth_percent="@dimen/width_percent_register" />
+
+        <include
+                android:id="@+id/registerDeliverLayout"
+                layout="@layout/layout_register_deliver_account"
+                android:layout_width="0dp"
+                android:layout_marginTop="@dimen/vertical_spacing_register_fields"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/layoutRegisterUserEmail"
+                app:layout_constraintWidth_percent="0.9" />
+
+
+        <EditText
+                android:id="@+id/activityRegisterProfileNumberEditText"
+                style="@style/EditTextRegisterInputStyles"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/vertical_spacing_register_fields"
+                android:focusable="false"
+                android:hint="@string/phone_number_hint"
+                android:inputType="phone|number"
+                android:textColor="@color/colorDarkGray"
+                android:textColorHint="@color/colorDarkGray"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/registerDeliverLayout"
+                app:layout_constraintWidth_percent="0.85" />
+
+        <CheckBox
+                android:id="@+id/activityRegisterProfileUpdatesCheckbox"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="30dp"
+                app:layout_constraintStart_toStartOf="@id/activityRegisterProfileNumberEditText"
+                app:layout_constraintTop_toBottomOf="@id/activityRegisterProfileNumberEditText" />
+
+        <TextView
+                android:id="@+id/activityRegisterReceiveUpdatesTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_marginStart="@dimen/margin_small"
+                android:checked="true"
+                android:gravity="center_vertical"
+                android:text="@string/i_agree_to_terms_and_conditons"
+                app:layout_constraintBottom_toBottomOf="@id/activityRegisterProfileUpdatesCheckbox"
+                app:layout_constraintStart_toEndOf="@id/activityRegisterProfileUpdatesCheckbox"
+                app:layout_constraintTop_toTopOf="@id/activityRegisterProfileUpdatesCheckbox" />
+
+
+        <Button
+                android:id="@+id/activityRegisterProfileNextButton"
+                style="@style/ButtonStyleDefaultOrange"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/large_button_size"
+                android:layout_marginTop="@dimen/vertical_margin_large"
+                android:layout_marginBottom="@dimen/margin_extra_small"
+                android:text="@string/activity_initial_continue"
+                android:visibility="visible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/activityRegisterReceiveUpdatesTextView"
+                app:layout_constraintWidth_percent="0.85" />
+
+        <include
+                layout="@layout/view_generic_scroling_layout"
+                android:layout_width="match_parent"
+                android:layout_height="90dp"
+                app:layout_constraintTop_toBottomOf="@id/activityRegisterProfileNextButton" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.Toolbar
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_height="wrap_content"
+        app:contentInsetStart="0dp"
+        android:layout_width="match_parent">
+    <include layout="@layout/toolbar_generic_layout"/>
+</androidx.appcompat.widget.Toolbar>

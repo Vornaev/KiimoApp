@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+                name="senderPickUpAddress"
+                type="String" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        <ImageView
+                android:layout_width="30dp"
+                android:layout_height="25dp"
+                android:layout_marginStart="4dp"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_pin_pick_up"
+                app:layout_constraintBottom_toBottomOf="@id/senderInitialPickUpAddress"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/senderInitialPickUpAddress" />
+
+        <TextView
+                android:id="@+id/senderInitialPickUpAddress"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:drawablePadding="2dp"
+                android:gravity="center"
+                android:text="@{senderPickUpAddress}"
+                android:textSize="@dimen/sender_address_text_size"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintWidth_percent="0.9" />
+
+        <Button
+                android:id="@+id/senderPickUpButton"
+                style="@style/ButtonStyleDefaultOrange"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/big_button_height"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:text="@string/continue_pickup"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/senderInitialPickUpAddress"
+                app:layout_constraintWidth_percent="0.9" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

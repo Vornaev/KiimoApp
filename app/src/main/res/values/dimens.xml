@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="vertical_margin_large">32dp</dimen>
+    <dimen name="horizontal_margin_medium">24dp</dimen>
+    <dimen name="horizontal_margin_large">36dp</dimen>
+    <dimen name="margin_extra_small">4dp</dimen>
+    <dimen name="margin_small">8dp</dimen>
+    <dimen name="margin_medium">16dp</dimen>
+    <dimen name="margin_large">32dp</dimen>
+    <dimen name="margin_extra_large">48dp</dimen>
+    <dimen name="margin_inital_title_huge">100dp</dimen>
+    <dimen name="big_button_height">35dp</dimen>
+    <dimen name="large_button_size">40dp</dimen>
+    <dimen name="font_size_heading">19sp</dimen>
+    <dimen name="font_size_button_large">15sp</dimen>
+    <dimen name="general_icon_size">45dp</dimen>
+    <dimen name="margin_vertical_content_extra_large">110dp</dimen>
+
+    <dimen name="camera_width">20dp</dimen>
+
+    //fonts
+    <dimen name="normalTextSize">14sp</dimen>
+    <dimen name="smallFontSize">13sp</dimen>
+    <dimen name="headerFontSize">15sp</dimen>
+    <dimen name="largeFontSize">16sp</dimen>
+    <dimen name="TitleHeaderFontSize">18sp</dimen>
+    <dimen name="corner_radius_edit_field">25dp</dimen>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="nav_header_vertical_spacing">8dp</dimen>
+    <dimen name="nav_header_height">200dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="margin_medium_large">24dp</dimen>
+    <dimen name="width_percent_register">0.85</dimen>
+    <dimen name="vertical_spacing_register_fields">18dp</dimen>
+
+    <dimen name="marker_size">20dp</dimen>
+    <dimen name="sender_address_text_size">11sp</dimen>
+    <dimen name="padding_text_view_background">12dp</dimen>
+    <dimen name="cash_type_img_size">30dp</dimen>
+
+    <dimen name="createDeliveryImageWidth">300dp</dimen>
+    <dimen name="createDeliveryImageHeight">400dp</dimen>
+
+</resources>

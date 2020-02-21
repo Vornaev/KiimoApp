@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorWhiteOpc"
+        android:fitsSystemWindows="true"
+        tools:context=".inital.InitialActivity">
+
+
+    <TextView
+            android:id="@+id/activityInitialTitleText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/horizontal_margin_large"
+            android:layout_marginTop="@dimen/vertical_margin_large"
+            android:layout_marginEnd="@dimen/horizontal_margin_large"
+            android:gravity="center"
+            android:text="@string/push_a_button_get_evertying_deliver_now"
+            android:textSize="@dimen/font_size_heading"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+            android:id="@+id/activityInitialCenterImage"
+            android:layout_width="match_parent"
+            android:layout_height="260dp"
+            android:layout_marginStart="@dimen/horizontal_margin_medium"
+            android:layout_marginEnd="@dimen/horizontal_margin_medium"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/image"
+            android:scaleType="fitCenter"
+            android:src="@drawable/inital_start"
+
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.45" />
+
+    <Button
+            android:id="@+id/activityInitialContinueButton"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/big_button_height"
+            android:layout_marginStart="@dimen/horizontal_margin_large"
+            android:layout_marginEnd="@dimen/horizontal_margin_large"
+            android:background="@drawable/button_cornered_background_orange"
+            android:letterSpacing="0.02"
+            android:text="@string/activity_initial_continue"
+            android:textAllCaps="false"
+            android:textColor="@color/colorWhite"
+            android:textSize="@dimen/font_size_button_large"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.85" />
+
+    <ImageView
+            android:id="@+id/activityInitalKiimoLogoImage"
+            android:layout_width="100dp"
+            android:layout_height="60dp"
+            android:layout_marginEnd="@dimen/horizontal_margin_medium"
+            android:layout_marginBottom="@dimen/vertical_margin_large"
+            android:contentDescription="@string/image"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

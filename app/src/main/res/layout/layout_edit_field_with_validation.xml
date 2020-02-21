@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+
+    <EditText
+            android:id="@+id/EditTextFieldValidation"
+            style="@style/EditTextRegisterInputStyles"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="First Name*"
+
+            android:importantForAutofill="no"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+            android:id="@+id/imageViewValidation"
+            android:layout_width="23dp"
+            android:layout_height="23dp"
+            android:layout_marginEnd="5dp"
+            android:visibility="invisible"
+            android:src="@drawable/ic_field_validation_red"
+            app:layout_constraintBottom_toBottomOf="@id/EditTextFieldValidation"
+            app:layout_constraintEnd_toEndOf="@id/EditTextFieldValidation"
+            app:layout_constraintTop_toTopOf="@id/EditTextFieldValidation"
+            tools:ignore="ContentDescription" />
+
+    <TextView
+            android:id="@+id/textViewFieldRequired"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:layout_marginStart="@dimen/margin_small"
+            android:visibility="invisible"
+            android:text="@string/field_is_required"
+            android:textSize="11sp"
+            app:layout_constraintTop_toBottomOf="@id/EditTextFieldValidation" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

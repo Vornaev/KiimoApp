@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/colorWhite"
+            android:orientation="vertical">
+
+        <include
+                android:id="@+id/toolbar"
+                layout="@layout/toolbar_back_button_title" />
+
+
+        <TextView
+                android:id="@+id/pickUpLocation"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="70dp"
+                android:text="Pick ap at location"
+                android:textAlignment="center"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/toolbar"
+                app:layout_constraintWidth_percent="0.8" />
+
+        <ImageView
+                android:id="@+id/fragmentPaymentImageViewHandshake"
+                android:layout_width="130dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_medium"
+                android:src="@drawable/ic_register_handshake"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/pickUpLocation" />
+
+
+        <TextView
+                android:id="@+id/priceDeliveryPackage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_extra_large"
+                android:gravity="center"
+                android:text="0"
+                android:textAllCaps="true"
+                android:textColor="@color/colorPrimary"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                app:layout_constraintTop_toBottomOf="@id/fragmentPaymentImageViewHandshake" />
+
+        <Button
+                android:id="@+id/payPackgeButtonConfirm"
+                style="@style/ButtonStyleDefaultOrange"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/big_button_height"
+                android:layout_marginBottom="@dimen/margin_medium_large"
+                android:text="@string/confirm_sender_route"
+                android:layout_marginTop="@dimen/margin_medium_large"
+                app:layout_constraintTop_toBottomOf="@id/priceDeliveryPackage"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintWidth_percent="0.8" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

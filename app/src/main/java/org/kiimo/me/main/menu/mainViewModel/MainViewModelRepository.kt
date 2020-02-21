@@ -1,0 +1,355 @@
+package org.kiimo.me.main.menu.mainViewModel
+
+import android.widget.Toast
+import androidx.lifecycle.MutableLiveData
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
+import org.kiimo.me.BuildConfig
+import org.kiimo.me.app.IBaseViewFeatures
+import org.kiimo.me.main.menu.model.GetUserRequestModel
+import org.kiimo.me.main.menu.model.UserProfileInformationResponse
+import org.kiimo.me.main.sender.model.request.CreateDeliveryRequest
+import org.kiimo.me.main.sender.model.request.PayRequest
+import org.kiimo.me.main.sender.model.request.pay.PayResponse
+import org.kiimo.me.main.sender.model.response.SenderCreateDeliveryResponse
+import org.kiimo.me.models.*
+import org.kiimo.me.models.delivery.*
+import org.kiimo.me.models.payment.PreferredPayResponse
+import org.kiimo.me.models.payment.PreferredPaymentUser
+import org.kiimo.me.register.model.*
+import org.kiimo.me.service.network.client.KiimoAppClient
+import org.kiimo.me.service.network.client.KiimoDeliverHttpClient
+import org.kiimo.me.util.AppConstants
+import timber.log.Timber
+import java.util.*
+
+class MainViewModelRepository(
+    private val userClient: KiimoAppClient,
+    private val deliveryClient: KiimoDeliverHttpClient,
+    private val viewFeatures: IBaseViewFeatures
+) {
+
+    private val disposableContainer: CompositeDisposable = CompositeDisposable()
+
+    fun getUser(userProfileLiveData: MutableLiveData<UserProfileInformationResponse>) {
+        disposableContainer.add(userClient.getUserByID(
+            data = GetUserRequestModel(
+                UserRegisterDataRequest(), viewFeatures.getUserToken()
+            )
+        )
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeOn(Schedulers.io()).subscribe(
+                {
+                    userProfileLiveData.postValue(it)
+                }, {
+                    viewFeatures.handleApiError(it)
+                }
+            ))
+    }
+
+    fun calculateDelivery(
+        deliveryCalculateRequest: CalculateDeliveryRequest,
+        calculateDeliveryData: MutableLiveData<CalculateDeliveryResponse>
+    ) {
+        disposableContainer.add(
+            deliveryClient.deliveryCalculate(
+                token = viewFeatures.getUserToken(),
+                delivryCalculateRequest = deliveryCalculateRequest
+            )
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io()).subscribe(
+                    {
+                        calculateDeliveryData.postValue(it)
+                    }, {
+                        viewFeatures.handleApiError(it)
+                    }
+                ))
+    }
+//
+//
+//    fun acceptDelivery(deliveryID: String, acceptLiveData: MutableLiveData<AcceptDeliveryResponse>) {
+//        disposableContainer.add(
+//            deliveryClient.acceptDelivery(
+//                token = viewFeatures.getUserToken(),
+//                deliveryID = deliveryID
+//            )
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribeOn(Schedulers.io()).subscribe(
+//                    {
+//                        acceptLiveData.postValue(it)
+//                    }, {
+//                        viewFeatures.handleApiError(it)
+//                    }
+//                ))
+//    }
+//
+//
+//    fun pickUpDelivery(pickUpLiveData: MutableLiveData<PickUpDeliveryResponse>) {
+//
+//        disposableContainer.add(
+//            deliveryClient.pickUpDelivery(
+//                token = viewFeatures.getUserToken()
+//            )
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribeOn(Schedulers.io()).subscribe(
+//                    {
+//                        pickUpLiveData.postValue(it)
+//                    }, {
+//                        viewFeatures.handleApiError(it)
+//                    }
+//                ))
+//    }
+//
+//    fun dropOffDelivery(dropOffLiveData: MutableLiveData<DropOffDeliveryResponse>) {
+//        disposableContainer.add(
+//            deliveryClient.dropOffDelivery(
+//                token = viewFeatures.getUserToken()
+//            )
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribeOn(Schedulers.io()).subscribe(
+//                    {
+//                        dropOffLiveData.postValue(it)
+//                    }, {
+//                        viewFeatures.handleApiError(it)
+//                    }
+//                ))
+//    }
+
+    fun isValidDeliverer(liveData: MutableLiveData<IsValidDelivererResponse>) {
+
+        disposableContainer.add(
+            userClient.isValidDeliverer(
+                activateUserRequest = ActivateUserRequest(
+                    user = UserRegisterDataRequest(),
+                    userId = viewFeatures.getUserToken()
+                )
+            )
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                    {
+                        liveData.postValue(it)
+                    },
+                    {
+                        viewFeatures.handleApiError(it)
+                    })
+        )
+    }
+
+
+    fun <D, F> reactiveSubsribe(
+        serviceMethod: (token: String, body: F) -> Observable<D>,
+        data: MutableLiveData<D>,
+        token: String,
+        body: F
+    ) {
+
+        disposableContainer.add(
+            serviceMethod.invoke(token, body)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io()).subscribe(
+                    {
+                        data.postValue(it)
+                    },
+                    {
+                        viewFeatures.handleApiError(it)
+                    })
+        )
+    }
+
+
+    fun saveUserDeviceToken() {
+        disposableContainer.add(
+            deliveryClient.putDeviceToken(
+                token = viewFeatures.getUserToken(),
+                deviceToken = viewFeatures.getFcmToken()
+            )
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io()).subscribe(
+                    {
+                        Timber.log(1, "success")
+                    },
+                    {
+                        viewFeatures.handleApiError(it)
+                    })
+        )
+    }
+
+    fun putDeliveryType(deliveryType: DeliveryType) {
+        disposableContainer.add(
+            deliveryClient.putDeliveryType(
+                token = viewFeatures.getUserToken(),
+                deliveryType = deliveryType
+            )
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io()).subscribe(
+                    {
+
+                        Timber.log(1, "success")
+                    },
+                    {
+                        viewFeatures.handleApiError(it)
+                    })
+        )
+    }
+
+    fun getDirectionRoute(url: String, destData: MutableLiveData<DestinationData>) {
+        disposableContainer.add(
+            deliveryClient.getDestinationData(url)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                    { destData.postValue(it) },
+                    { viewFeatures.handleApiError(it) })
+        )
+    }
+
+    fun createPackageForDelivery(
+        request: CreateDeliveryRequest,
+        data: MutableLiveData<SenderCreateDeliveryResponse>
+    ) {
+        disposableContainer.add(
+            deliveryClient.createPackageForDelivery(
+                token = viewFeatures.getUserToken(),
+                request = request
+            )
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread()).subscribe(
+                    {
+                        data.postValue(it)
+                    },
+                    {
+                        viewFeatures.handleApiError(it)
+                    }
+                ))
+    }
+
+    fun onClear() {
+        disposableContainer.clear()
+    }
+
+    fun saveUserData(
+        userProfileInformationRequest: UserProfileInformationRequest,
+        updateUserProfileLiveData: MutableLiveData<UserRegisterResponse>
+    ) {
+        disposableContainer.add(
+            userClient.updateUserInformation(
+                userProfileInformationRequest
+            )
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread()).subscribe(
+                    {
+                        updateUserProfileLiveData.postValue(it)
+                    },
+                    {
+                        viewFeatures.handleApiError(it)
+                    }
+                ))
+    }
+
+    fun putStatus(status: Status, data: MutableLiveData<StatusResponse>) {
+        disposableContainer.add(
+            deliveryClient.putStatus("application/json", viewFeatures.getUserToken(), status)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                    {
+                        data.postValue(it)
+                    },
+                    {
+                        viewFeatures.handleApiError(it)
+                    })
+        )
+    }
+
+    fun payForPackage(payRequest: PayRequest, data: MutableLiveData<PayResponse>) {
+        disposableContainer.add(
+            deliveryClient.payForPackage(
+                token = viewFeatures.getUserToken(),
+                payRequest = payRequest
+            )
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                    {
+                        data.postValue(it)
+                    },
+                    {
+                        viewFeatures.handleApiError(it)
+                    })
+        )
+    }
+
+
+    fun putLocation(locationModel: LocationModel) {
+        disposableContainer.add(
+            deliveryClient.putLocation(
+                token = viewFeatures.getUserToken(),
+                locationRequest = LocationRequest(locationModel)
+            )
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                    {
+                        if (BuildConfig.DEBUG) {
+                            viewFeatures.trackRequestSuccess("success PutLocation")
+                        }
+                    },
+                    {
+                        viewFeatures.handleApiError(it)
+                    })
+        )
+    }
+
+    fun uploadPhoto(
+        photoRequest: UploadPhotoRequest,
+        photoLiveData: MutableLiveData<UploadImageResponse>
+    ) {
+        disposableContainer.add(
+            deliveryClient.uploadImageToServer(
+                token = viewFeatures.getUserToken(),
+                uploadPhotoRequest = photoRequest
+            )
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                    {
+                        photoLiveData.postValue(it)
+                        if (BuildConfig.DEBUG) {
+                            viewFeatures.trackRequestSuccess("Photo uploaded")
+                        }
+                    },
+                    {
+                        viewFeatures.handleApiError(it)
+                    })
+        )
+    }
+
+
+    fun savePreferredPaymentUser(
+        preferredPaymentUser: PreferredPaymentUser,
+        prefferedLiveData: MutableLiveData<PreferredPayResponse>
+    ) {
+        disposableContainer.add(
+            deliveryClient.savePreferredPayment(
+                token = viewFeatures.getUserToken(),
+                preferedPay = preferredPaymentUser
+            )
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                    {
+                        prefferedLiveData.postValue(it)
+                        if (BuildConfig.DEBUG) {
+                            viewFeatures.trackRequestSuccess("Preferred Payment Success")
+                        }
+                    },
+                    {
+                        viewFeatures.handleApiError(it)
+                    })
+        )
+    }
+}
