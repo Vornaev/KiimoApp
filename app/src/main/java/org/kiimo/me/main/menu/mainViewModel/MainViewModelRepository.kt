@@ -7,6 +7,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import org.kiimo.me.BuildConfig
 import org.kiimo.me.app.IBaseViewFeatures
 import org.kiimo.me.main.menu.model.GetUserRequestModel
@@ -23,6 +25,7 @@ import org.kiimo.me.register.model.*
 import org.kiimo.me.service.network.client.KiimoAppClient
 import org.kiimo.me.service.network.client.KiimoDeliverHttpClient
 import org.kiimo.me.util.AppConstants
+import retrofit2.http.Multipart
 import timber.log.Timber
 import java.util.*
 
@@ -347,6 +350,49 @@ class MainViewModelRepository(
                             viewFeatures.trackRequestSuccess("Preferred Payment Success")
                         }
                     },
+                    {
+                        viewFeatures.handleApiError(it)
+                    })
+        )
+    }
+
+    fun uploadPhotoFields(byteArray: ByteArray, string: String) {
+        disposableContainer.add(
+            deliveryClient.uploadImageToServerField(
+                token = viewFeatures.getUserToken(),
+                contentHeader = "multipart/form-data;charset=utf-8",
+                media = byteArray,
+                signatureRequest = "packages"
+
+            )
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                    {
+                        if (BuildConfig.DEBUG) {
+                            viewFeatures.trackRequestSuccess("Photo uploaded")
+                        }
+                    },
+                    {
+                        viewFeatures.handleApiError(it)
+                    })
+        )
+    }
+
+    fun uploadMultiFormDataImage(type: String, data: MultipartBody.Part) {
+
+        val type = RequestBody.create(
+            okhttp3.MultipartBody.FORM, type
+        )
+        disposableContainer.add(
+            deliveryClient.uploadMultipardData(data, type)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    if (BuildConfig.DEBUG) {
+                        viewFeatures.trackRequestSuccess("Photo uploaded")
+                    }
+                },
                     {
                         viewFeatures.handleApiError(it)
                     })

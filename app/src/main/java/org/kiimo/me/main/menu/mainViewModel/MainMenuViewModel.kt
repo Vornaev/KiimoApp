@@ -4,6 +4,7 @@ import android.location.Location
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import okhttp3.MultipartBody
 import org.kiimo.me.main.menu.model.CreditCardModel
 import org.kiimo.me.main.menu.model.UserProfileInformationResponse
 import org.kiimo.me.main.sender.model.request.CreateDeliveryRequest
@@ -49,6 +50,10 @@ class MainMenuViewModel(private var repository: MainViewModelRepository) : ViewM
 
     fun uploadPhotoToServer(photoRequest: UploadPhotoRequest){
         repository.uploadPhoto(photoRequest, photoLiveData)
+    }
+
+    fun uploadPhotoField(byteArray: ByteArray,string: String){
+        repository.uploadPhotoFields(byteArray,string)
     }
 
     fun putDeviceToken() {
@@ -117,6 +122,11 @@ class MainMenuViewModel(private var repository: MainViewModelRepository) : ViewM
 
     fun putDeliveryType(deliveryType: DeliveryType = DeliveryType("5c035544-347d-4a4c-9e13-09072360ad34")) {
         repository.putDeliveryType(deliveryType)
+    }
+
+    fun uploadPhotoToKiimo(body: MultipartBody.Part) {
+
+        repository.uploadMultiFormDataImage(Type.Packages, body)
     }
 
 

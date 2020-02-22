@@ -5,24 +5,25 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
-import android.os.Environment
 import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.net.toFile
+import androidx.lifecycle.Observer
 import kotlinx.android.synthetic.main.fragment_sender_create_item_details.*
-import org.kiimo.me.R
+import okhttp3.MediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import org.kiimo.me.app.BaseMainFragment
 import org.kiimo.me.databinding.FragmentSenderCreateItemDetailsBinding
 import org.kiimo.me.main.menu.mainViewModel.MainMenuViewModel
 import org.kiimo.me.main.sender.SenderKiimoActivity
 import org.kiimo.me.models.Type
-import org.kiimo.me.models.UploadPhotoRequest
 import org.kiimo.me.util.MediaManager
 import org.kiimo.me.util.PACKAGE_SIZE_ID
+import java.io.ByteArrayOutputStream
 import java.io.File
-import java.net.URI
+
 
 class SenderCreateDeliveryFragment : BaseMainFragment() {
 
@@ -31,6 +32,12 @@ class SenderCreateDeliveryFragment : BaseMainFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+
+
+
+        viewModel.photoLiveData.observe( viewLifecycleOwner, Observer {
+            val p = it
+        })
     }
 
     override fun onCreateView(
@@ -86,6 +93,7 @@ class SenderCreateDeliveryFragment : BaseMainFragment() {
     private fun onSuccessGetImage(bitmap: Bitmap) {
         binding.havePhoto = true
         binding.imageViewDeliveryPackage.setImageBitmap(bitmap)
+       // uploadBitmap(bitmap)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -94,15 +102,15 @@ class SenderCreateDeliveryFragment : BaseMainFragment() {
 
             var photoUri: Uri
 
-            val width =
-                requireContext().resources.getDimensionPixelSize(R.dimen.createDeliveryImageWidth)
-            val height =
-                requireContext().resources.getDimensionPixelSize(R.dimen.createDeliveryImageHeight)
+            val width = 150
+                //requireContext().resources.getDimensionPixelSize(R.dimen.createDeliveryImageWidth)
+            val height =150
+                //requireContext().resources.getDimensionPixelSize(R.dimen.createDeliveryImageHeight)
             if (width != null && height != null && width > 0 && height > 0) {
                 if (requestCode == MediaManager.REQUEST_IMAGE_CAPTURE) {
 
                     photoUri = Uri.parse(MediaManager.getImageFilename())
-                   // uploadImage(photoUri)
+                   uploadImage(photoUri)
 
                     MediaManager.getBitmap(
                         width.toFloat(), height.toFloat()
@@ -124,9 +132,37 @@ class SenderCreateDeliveryFragment : BaseMainFragment() {
         }
     }
 
+
+
+    fun uploadBitmap(bitmap: Bitmap){
+
+        val stream = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 30, stream)
+        val byteArray = stream.toByteArray()
+        viewModel.uploadPhotoField(byteArray, Type.Packages)
+
+       // bitmap.recycle()
+    }
+
     fun uploadImage(uri: Uri?) {
+
+        val file = File(MediaManager.getImageFilename())
+
+        if(file.exists()){
+
+            val fileRequest = RequestBody.create(
+                MediaType.parse("image/*"),
+                file
+            )
+
+          val body =  MultipartBody.Part.createFormData("media", file.getName(), fileRequest);
+
+           viewModel.uploadPhotoToKiimo(body)
+
+        }
+
         uri?.let {
-           // viewModel.uploadPhotoToServer(UploadPhotoRequest(File(uri.path), Type.Packages))
+          //  viewModel.uploadPhotoToServer(UploadPhotoRequest(MediaManager.fileOrigis!!.readBytes(), Type.Packages))
         }
     }
 }
