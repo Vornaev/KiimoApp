@@ -14,6 +14,7 @@ import android.os.Environment
 import android.provider.MediaStore
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.FileProvider
+import androidx.core.net.toUri
 import androidx.exifinterface.media.ExifInterface
 import org.kiimo.me.BuildConfig
 import org.kiimo.me.R
@@ -27,6 +28,7 @@ import java.util.*
 object MediaManager {
 
     private var currentPhotoPath: String? = null
+    var photoURI: Uri? = null
     const val REQUEST_IMAGE_CAPTURE = 1
     const val REQUEST_IMAGE_PICK = 2
 
@@ -88,18 +90,20 @@ object MediaManager {
                         }
                         // Continue only if the File was successfully created
                         photoFile?.also {
-                            val photoURI: Uri = FileProvider.getUriForFile(
+                            val localPhotoURI = FileProvider.getUriForFile(
                                 baseFragment.requireActivity(),
                                 "${BuildConfig.APPLICATION_ID}.contentprovider",
                                 it
                             )
-                            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
+                            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, localPhotoURI)
 
                             baseFragment.startActivityForResult(
                                 takePictureIntent,
                                 REQUEST_IMAGE_CAPTURE
                             )
                         }
+
+                        photoURI = photoFile?.toUri()
                     }
             }
         }
