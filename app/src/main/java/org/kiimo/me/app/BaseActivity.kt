@@ -22,7 +22,7 @@ abstract class BaseActivity : AppCompatActivity(), IBaseViewFeatures {
         if (BuildConfig.DEBUG)
             Toast.makeText(
                 this,
-                "Success PutLocation",
+                info,
                 Toast.LENGTH_SHORT
             ).show()
     }
