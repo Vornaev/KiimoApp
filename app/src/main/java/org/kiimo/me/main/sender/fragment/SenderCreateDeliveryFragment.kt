@@ -35,7 +35,7 @@ class SenderCreateDeliveryFragment : BaseMainFragment() {
 
 
 
-        viewModel.photoLiveData.observe( viewLifecycleOwner, Observer {
+        viewModel.photoLiveData.observe(viewLifecycleOwner, Observer {
             val p = it
         })
     }
@@ -93,7 +93,7 @@ class SenderCreateDeliveryFragment : BaseMainFragment() {
     private fun onSuccessGetImage(bitmap: Bitmap) {
         binding.havePhoto = true
         binding.imageViewDeliveryPackage.setImageBitmap(bitmap)
-       // uploadBitmap(bitmap)
+        uploadBitmap(bitmap)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -102,15 +102,15 @@ class SenderCreateDeliveryFragment : BaseMainFragment() {
 
             var photoUri: Uri
 
-            val width = 150
-                //requireContext().resources.getDimensionPixelSize(R.dimen.createDeliveryImageWidth)
-            val height =150
-                //requireContext().resources.getDimensionPixelSize(R.dimen.createDeliveryImageHeight)
+            val width = 300
+            //requireContext().resources.getDimensionPixelSize(R.dimen.createDeliveryImageWidth)
+            val height = 250
+            //requireContext().resources.getDimensionPixelSize(R.dimen.createDeliveryImageHeight)
             if (width != null && height != null && width > 0 && height > 0) {
                 if (requestCode == MediaManager.REQUEST_IMAGE_CAPTURE) {
 
                     photoUri = Uri.parse(MediaManager.getImageFilename())
-                   uploadImage(photoUri)
+                    // uploadImage(photoUri)
 
                     MediaManager.getBitmap(
                         width.toFloat(), height.toFloat()
@@ -133,36 +133,47 @@ class SenderCreateDeliveryFragment : BaseMainFragment() {
     }
 
 
-
-    fun uploadBitmap(bitmap: Bitmap){
+    fun uploadBitmap(bitmap: Bitmap) {
 
         val stream = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 30, stream)
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 80, stream)
         val byteArray = stream.toByteArray()
-        viewModel.uploadPhotoField(byteArray, Type.Packages)
 
-       // bitmap.recycle()
+        val fileRequest = RequestBody.create(
+            MediaType.parse("image/*"),
+            byteArray
+        )
+
+        val body = MultipartBody.Part.createFormData(
+            "media",
+            "${System.currentTimeMillis()}.jpg",
+            fileRequest
+        );
+
+        viewModel.uploadPhotoToKiimo(body)
+
+        // bitmap.recycle()
     }
 
     fun uploadImage(uri: Uri?) {
 
         val file = File(MediaManager.getImageFilename())
 
-        if(file.exists()){
+        if (file.exists()) {
 
             val fileRequest = RequestBody.create(
                 MediaType.parse("image/*"),
                 file
             )
 
-          val body =  MultipartBody.Part.createFormData("media", file.getName(), fileRequest);
+            val body = MultipartBody.Part.createFormData("media", file.getName(), fileRequest);
 
-           viewModel.uploadPhotoToKiimo(body)
+            viewModel.uploadPhotoToKiimo(body)
 
         }
 
         uri?.let {
-          //  viewModel.uploadPhotoToServer(UploadPhotoRequest(MediaManager.fileOrigis!!.readBytes(), Type.Packages))
+            //  viewModel.uploadPhotoToServer(UploadPhotoRequest(MediaManager.fileOrigis!!.readBytes(), Type.Packages))
         }
     }
 }
