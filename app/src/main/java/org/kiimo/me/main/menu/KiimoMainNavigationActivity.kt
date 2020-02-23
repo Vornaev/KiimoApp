@@ -24,6 +24,7 @@ import org.kiimo.me.main.fragments.ProfileFragment
 import org.kiimo.me.main.menu.di.DaggerMainMenuComponent
 import org.kiimo.me.main.menu.di.MainManiActivityModule
 import org.kiimo.me.main.menu.mainViewModel.MainMenuViewModel
+import org.kiimo.me.main.sender.fragment.SenderMapFragment
 import org.kiimo.me.register.WelcomeActivity
 import org.kiimo.me.services.MessageEvent
 import org.kiimo.me.util.NetworkResponseStatus
@@ -53,13 +54,10 @@ open class KiimoMainNavigationActivity : BaseActivity() {
         viewModel.getUser()
         viewModel.putDeviceToken()
 
-
-        composositeContainer.add(
-            RxBus.listen(MessageEvent::class.java).observeOn(AndroidSchedulers.mainThread()).subscribe {
-                onNewIntent(it.data)
-            })
-
     }
+
+    open fun handlePayload(newIntent: Intent) {}
+
 
     protected fun putDeliveryType() {
         viewModel.putDeliveryType()
@@ -160,6 +158,11 @@ open class KiimoMainNavigationActivity : BaseActivity() {
         } else {
 
             if (supportFragmentManager.backStackEntryCount == 1) {
+
+                val lastFrag = supportFragmentManager.fragments.last()
+//                if(lastFrag is SenderMapFragment){
+//                    lastFrag.shouldResetFragment()
+//                }
                 moveTaskToBack(true)
             } else {
                 super.onBackPressed()

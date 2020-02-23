@@ -6,21 +6,18 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
+import android.os.Handler
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.android.gms.maps.model.LatLng
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_kiimo_main_navigation.*
 import kotlinx.android.synthetic.main.nav_header_kiimo_main_navigation.view.*
 import org.kiimo.me.R
-import org.kiimo.me.app.BaseActivity
 import org.kiimo.me.dialogs.*
-import org.kiimo.me.inital.InitialActivity
-import org.kiimo.me.main.account.ChangeAccountTypeDialog
 import org.kiimo.me.main.fragments.MapFragment
 import org.kiimo.me.main.menu.KiimoMainNavigationActivity
 import org.kiimo.me.main.sender.SenderKiimoActivity
 import org.kiimo.me.models.*
-import org.kiimo.me.register.WelcomeActivity
 import org.kiimo.me.util.AppConstants
 import org.kiimo.me.util.PreferenceUtils
 
@@ -107,7 +104,7 @@ class MainActivity : KiimoMainNavigationActivity(),
         nav_view?.getHeaderView(0)?.buttonChangeAccountTypeUser?.text =
             getString(R.string.i_want_to_send_button)
 
-        handleNotificationReceived(intent)
+        Handler().postDelayed(Runnable {handlePayload(intent) },1000)
     }
 
     override fun onStart() {
@@ -165,11 +162,11 @@ class MainActivity : KiimoMainNavigationActivity(),
 
     private val messageReceiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent) {
-            handleNotificationReceived(intent)
+            handlePayload(intent)
         }
     }
 
-    fun handleNotificationReceived(notIntent: Intent) {
+   override fun handlePayload(notIntent: Intent) {
         val payloadString = notIntent.extras?.getString(AppConstants.FIREBASE_PAYLOAD)
         if (payloadString.isNullOrEmpty()) return
         val payload = Gson().fromJson(payloadString, FirebasePayload::class.java)

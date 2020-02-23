@@ -273,17 +273,33 @@ class SenderMapFragment : BaseMainFragment() {
         binding.carrierNameDescription.text = "Its on his way to the package"
     }
 
-    fun receviedCodePickUP(deliveryAccepted: ConfirmPickUpFcmData?) {
+    fun receviedCodePickUP(deliveryAccepted: ConfirmPickUpFcmData) {
         binding.notificationPickUPReceived = true
         binding.notificationCodeReceived = true
         binding.carrierNameDescription.text = "Its on his way to the destination"
-        binding.carrierPickUpCodeValue.text =  deliveryAccepted?.code ?: ""
+        binding.carrierPickUpCodeValue.text = deliveryAccepted?.code ?: ""
+
+        val carrierName =
+            "${deliveryAccepted.carrier.firstName} ${deliveryAccepted.carrier.lastName}"
+
+        binding.pinLayoutDropOffPacakgeCarrier.pickUpText =
+            deliveryAccepted.delivery.originAddress
+        binding.pinLayoutDropOffPacakgeCarrier.dropOffText =
+            deliveryAccepted.delivery.destinationAddress
+
+        binding.carrierName.text = carrierName
     }
 
     fun finishedDelivery() {
         binding.notificationCodeReceived = false
         binding.notificationPickUPReceived = false
+        viewModel.senderProperties = MainMenuViewModel.SenderProperties()
     }
 
+    fun shouldResetFragment() {
+        binding.notificationCodeReceived = false
+        binding.notificationPickUPReceived = false
+        viewModel.senderProperties = MainMenuViewModel.SenderProperties()
+    }
 
 }

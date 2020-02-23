@@ -33,7 +33,7 @@ class MainMenuViewModel(private var repository: MainViewModelRepository) : ViewM
     var dropOffDeliveryLiveData = MutableLiveData<DropOffDeliveryResponse>()
     var acceptDeliveryLiveData = MutableLiveData<AcceptDeliveryResponse>()
     var isValidDelivererLiveData = MutableLiveData<IsValidDelivererResponse>()
-    val senderProperties = SenderProperties()
+    var senderProperties = SenderProperties()
     val destinationLiveData = MutableLiveData<DestinationData>()
     val statusLiveData = MutableLiveData<StatusResponse>()
     val payPackageLiveData = MutableLiveData<PayResponse>()
