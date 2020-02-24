@@ -13,8 +13,11 @@
 
             <ImageView
                     android:id="@+id/delivery_image_view"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
+                    app:layout_constraintWidth_percent="0.8"
                     android:layout_height="200dp"
+                    android:scaleType="centerCrop"
+                    android:adjustViewBounds="true"
                     android:contentDescription="@string/delivery_image_content_description"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
