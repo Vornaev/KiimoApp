@@ -134,7 +134,7 @@ class SenderCreateDeliveryFragment : BaseMainFragment() {
     fun uploadBitmap(bitmap: Bitmap) {
 
         val stream = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 80, stream)
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream)
         var byteArray = stream.toByteArray()
 
         val fileRequest = RequestBody.create(
