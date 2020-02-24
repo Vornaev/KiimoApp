@@ -40,7 +40,7 @@
     <dimen name="padding_text_view_background">12dp</dimen>
     <dimen name="cash_type_img_size">30dp</dimen>
 
-    <dimen name="createDeliveryImageWidth">100dp</dimen>
-    <dimen name="createDeliveryImageHeight">120dp</dimen>
+    <dimen name="createDeliveryImageWidth">180dp</dimen>
+    <dimen name="createDeliveryImageHeight">150dp</dimen>
 
 </resources>
