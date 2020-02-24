@@ -307,30 +307,6 @@ class MainViewModelRepository(
         )
     }
 
-    fun uploadPhoto(
-        photoRequest: UploadPhotoRequest,
-        photoLiveData: MutableLiveData<UploadImageResponse>
-    ) {
-        disposableContainer.add(
-            deliveryClient.uploadImageToServer(
-                token = viewFeatures.getUserToken(),
-                uploadPhotoRequest = photoRequest
-            )
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                    {
-                        photoLiveData.postValue(it)
-                        if (BuildConfig.DEBUG) {
-                            viewFeatures.trackRequestSuccess("Photo uploaded")
-                        }
-                    },
-                    {
-                        viewFeatures.handleApiError(it)
-                    })
-        )
-    }
-
 
     fun savePreferredPaymentUser(
         preferredPaymentUser: PreferredPaymentUser,
@@ -356,30 +332,9 @@ class MainViewModelRepository(
         )
     }
 
-    fun uploadPhotoFields(byteArray: ByteArray, string: String) {
-        disposableContainer.add(
-            deliveryClient.uploadImageToServerField(
-                token = viewFeatures.getUserToken(),
-                contentHeader = "multipart/form-data;charset=utf-8",
-                media = byteArray,
-                signatureRequest = "packages"
 
-            )
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                    {
-                        if (BuildConfig.DEBUG) {
-                            viewFeatures.trackRequestSuccess("Photo uploaded")
-                        }
-                    },
-                    {
-                        viewFeatures.handleApiError(it)
-                    })
-        )
-    }
 
-    fun uploadMultiFormDataImage(type: String, data: MultipartBody.Part) {
+    fun uploadMultiFormDataImage(type: String, data: MultipartBody.Part, photoLiveData: MutableLiveData<UploadImageResponse>) {
 
         val type = RequestBody.create(
             okhttp3.MultipartBody.FORM, type
@@ -389,6 +344,7 @@ class MainViewModelRepository(
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
+                    photoLiveData.postValue(it)
                     if (BuildConfig.DEBUG) {
                         viewFeatures.trackRequestSuccess("Photo uploaded")
                     }

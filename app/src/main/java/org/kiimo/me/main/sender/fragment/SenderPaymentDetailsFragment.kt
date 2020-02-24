@@ -8,7 +8,6 @@ import kotlinx.android.synthetic.main.toolbar_back_button_title.view.*
 import org.kiimo.me.app.BaseMainFragment
 import org.kiimo.me.databinding.FragmentSenderPaymentDetailsBinding
 import org.kiimo.me.main.menu.mainViewModel.MainMenuViewModel
-import org.kiimo.me.main.sender.model.notifications.FirebaseSenderResponse
 import org.kiimo.me.main.sender.model.notifications.deliveryAcceptedNotification.DeliveryAcceptedNotificaiton
 import org.kiimo.me.util.JsonUtil
 

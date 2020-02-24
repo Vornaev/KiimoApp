@@ -48,14 +48,6 @@ class MainMenuViewModel(private var repository: MainViewModelRepository) : ViewM
         repository.getUser(userProfileLiveData)
     }
 
-    fun uploadPhotoToServer(photoRequest: UploadPhotoRequest){
-        repository.uploadPhoto(photoRequest, photoLiveData)
-    }
-
-    fun uploadPhotoField(byteArray: ByteArray,string: String){
-        repository.uploadPhotoFields(byteArray,string)
-    }
-
     fun putDeviceToken() {
         repository.saveUserDeviceToken()
     }
@@ -76,11 +68,11 @@ class MainMenuViewModel(private var repository: MainViewModelRepository) : ViewM
         repository.putLocation(locationModel)
     }
 
-    fun saveCreditCard(creditCardModel: CreditCardModel){
+    fun saveCreditCard(creditCardModel: CreditCardModel) {
 
     }
 
-    fun savePreferredPaymentType(preferredPaymentUser: PreferredPaymentUser){
+    fun savePreferredPaymentType(preferredPaymentUser: PreferredPaymentUser) {
         repository.savePreferredPaymentUser(preferredPaymentUser, preferredPayLiveData)
     }
 
@@ -126,7 +118,7 @@ class MainMenuViewModel(private var repository: MainViewModelRepository) : ViewM
 
     fun uploadPhotoToKiimo(body: MultipartBody.Part) {
 
-        repository.uploadMultiFormDataImage(Type.Packages, body)
+        repository.uploadMultiFormDataImage(Type.Packages, body, photoLiveData)
     }
 
 

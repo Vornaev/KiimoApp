@@ -7,7 +7,7 @@ data class Packages(
     @SerializedName("description")
     var description: String = "test description",
     @SerializedName("images")
-    val images: List<Any> = listOf(),
+    val images: MutableList<String> = mutableListOf(),
     @SerializedName("packageSizeId")
     var packageSizeId: String = "38983d4e-a170-4c4e-a32a-f20fbabbc31e",
     @SerializedName("phoneNumber")

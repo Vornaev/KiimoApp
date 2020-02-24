@@ -26,7 +26,6 @@ import org.kiimo.me.main.sender.fragment.SenderDeliveryPackageSummaryFragment
 import org.kiimo.me.main.sender.fragment.SenderMapFragment
 import org.kiimo.me.main.sender.fragment.SenderPaymentDetailsFragment
 import org.kiimo.me.main.sender.model.notifications.ConfirmPickUpNotification.ConfirmPickUpFcmData
-import org.kiimo.me.main.sender.model.notifications.FirebaseSenderResponse
 import org.kiimo.me.main.sender.model.request.pay.PayResponse
 import org.kiimo.me.models.FirebasePayload
 import org.kiimo.me.util.AppConstants
@@ -49,10 +48,7 @@ class SenderKiimoActivity : KiimoMainNavigationActivity() {
         setObservers()
         setupHeaderView()
 
-        val payloadString = intent?.extras?.getString(AppConstants.FIREBASE_PAYLOAD, "") ?: ""
-        if (payloadString.isNotEmpty()) {
-            Handler().postDelayed(Runnable { handlePayload(intent) }, 1500)
-        }
+        Handler().postDelayed(Runnable { handlePayload(intent) }, 1500)
     }
 
     fun setupHeaderView() {
