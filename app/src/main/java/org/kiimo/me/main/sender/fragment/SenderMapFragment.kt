@@ -285,7 +285,6 @@ class SenderMapFragment : BaseMainFragment() {
     fun finishedDelivery() {
         binding.notificationCodeReceived = false
         binding.notificationPickUPReceived = false
-        viewModel.senderProperties = MainMenuViewModel.SenderProperties()
     }
 
     fun shouldResetFragment() {

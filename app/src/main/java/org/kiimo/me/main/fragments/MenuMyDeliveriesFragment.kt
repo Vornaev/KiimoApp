@@ -31,5 +31,6 @@ class MenuMyDeliveriesFragment : BaseMainFragment() {
         binding.toolbar.arrow_back_image_view.setOnClickListener {
             requireActivity().onBackPressed()
         }
+
     }
 }
