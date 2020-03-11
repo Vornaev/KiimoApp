@@ -33,7 +33,7 @@ class MenuMyDeliveriesAdapter : RecyclerView.Adapter<MenuMyDeliveriesAdapter.MyD
 
         fun bind(item: String) {
             with(binding) {
-                          
+
 
             }
         }
