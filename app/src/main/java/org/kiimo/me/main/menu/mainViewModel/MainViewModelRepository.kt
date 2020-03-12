@@ -11,6 +11,8 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import org.kiimo.me.BuildConfig
 import org.kiimo.me.app.IBaseViewFeatures
+import org.kiimo.me.main.fragments.model.deliveries.DeliveryCarrierItem
+import org.kiimo.me.main.fragments.model.sender.SenderOrderListResponse
 import org.kiimo.me.main.menu.model.GetUserRequestModel
 import org.kiimo.me.main.menu.model.UserProfileInformationResponse
 import org.kiimo.me.main.sender.model.request.CreateDeliveryRequest
@@ -353,5 +355,14 @@ class MainViewModelRepository(
                         viewFeatures.handleApiError(it)
                     })
         )
+    }
+
+    fun getDeliveryList(deliveryLiveData: MutableLiveData<DeliveryCarrierItem>) {
+
+
+    }
+
+    fun getOrdersList(ordersLiveDta : MutableLiveData<SenderOrderListResponse>){
+
     }
 }

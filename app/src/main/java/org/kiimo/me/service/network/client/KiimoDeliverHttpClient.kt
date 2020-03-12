@@ -3,6 +3,7 @@ package org.kiimo.me.service.network.client
 import io.reactivex.Observable
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import org.kiimo.me.main.fragments.model.sender.SenderOrderListResponse
 import org.kiimo.me.main.sender.model.request.CreateDeliveryRequest
 import org.kiimo.me.main.sender.model.request.PayRequest
 import org.kiimo.me.main.sender.model.request.pay.PayResponse
@@ -152,7 +153,11 @@ interface KiimoDeliverHttpClient {
 
     @POST("api/upload")
     @FormUrlEncoded()
-    fun uploadImageToServerField(@Header(AuthorizationHeader) token: String, @Header(ContentTypeHeader) contentHeader: String, @Field("media") media : ByteArray, @Field("signature") signatureRequest: String): Observable<UploadImageResponse>
+    fun uploadImageToServerField(
+        @Header(AuthorizationHeader) token: String, @Header(
+            ContentTypeHeader
+        ) contentHeader: String, @Field("media") media: ByteArray, @Field("signature") signatureRequest: String
+    ): Observable<UploadImageResponse>
 
 
     @POST("api/self/preferred-payment")
@@ -161,6 +166,12 @@ interface KiimoDeliverHttpClient {
 
     @Multipart
     @POST("api/upload")
-    fun uploadMultipardData(@Part media : MultipartBody.Part, @Part("type") requestBody : RequestBody ) : Observable<UploadImageResponse>
+    fun uploadMultipardData(@Part media: MultipartBody.Part, @Part("type") requestBody: RequestBody): Observable<UploadImageResponse>
+
+    @POST("api/deliveries/sender")
+    fun getOrdersList(@Header(AuthorizationHeader) token: String): Observable<SenderOrderListResponse>
+
+    @POST("api/deliveries/sender")
+    fun getDeliveriesList(@Header(AuthorizationHeader) token: String): Observable<SenderOrderListResponse>
 
 }

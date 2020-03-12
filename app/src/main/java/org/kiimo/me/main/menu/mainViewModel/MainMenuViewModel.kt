@@ -5,6 +5,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import okhttp3.MultipartBody
+import org.kiimo.me.main.fragments.model.deliveries.DeliveryCarrierItem
+import org.kiimo.me.main.fragments.model.sender.SenderOrderListResponse
 import org.kiimo.me.main.menu.model.CreditCardModel
 import org.kiimo.me.main.menu.model.UserProfileInformationResponse
 import org.kiimo.me.main.sender.model.request.CreateDeliveryRequest
@@ -66,6 +68,17 @@ class MainMenuViewModel(private var repository: MainViewModelRepository) : ViewM
 
     fun putLocation(locationModel: LocationModel) {
         repository.putLocation(locationModel)
+    }
+
+
+    val deliveryLiveData = MutableLiveData<DeliveryCarrierItem>()
+    fun getDeliveryList(){
+        repository.getDeliveryList(deliveryLiveData)
+    }
+
+    val ordersListLiveData = MutableLiveData<SenderOrderListResponse>()
+    fun getOrdersList(){
+        repository.getOrdersList(ordersListLiveData)
     }
 
     fun saveCreditCard(creditCardModel: CreditCardModel) {
