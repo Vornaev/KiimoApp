@@ -335,8 +335,11 @@ class MainViewModelRepository(
     }
 
 
-
-    fun uploadMultiFormDataImage(type: String, data: MultipartBody.Part, photoLiveData: MutableLiveData<UploadImageResponse>) {
+    fun uploadMultiFormDataImage(
+        type: String,
+        data: MultipartBody.Part,
+        photoLiveData: MutableLiveData<UploadImageResponse>
+    ) {
 
         val type = RequestBody.create(
             okhttp3.MultipartBody.FORM, type
@@ -358,11 +361,40 @@ class MainViewModelRepository(
     }
 
     fun getDeliveryList(deliveryLiveData: MutableLiveData<DeliveryCarrierItem>) {
-
+        disposableContainer.add(
+            deliveryClient.getDeliveriesList(
+                token = viewFeatures.getUserToken()
+            )
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                    {
+                        deliveryLiveData.postValue(it)
+                    },
+                    {
+                        viewFeatures.handleApiError(it)
+                    })
+        )
 
     }
 
-    fun getOrdersList(ordersLiveDta : MutableLiveData<SenderOrderListResponse>){
-
+    fun getOrdersList(ordersLiveDta: MutableLiveData<MutableList<SenderOrderListResponse>>) {
+        disposableContainer.add(
+            deliveryClient.getOrdersList(
+                token = viewFeatures.getUserToken()
+            )
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                    {
+                        ordersLiveDta.postValue(it)
+                        if (BuildConfig.DEBUG) {
+                            viewFeatures.trackRequestSuccess("orders list success")
+                        }
+                    },
+                    {
+                        viewFeatures.handleApiError(it)
+                    })
+        )
     }
 }

@@ -42,5 +42,6 @@
 
     <dimen name="createDeliveryImageWidth">130dp</dimen>
     <dimen name="createDeliveryImageHeight">160dp</dimen>
+    <dimen name="lists_image_size">48dp</dimen>
 
 </resources>

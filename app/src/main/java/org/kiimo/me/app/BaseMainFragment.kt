@@ -18,7 +18,7 @@ abstract class BaseMainFragment : BaseFragment() {
         return this.activity as KiimoMainNavigationActivity
     }
 
-    fun mainDeliveryViewModel() = getMainActivity()!!.viewModel
+    fun mainDeliveryViewModel() = getNavigationActivity()!!.viewModel
 
     protected fun requestAccessFineLocationPermission() {
         val activity = activity

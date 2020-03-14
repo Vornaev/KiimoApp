@@ -3,6 +3,7 @@ package org.kiimo.me.service.network.client
 import io.reactivex.Observable
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import org.kiimo.me.main.fragments.model.deliveries.DeliveryCarrierItem
 import org.kiimo.me.main.fragments.model.sender.SenderOrderListResponse
 import org.kiimo.me.main.sender.model.request.CreateDeliveryRequest
 import org.kiimo.me.main.sender.model.request.PayRequest
@@ -169,9 +170,9 @@ interface KiimoDeliverHttpClient {
     fun uploadMultipardData(@Part media: MultipartBody.Part, @Part("type") requestBody: RequestBody): Observable<UploadImageResponse>
 
     @POST("api/deliveries/sender")
-    fun getOrdersList(@Header(AuthorizationHeader) token: String): Observable<SenderOrderListResponse>
+    fun getOrdersList(@Header(AuthorizationHeader) token: String): Observable<MutableList<SenderOrderListResponse>>
 
     @POST("api/deliveries/sender")
-    fun getDeliveriesList(@Header(AuthorizationHeader) token: String): Observable<SenderOrderListResponse>
+    fun getDeliveriesList(@Header(AuthorizationHeader) token: String): Observable<DeliveryCarrierItem>
 
 }
