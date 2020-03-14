@@ -15,9 +15,12 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
+            android:padding="8dp"
+            android:paddingBottom="0dp"
             android:layout_height="wrap_content">
 
         <androidx.constraintlayout.widget.ConstraintLayout
+                app:layout_constraintTop_toTopOf="parent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/black_curve_rounded"
@@ -35,7 +38,8 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/pin_pick_up_constraint_layout"
-                    android:layout_width="180dp"
+                    android:layout_width="0dp"
+                    app:layout_constraintWidth_percent="0.5"
                     android:layout_height="wrap_content"
                     android:padding="@dimen/margin_small"
                     app:layout_constraintHorizontal_bias="0.0"
@@ -86,9 +90,10 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/pin_drop_off_constraint_layout"
-                    android:layout_width="180dp"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:padding="@dimen/margin_small"
+                    app:layout_constraintWidth_percent="0.5"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toEndOf="@id/viewHolderDate"
                     app:layout_constraintTop_toBottomOf="@id/pin_pick_up_constraint_layout">
@@ -124,19 +129,6 @@
 
 
             <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/viewHolderPckSizeImg"
-                    android:layout_width="@dimen/lists_image_size"
-                    android:layout_height="@dimen/lists_image_size"
-                    android:layout_marginEnd="6dp"
-                    android:src="@drawable/ic_package_size_small"
-                    app:civ_border_color="@color/colorPrimary"
-                    app:civ_border_width="1dp"
-
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-            <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/viewHolderTranTypeImg"
                     android:layout_width="@dimen/lists_image_size"
                     android:layout_height="@dimen/lists_image_size"
@@ -149,6 +141,20 @@
                     app:layout_constraintEnd_toStartOf="@id/viewHolderPckSizeImg"
                     app:layout_constraintStart_toEndOf="@id/pin_pick_up_constraint_layout"
                     app:layout_constraintTop_toTopOf="parent" />
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/viewHolderPckSizeImg"
+                    android:layout_width="@dimen/lists_image_size"
+                    android:layout_height="@dimen/lists_image_size"
+                    android:layout_marginEnd="6dp"
+                    android:src="@drawable/ic_package_size_small"
+                    app:civ_border_color="@color/colorPrimary"
+                    app:civ_border_width="1dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
