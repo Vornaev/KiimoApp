@@ -26,17 +26,15 @@
                 android:layout_height="wrap_content"
                 android:paddingBottom="@dimen/margin_medium">
 
-            <ImageButton
+            <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/profile_image_view"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
+                    android:layout_width="55dp"
+                    android:layout_height="55dp"
                     android:layout_marginStart="@dimen/margin_large"
                     android:layout_marginTop="@dimen/margin_medium"
-                    android:background="@null"
-                    android:contentDescription="@string/arrow_back_content_description"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/ic_profile" />
+                    android:src="@drawable/ic_profile" />
 
             <ImageView
                     android:layout_width="@dimen/camera_width"

@@ -9,14 +9,15 @@
         android:padding="@dimen/margin_medium"
         android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_marginTop="@dimen/margin_medium"
             android:id="@+id/imageView"
-            android:layout_width="60dp"
-            android:layout_height="65dp"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
             android:layout_gravity="center_horizontal"
             android:contentDescription="@string/nav_header_desc"
             android:scaleType="centerCrop"
-            app:srcCompat="@drawable/ic_user_profile" />
+            android:src="@drawable/ic_user_profile" />
 
     <TextView
             android:id="@+id/userNameHeader"

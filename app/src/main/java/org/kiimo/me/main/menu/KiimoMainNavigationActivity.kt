@@ -86,17 +86,6 @@ open class KiimoMainNavigationActivity : BaseActivity() {
                                     DiskCacheStrategy.NONE
                                 )
                             )
-                            .into(imageViewProfileDrawer)
-
-                        Glide.with(this).load(it.photo)
-                            .apply(
-                                RequestOptions().override(
-                                    300,
-                                    0
-                                ).skipMemoryCache(true).diskCacheStrategy(
-                                    DiskCacheStrategy.NONE
-                                )
-                            )
                             .into(nav_view?.getHeaderView(0)?.imageView!!)
 
                     }

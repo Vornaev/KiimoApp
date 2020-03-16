@@ -390,9 +390,7 @@ class MainViewModelRepository(
                 .subscribe(
                     {
                         ordersLiveDta.postValue(it)
-                        if (BuildConfig.DEBUG) {
-                            viewFeatures.trackRequestSuccess("orders list success")
-                        }
+                        viewFeatures.trackRequestSuccess("orders list success")
                     },
                     {
                         viewFeatures.handleApiError(it)
@@ -403,16 +401,17 @@ class MainViewModelRepository(
     fun updateUserPhoto(photoUrl: String) {
         disposableContainer.add(
             userClient.updateUserInformation(
-                UserProfileUpdatePhotoRequest(photoUrl, viewFeatures.getUserToken(), UserRegisterDataRequest())
+                UserProfileUpdatePhotoRequest(
+                    photoUrl,
+                    viewFeatures.getUserToken(),
+                    UserRegisterDataRequest()
+                )
             )
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                     {
-                        DialogUtils.showSuccessMessage(
-                            (viewFeatures.getViewContext() as Activity),
-                            "photo update succes"
-                        )
+                        viewFeatures.trackRequestSuccess("photo saved")
                     }, {
                         viewFeatures.handleApiError(it)
                     }
