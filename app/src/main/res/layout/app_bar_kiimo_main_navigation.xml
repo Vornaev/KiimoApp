@@ -11,6 +11,7 @@
             android:id="@+id/imageViewProfileDrawer"
             android:layout_width="60dp"
             android:layout_height="60dp"
+            android:scaleType="centerCrop"
             android:layout_marginStart="@dimen/margin_medium_large"
             android:layout_marginTop="@dimen/margin_medium_large"
             android:src="@drawable/ic_user_profile" />

@@ -19,7 +19,6 @@ import org.kiimo.me.app.BaseMainFragment
 import org.kiimo.me.databinding.FragmentSenderCreateItemDetailsBinding
 import org.kiimo.me.main.menu.mainViewModel.MainMenuViewModel
 import org.kiimo.me.main.sender.SenderKiimoActivity
-import org.kiimo.me.models.Type
 import org.kiimo.me.util.MediaManager
 import org.kiimo.me.util.PACKAGE_SIZE_ID
 import java.io.ByteArrayOutputStream
@@ -36,7 +35,7 @@ class SenderCreateDeliveryFragment : BaseMainFragment() {
 
 
 
-        viewModel.photoLiveData.observe(viewLifecycleOwner, Observer {
+        viewModel.photoPackageLiveData.observe(viewLifecycleOwner, Observer {
             viewModel.senderProperties.packageDescritpion.images.clear()
             viewModel.senderProperties.packageDescritpion.images.add(it.imageUrl)
         })
@@ -148,7 +147,7 @@ class SenderCreateDeliveryFragment : BaseMainFragment() {
             fileRequest
         );
 
-        viewModel.uploadPhotoToKiimo(body)
+        viewModel.uploadPhotoForPackage(body)
     }
 
     fun uploadImage(uri: Uri?) {
@@ -164,7 +163,7 @@ class SenderCreateDeliveryFragment : BaseMainFragment() {
 
             val body = MultipartBody.Part.createFormData("media", file.getName(), fileRequest);
 
-            viewModel.uploadPhotoToKiimo(body)
+            viewModel.uploadPhotoForPackage(body)
         }
 
         uri?.let {

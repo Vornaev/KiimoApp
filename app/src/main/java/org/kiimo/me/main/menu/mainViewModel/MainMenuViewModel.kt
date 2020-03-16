@@ -1,7 +1,6 @@
 package org.kiimo.me.main.menu.mainViewModel
 
 import android.location.Location
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import okhttp3.MultipartBody
@@ -10,11 +9,9 @@ import org.kiimo.me.main.fragments.model.sender.SenderOrderListResponse
 import org.kiimo.me.main.menu.model.CreditCardModel
 import org.kiimo.me.main.menu.model.UserProfileInformationResponse
 import org.kiimo.me.main.sender.model.request.CreateDeliveryRequest
-import org.kiimo.me.main.sender.model.request.Destination
 import org.kiimo.me.main.sender.model.request.Packages
 import org.kiimo.me.main.sender.model.request.PayRequest
 import org.kiimo.me.main.sender.model.request.pay.PayResponse
-import org.kiimo.me.main.sender.model.response.Package
 import org.kiimo.me.main.sender.model.response.SenderCreateDeliveryResponse
 import org.kiimo.me.models.*
 import org.kiimo.me.models.delivery.*
@@ -39,7 +36,8 @@ class MainMenuViewModel(private var repository: MainViewModelRepository) : ViewM
     val destinationLiveData = MutableLiveData<DestinationData>()
     val statusLiveData = MutableLiveData<StatusResponse>()
     val payPackageLiveData = MutableLiveData<PayResponse>()
-    val photoLiveData = MutableLiveData<UploadImageResponse>()
+    val photoPackageLiveData = MutableLiveData<UploadImageResponse>()
+    val photoProfileLiveData = MutableLiveData<UploadImageResponse>()
     val preferredPayLiveData = MutableLiveData<PreferredPayResponse>()
 
     fun setPackageSize(packageID: String) {
@@ -72,12 +70,12 @@ class MainMenuViewModel(private var repository: MainViewModelRepository) : ViewM
 
 
     val deliveryLiveData = MutableLiveData<DeliveryCarrierItem>()
-    fun getDeliveryList(){
+    fun getDeliveryList() {
         repository.getDeliveryList(deliveryLiveData)
     }
 
     val ordersListLiveData = MutableLiveData<MutableList<SenderOrderListResponse>>()
-    fun getOrdersList(){
+    fun getOrdersList() {
         repository.getOrdersList(ordersListLiveData)
     }
 
@@ -129,9 +127,16 @@ class MainMenuViewModel(private var repository: MainViewModelRepository) : ViewM
         repository.putDeliveryType(deliveryType)
     }
 
-    fun uploadPhotoToKiimo(body: MultipartBody.Part) {
+    fun uploadPhotoForPackage(body: MultipartBody.Part) {
+        repository.uploadMultiFormDataImage(Type.Packages, body, photoPackageLiveData)
+    }
 
-        repository.uploadMultiFormDataImage(Type.Packages, body, photoLiveData)
+    fun uploadPhotoForUser(body: MultipartBody.Part) {
+        repository.uploadMultiFormDataImage(Type.Users, body, photoProfileLiveData)
+    }
+
+    fun updateUserProfilePhoto(photoUrl :String){
+        repository.updateUserPhoto(photoUrl)
     }
 
 
@@ -190,6 +195,7 @@ class MainMenuViewModel(private var repository: MainViewModelRepository) : ViewM
             )
             return req
         }
+
 
         fun getCalculateRequest(): CalculateDeliveryRequest {
             return CalculateDeliveryRequest(

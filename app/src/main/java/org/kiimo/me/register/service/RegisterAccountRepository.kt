@@ -63,8 +63,7 @@ class RegisterAccountRepository(
                 ))
     }
 
-    fun sendSMSCodeToUser(
-        smsCode: String, phone: String, smsLiveData: MutableLiveData<UserRegisterResponse>
+    fun sendSMSCodeToUser(phone: String, smsLiveData: MutableLiveData<UserRegisterResponse>
     ) {
         disposableContainer.add(
             deliverHttpClient.sendCode(

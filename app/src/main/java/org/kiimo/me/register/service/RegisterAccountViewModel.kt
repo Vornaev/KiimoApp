@@ -45,6 +45,10 @@ class RegisterAccountViewModel(private var repository: RegisterAccountRepository
         repository.userLogin(userLoginLiveData)
     }
 
+    fun sendSmsCodeToUser(number: String) {
+        repository.sendSMSCodeToUser(number, smsCodeLiveData)
+    }
+
     fun ativateUser() {
         repository.activateUser(activateUserLiveData)
     }

@@ -2,6 +2,7 @@ package org.kiimo.me.main.fragments
 
 import android.app.Activity.RESULT_OK
 import android.content.Intent
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.provider.MediaStore
 import android.text.SpannableString
@@ -11,7 +12,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import kotlinx.android.synthetic.main.toolbar_back_button_title.view.*
+import okhttp3.MediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import org.kiimo.me.R
 import org.kiimo.me.app.BaseFragment
 import org.kiimo.me.app.BaseMainFragment
@@ -24,6 +30,7 @@ import org.kiimo.me.models.Profile
 import org.kiimo.me.util.JsonUtil
 import org.kiimo.me.util.MediaManager
 import org.kiimo.me.util.PreferenceUtils
+import java.io.ByteArrayOutputStream
 import javax.inject.Inject
 
 class ProfileFragment : BaseMainFragment() {
@@ -50,6 +57,10 @@ class ProfileFragment : BaseMainFragment() {
         setToolbarTitle()
         setListeners()
         subscribeUi()
+
+        mainDeliveryViewModel().photoProfileLiveData.observe(viewLifecycleOwner, Observer {
+            mainDeliveryViewModel().updateUserProfilePhoto(it.imageUrl)
+        })
 
         return binding.root
     }
@@ -79,9 +90,32 @@ class ProfileFragment : BaseMainFragment() {
         }
     }
 
+    fun uploadBitmap(bitmap: Bitmap) {
+
+        val stream = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream)
+        var byteArray = stream.toByteArray()
+
+        val fileRequest = RequestBody.create(
+            MediaType.parse("image/*"),
+            byteArray
+        )
+
+        val body = MultipartBody.Part.createFormData(
+            "media",
+            "${System.currentTimeMillis()}.jpg",
+            fileRequest
+        );
+
+        mainDeliveryViewModel().uploadPhotoForUser(body)
+
+
+    }
+
     private fun subscribeUi() {
         profileViewModel.profileImageViewBitmap.observe(viewLifecycleOwner, Observer {
             binding.profileLayout.profileImageView.setImageBitmap(it)
+            uploadBitmap(it)
         })
     }
 
@@ -114,6 +148,10 @@ class ProfileFragment : BaseMainFragment() {
         }
     }
 
+    fun saveProfileData() {
+
+    }
+
     private fun setDummyData() {
 
         val profileString = PreferenceUtils.getUserProfile(requireContext())
@@ -124,6 +162,12 @@ class ProfileFragment : BaseMainFragment() {
                 JsonUtil.loadModelFromJson(profileString),
                 PreferenceUtils.getUserPhoneNumber(requireContext())
             )
+
+            if (profileCache.photoUserUrl.isNotEmpty()) {
+                Glide.with(requireContext()).load(profileCache.photoUserUrl)
+                    .apply(RequestOptions().override(300, 0))
+                    .into(binding.profileLayout.profileImageView)
+            }
         }
 
         binding.profileLayout.profile = profileCache

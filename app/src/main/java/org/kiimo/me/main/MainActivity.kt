@@ -19,6 +19,7 @@ import org.kiimo.me.main.menu.KiimoMainNavigationActivity
 import org.kiimo.me.main.sender.SenderKiimoActivity
 import org.kiimo.me.models.*
 import org.kiimo.me.util.AppConstants
+import org.kiimo.me.util.DialogUtils
 import org.kiimo.me.util.PreferenceUtils
 
 class MainActivity : KiimoMainNavigationActivity(),
@@ -179,9 +180,12 @@ class MainActivity : KiimoMainNavigationActivity(),
                     getDestination(deliveryPaid.delivery)
                 )
             }
-        } else  {
+        } else if("DELIVERY_REQUEST" == payload.type) {
             val delivery = Gson().fromJson(payload.delivery, Delivery::class.java)
             showDeliveryAlertDialog(delivery)
+        }else{
+           // DialogUtils.showErrorMessage(this,"error notification")
+            val typy = payload.type
         }
     }
 

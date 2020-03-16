@@ -13,3 +13,10 @@ data class UserProfileInformationRequest(
     @SerializedName("user") var user: UserRegisterDataRequest,
     @SerializedName("userID") val userID: String
 )
+
+
+data class UserProfileUpdatePhotoRequest(
+    @SerializedName("photo") val photo: String,
+    @SerializedName("userID") val userID: String,
+    @SerializedName("user") var user: UserRegisterDataRequest
+)

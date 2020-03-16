@@ -5,6 +5,9 @@ import android.os.Bundle
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Observer
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.request.RequestOptions
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_kiimo_main_navigation.*
@@ -71,6 +74,32 @@ open class KiimoMainNavigationActivity : BaseActivity() {
 
                     val username = "${it.firstName}  ${it.lastName}"
                     userNameHeader.text = username
+
+                    if (it.photo.isNotEmpty()) {
+
+                        Glide.with(this).load(it.photo)
+                            .apply(
+                                RequestOptions().override(
+                                    300,
+                                    0
+                                ).skipMemoryCache(true).diskCacheStrategy(
+                                    DiskCacheStrategy.NONE
+                                )
+                            )
+                            .into(imageViewProfileDrawer)
+
+                        Glide.with(this).load(it.photo)
+                            .apply(
+                                RequestOptions().override(
+                                    300,
+                                    0
+                                ).skipMemoryCache(true).diskCacheStrategy(
+                                    DiskCacheStrategy.NONE
+                                )
+                            )
+                            .into(nav_view?.getHeaderView(0)?.imageView!!)
+
+                    }
                 }
             }
         )

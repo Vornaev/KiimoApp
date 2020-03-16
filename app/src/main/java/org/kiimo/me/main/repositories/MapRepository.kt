@@ -10,6 +10,7 @@ import io.reactivex.schedulers.Schedulers
 import org.kiimo.me.BuildConfig
 import org.kiimo.me.app.App
 import org.kiimo.me.models.*
+import org.kiimo.me.service.network.client.KiimoAppClient
 import org.kiimo.me.service.network.client.KiimoDeliverHttpClient
 import javax.inject.Inject
 
@@ -21,6 +22,9 @@ class MapRepository {
 
     @Inject
     lateinit var kiimoDeliverHttpClient: KiimoDeliverHttpClient
+
+    @Inject
+    lateinit var kiimoUserClient : KiimoAppClient
 
     private val disposableContainer: CompositeDisposable = CompositeDisposable()
 

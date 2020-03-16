@@ -1,5 +1,6 @@
 package org.kiimo.me.main.menu.mainViewModel
 
+import android.app.Activity
 import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import io.reactivex.Observable
@@ -27,6 +28,7 @@ import org.kiimo.me.register.model.*
 import org.kiimo.me.service.network.client.KiimoAppClient
 import org.kiimo.me.service.network.client.KiimoDeliverHttpClient
 import org.kiimo.me.util.AppConstants
+import org.kiimo.me.util.DialogUtils
 import retrofit2.http.Multipart
 import timber.log.Timber
 import java.util.*
@@ -395,6 +397,26 @@ class MainViewModelRepository(
                     {
                         viewFeatures.handleApiError(it)
                     })
+        )
+    }
+
+    fun updateUserPhoto(photoUrl: String) {
+        disposableContainer.add(
+            userClient.updateUserInformation(
+                UserProfileUpdatePhotoRequest(photoUrl, viewFeatures.getUserToken(), UserRegisterDataRequest())
+            )
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                    {
+                        DialogUtils.showSuccessMessage(
+                            (viewFeatures.getViewContext() as Activity),
+                            "photo update succes"
+                        )
+                    }, {
+                        viewFeatures.handleApiError(it)
+                    }
+                )
         )
     }
 }

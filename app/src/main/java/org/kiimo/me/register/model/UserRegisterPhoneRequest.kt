@@ -15,3 +15,8 @@ data class UserLoginRequest(
     @SerializedName("username") val username: String
 )
 
+//first
+//register
+// send sms code
+//validate code
+//activate user
