@@ -182,6 +182,8 @@ class MainMenuViewModel(private var repository: MainViewModelRepository) : ViewM
                 destinationAddress = destinationAddressPoint.address,
                 distanceByFoot = this.distanceToRoute().roundToInt(),
                 distanceByCar = this.distanceToRoute().roundToInt(),
+                distanceByKickScooter = distanceToRoute().roundToInt(),
+                distanceByBike = distanceToRoute().roundToInt(),
                 originAddress = this.pickUpAddressPoint.address,
                 origin = this.pickUpAddressPoint.locationModel,
                 packages = packageDescritpion
