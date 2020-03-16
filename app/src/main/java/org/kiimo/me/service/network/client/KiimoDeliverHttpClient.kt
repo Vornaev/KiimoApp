@@ -40,7 +40,7 @@ object HttpHeaders {
 interface KiimoDeliverHttpClient {
 
     @POST("api/sms/send-code")
-    fun sendCode(@Header(AuthorizationHeader) userID: String, @Body smsCodeRequest: UserSmsCodeRequest): Observable<UserRegisterResponse>
+    fun sendCode(@Header(ContentTypeHeader) contentType: String = jsonHeader, @Body smsCodeRequest: UserSmsCodeRequest): Observable<UserRegisterResponse>
 
 
     @POST("api/sms/validate-code")

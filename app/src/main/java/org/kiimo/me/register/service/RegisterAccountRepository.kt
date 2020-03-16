@@ -67,8 +67,7 @@ class RegisterAccountRepository(
     ) {
         disposableContainer.add(
             deliverHttpClient.sendCode(
-                viewFeatures.getUserToken()
-                , UserSmsCodeRequest(phone)
+              smsCodeRequest =  UserSmsCodeRequest(phone)
             ).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                     {
