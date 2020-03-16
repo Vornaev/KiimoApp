@@ -6,6 +6,8 @@ import androidx.recyclerview.widget.RecyclerView
 import org.kiimo.me.R
 import org.kiimo.me.databinding.ViewHolderMyDeliversBinding
 import org.kiimo.me.main.fragments.model.sender.SenderOrderListResponse
+import org.kiimo.me.util.DateUtils
+import org.kiimo.me.util.DeliveryTypeID
 import org.kiimo.me.util.PACKAGE_SIZE_ID
 
 class MenuMyOrdersAdatper : RecyclerView.Adapter<MenuMyOrdersAdatper.MyOrdersViewHolder>() {
@@ -55,6 +57,18 @@ class MenuMyOrdersAdatper : RecyclerView.Adapter<MenuMyOrdersAdatper.MyOrdersVie
                         else -> R.drawable.ic_package_size_small
                     }
                 )
+
+                viewHolderTranTypeImg.setImageResource(
+                    when (item.carrierDelivery.deliveryTypeId) {
+                        DeliveryTypeID.FOOT -> R.drawable.ic_foot
+                        DeliveryTypeID.CAR -> R.drawable.ic_car
+                        DeliveryTypeID.BIKE -> R.drawable.ic_bicycle
+                        DeliveryTypeID.SCOOTER -> R.drawable.ic_scooter
+                        else -> R.drawable.ic_foot
+                    }
+                )
+
+                viewHolderDate.text = DateUtils.formatDate(item.createdAt)
 
             }
         }

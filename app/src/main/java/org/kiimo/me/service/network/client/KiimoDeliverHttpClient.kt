@@ -172,7 +172,7 @@ interface KiimoDeliverHttpClient {
     @POST("api/deliveries/sender")
     fun getOrdersList(@Header(AuthorizationHeader) token: String): Observable<MutableList<SenderOrderListResponse>>
 
-    @POST("api/deliveries/sender")
-    fun getDeliveriesList(@Header(AuthorizationHeader) token: String): Observable<DeliveryCarrierItem>
+    @GET("api/deliveries?userType=carrier")
+    fun getDeliveriesList(@Header(AuthorizationHeader) token: String): Observable<MutableList<SenderOrderListResponse>>
 
 }

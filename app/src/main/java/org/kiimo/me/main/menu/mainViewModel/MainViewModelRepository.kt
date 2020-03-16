@@ -362,7 +362,7 @@ class MainViewModelRepository(
         )
     }
 
-    fun getDeliveryList(deliveryLiveData: MutableLiveData<DeliveryCarrierItem>) {
+    fun getDeliveryList(deliveryLiveData: MutableLiveData<MutableList<SenderOrderListResponse>>) {
         disposableContainer.add(
             deliveryClient.getDeliveriesList(
                 token = viewFeatures.getUserToken()

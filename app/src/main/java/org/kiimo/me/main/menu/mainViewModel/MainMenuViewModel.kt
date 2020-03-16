@@ -69,9 +69,9 @@ class MainMenuViewModel(private var repository: MainViewModelRepository) : ViewM
     }
 
 
-    val deliveryLiveData = MutableLiveData<DeliveryCarrierItem>()
+    val deliveryListLiveData = MutableLiveData<MutableList<SenderOrderListResponse>>()
     fun getDeliveryList() {
-        repository.getDeliveryList(deliveryLiveData)
+        repository.getDeliveryList(deliveryListLiveData)
     }
 
     val ordersListLiveData = MutableLiveData<MutableList<SenderOrderListResponse>>()
