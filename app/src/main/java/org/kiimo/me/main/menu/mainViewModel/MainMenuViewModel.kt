@@ -38,6 +38,8 @@ class MainMenuViewModel(private var repository: MainViewModelRepository) : ViewM
     val payPackageLiveData = MutableLiveData<PayResponse>()
     val photoPackageLiveData = MutableLiveData<UploadImageResponse>()
     val photoProfileLiveData = MutableLiveData<UploadImageResponse>()
+    val signatureLiveData = MutableLiveData<UploadImageResponse>()
+
     val preferredPayLiveData = MutableLiveData<PreferredPayResponse>()
 
     fun setPackageSize(packageID: String) {
@@ -137,6 +139,11 @@ class MainMenuViewModel(private var repository: MainViewModelRepository) : ViewM
 
     fun updateUserProfilePhoto(photoUrl :String){
         repository.updateUserPhoto(photoUrl)
+    }
+
+
+    fun uploadSignaturePhoto(body: MultipartBody.Part){
+        repository.uploadMultiFormDataImage(Type.Signatures, body, signatureLiveData)
     }
 
 
