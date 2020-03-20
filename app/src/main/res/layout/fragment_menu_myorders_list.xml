@@ -42,7 +42,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
             <Button
-                    android:id="@+id/payment_save_button"
+                    android:id="@+id/startnewOrderBtn"
                     android:layout_width="0dp"
                     android:layout_height="@dimen/big_button_height"
                     android:layout_marginTop="@dimen/margin_extra_large"

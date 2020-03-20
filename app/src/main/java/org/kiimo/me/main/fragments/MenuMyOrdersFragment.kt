@@ -40,6 +40,10 @@ class MenuMyOrdersFragment : BaseMainFragment() {
             requireActivity().onBackPressed()
         }
 
+        binding.startnewOrderBtn.setOnClickListener {
+            activity?.onBackPressed()
+        }
+
         binding.recycleViewOrders.layoutManager = LinearLayoutManager(requireContext())
         binding.recycleViewOrders.adapter = adapter
 

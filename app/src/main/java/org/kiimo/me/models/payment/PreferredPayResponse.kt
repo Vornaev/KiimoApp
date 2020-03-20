@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 
 data class PreferredPayResponse(
     @SerializedName("avgRating")
-    val avgRating: Any? = Any(),
+    val avgRating: Float = 0f,
     @SerializedName("createdAt")
     val createdAt: String = "",
     @SerializedName("currentLocation")

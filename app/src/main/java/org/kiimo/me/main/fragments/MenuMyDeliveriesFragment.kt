@@ -1,5 +1,6 @@
 package org.kiimo.me.main.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +13,8 @@ import org.kiimo.me.app.BaseMainFragment
 import org.kiimo.me.databinding.FragmentMenuMydeliveriesListBinding
 import org.kiimo.me.main.fragments.adapter.MenuMyOrdersAdatper
 import org.kiimo.me.main.fragments.model.sender.SenderOrderListResponse
+import org.kiimo.me.main.sender.SenderKiimoActivity
+import org.kiimo.me.models.Status
 
 class MenuMyDeliveriesFragment : BaseMainFragment() {
 
@@ -38,6 +41,11 @@ class MenuMyDeliveriesFragment : BaseMainFragment() {
 
         binding.toolbar.arrow_back_image_view.setOnClickListener {
             requireActivity().onBackPressed()
+        }
+
+        binding.paymentSaveButton.setOnClickListener {
+            mainDeliveryViewModel().putStatus(Status(false))
+            startActivity(Intent(requireContext(), SenderKiimoActivity::class.java))
         }
 
         binding.recycleViewDeliveries.layoutManager = LinearLayoutManager(requireContext())

@@ -11,7 +11,7 @@ data class StatusResponse(
     val deliveryTypeId: String?,
     val deviceToken: List<String?>?,
     val preferredPayment: Any?,
-    val avgRating: Any?,
+    val avgRating: Float =0f,
     val ratingCount: Any?,
     val createdAt: String?,
     val updatedAt: String?
