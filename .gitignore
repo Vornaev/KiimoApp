@@ -12,3 +12,5 @@
 /captures
 .externalNativeBuild
 .idea/vcs.xml
+app/playStore/release/output.json
+app/playStore/release/app-playStore-release.apk
