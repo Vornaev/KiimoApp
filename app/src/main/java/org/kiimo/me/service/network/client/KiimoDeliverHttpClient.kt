@@ -161,7 +161,7 @@ interface KiimoDeliverHttpClient {
     ): Observable<UploadImageResponse>
 
 
-    @POST("api/self/preferred-payment")
+    @PUT("api/self/preferred-payment")
     fun savePreferredPayment(@Header(AuthorizationHeader) token: String, @Body preferedPay: PreferredPaymentUser): Observable<PreferredPayResponse>
 
 

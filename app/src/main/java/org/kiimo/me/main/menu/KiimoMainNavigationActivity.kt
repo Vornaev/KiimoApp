@@ -28,6 +28,7 @@ import org.kiimo.me.main.menu.di.DaggerMainMenuComponent
 import org.kiimo.me.main.menu.di.MainManiActivityModule
 import org.kiimo.me.main.menu.mainViewModel.MainMenuViewModel
 import org.kiimo.me.main.sender.fragment.SenderMapFragment
+import org.kiimo.me.models.payment.PreferredPaymentUser
 import org.kiimo.me.register.WelcomeActivity
 import org.kiimo.me.services.MessageEvent
 import org.kiimo.me.util.NetworkResponseStatus
@@ -56,6 +57,7 @@ open class KiimoMainNavigationActivity : BaseActivity() {
 
         viewModel.getUser()
         viewModel.putDeviceToken()
+        viewModel.savePreferredPaymentType(PreferredPaymentUser())
 
     }
 
