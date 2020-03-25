@@ -75,7 +75,7 @@ open class KiimoMainNavigationActivity : BaseActivity() {
                     PreferenceUtils.saveUserProfile(this, it)
 
                     val username = "${it.firstName}  ${it.lastName}"
-                    userNameHeader.text = username
+                    nav_view?.getHeaderView(0)?.userNameHeader?.text = username
 
                     if (it.photo.isNotEmpty()) {
 
