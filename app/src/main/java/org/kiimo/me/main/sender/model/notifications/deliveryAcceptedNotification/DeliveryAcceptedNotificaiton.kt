@@ -1,15 +1,15 @@
-package org.kiimo.me.main.sender.model.notifications
+package org.kiimo.me.main.sender.model.notifications.deliveryAcceptedNotification
 
 
 import com.google.gson.annotations.SerializedName
 
-data class Delivery(
+data class DeliveryAcceptedNotificaiton(
     @SerializedName("carrier")
     val carrier: Carrier = Carrier(),
     @SerializedName("code")
-    val code: String? = null,
+    val code: Any? = Any(),
     @SerializedName("delivery")
-    val delivery: DeliveryX = DeliveryX(),
+    val delivery: Delivery = Delivery(),
     @SerializedName("deliveryId")
     val deliveryId: String = "",
     @SerializedName("deliveryPrice")

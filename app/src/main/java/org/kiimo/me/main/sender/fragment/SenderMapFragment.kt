@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Intent
 import android.location.Location
 import android.os.Bundle
-import android.os.Parcel
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -13,29 +12,22 @@ import android.widget.Toast
 import androidx.lifecycle.Observer
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.CameraPosition
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.libraries.places.api.model.*
+import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.widget.Autocomplete
 import com.google.android.libraries.places.widget.AutocompleteActivity
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
 import org.kiimo.me.R
 import org.kiimo.me.app.BaseMainFragment
 import org.kiimo.me.databinding.FragmentSenderLayoutBinding
-import org.kiimo.me.dialogs.DigitCodeDialog
 import org.kiimo.me.main.fragments.MapFragment
 import org.kiimo.me.main.menu.mainViewModel.MainMenuViewModel
 import org.kiimo.me.main.sender.SenderKiimoActivity
-import org.kiimo.me.main.sender.dialog.SendItemDescriptionDialog
 import org.kiimo.me.main.sender.map.ISenderMapFeatures
 import org.kiimo.me.main.sender.map.SenderMapFeatures
 import org.kiimo.me.main.sender.model.notifications.ConfirmPickUpNotification.ConfirmPickUpFcmData
-import org.kiimo.me.main.sender.model.notifications.FirebaseSenderResponse
 import org.kiimo.me.main.sender.model.request.pay.PayResponse
-import org.kiimo.me.models.Bounds
 import org.kiimo.me.models.LocationModel
 import org.kiimo.me.services.LocationServicesKiimo
-import org.kiimo.me.util.AppConstants
 import org.kiimo.me.util.StringUtils
 
 class SenderMapFragment : BaseMainFragment() {
@@ -273,11 +265,21 @@ class SenderMapFragment : BaseMainFragment() {
         binding.carrierNameDescription.text = "Its on his way to the package"
     }
 
-    fun receviedCodePickUP(deliveryAccepted: ConfirmPickUpFcmData?) {
+    fun receviedCodePickUP(deliveryAccepted: ConfirmPickUpFcmData) {
         binding.notificationPickUPReceived = true
         binding.notificationCodeReceived = true
         binding.carrierNameDescription.text = "Its on his way to the destination"
-        binding.carrierPickUpCodeValue.text =  deliveryAccepted?.code ?: ""
+        binding.carrierPickUpCodeValue.text = deliveryAccepted?.code ?: ""
+
+        val carrierName =
+            "${deliveryAccepted.carrier.firstName} ${deliveryAccepted.carrier.lastName}"
+
+        binding.pinLayoutDropOffPacakgeCarrier.pickUpText =
+            deliveryAccepted.delivery.originAddress
+        binding.pinLayoutDropOffPacakgeCarrier.dropOffText =
+            deliveryAccepted.delivery.destinationAddress
+
+        binding.carrierName.text = carrierName
     }
 
     fun finishedDelivery() {
@@ -285,5 +287,10 @@ class SenderMapFragment : BaseMainFragment() {
         binding.notificationPickUPReceived = false
     }
 
+    fun shouldResetFragment() {
+        binding.notificationCodeReceived = false
+        binding.notificationPickUPReceived = false
+        viewModel.senderProperties = MainMenuViewModel.SenderProperties()
+    }
 
 }

@@ -4,14 +4,10 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
-import androidx.core.view.GravityCompat
-import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
-import com.google.android.gms.common.util.JsonUtils
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_kiimo_main_navigation.*
 import kotlinx.android.synthetic.main.layout_menu_item.view.*
@@ -20,7 +16,6 @@ import org.kiimo.me.R
 import org.kiimo.me.main.FragmentTags
 import org.kiimo.me.main.MainActivity
 import org.kiimo.me.main.account.ChangeAccountTypeDialog
-import org.kiimo.me.main.fragments.MapFragment
 import org.kiimo.me.main.fragments.MenuMyOrdersFragment
 import org.kiimo.me.main.fragments.MenuPaymentTypeFragment
 import org.kiimo.me.main.menu.KiimoMainNavigationActivity
@@ -31,17 +26,12 @@ import org.kiimo.me.main.sender.fragment.SenderDeliveryPackageSummaryFragment
 import org.kiimo.me.main.sender.fragment.SenderMapFragment
 import org.kiimo.me.main.sender.fragment.SenderPaymentDetailsFragment
 import org.kiimo.me.main.sender.model.notifications.ConfirmPickUpNotification.ConfirmPickUpFcmData
-import org.kiimo.me.main.sender.model.notifications.FirebaseSenderResponse
-import org.kiimo.me.main.sender.model.request.pay.Carrier
 import org.kiimo.me.main.sender.model.request.pay.PayResponse
-import org.kiimo.me.models.Delivery
-import org.kiimo.me.models.DeliveryPaid
 import org.kiimo.me.models.FirebasePayload
 import org.kiimo.me.util.AppConstants
 import org.kiimo.me.util.JsonUtil
 import org.kiimo.me.util.PreferenceUtils
 import timber.log.Timber
-import java.util.*
 
 class SenderKiimoActivity : KiimoMainNavigationActivity() {
 
@@ -58,7 +48,7 @@ class SenderKiimoActivity : KiimoMainNavigationActivity() {
         setObservers()
         setupHeaderView()
 
-        handlePayoload(intent)
+        Handler().postDelayed(Runnable { handlePayload(intent) }, 1500)
     }
 
     fun setupHeaderView() {
@@ -175,25 +165,30 @@ class SenderKiimoActivity : KiimoMainNavigationActivity() {
 
     private val messageReceiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent) {
-            handlePayoload(intent)
+            handlePayload(intent)
         }
     }
 
-    fun handlePayoload(newIntent: Intent) {
+    override fun handlePayload(newIntent: Intent) {
 
-        shouldPopToMap()
 
         val payloadString = newIntent.extras?.getString(AppConstants.FIREBASE_PAYLOAD)
         if (payloadString.isNullOrEmpty()) return
 
+        shouldPopToMap()
+        dialogSpiner?.dismiss()
+
         val payload = Gson().fromJson(payloadString, FirebasePayload::class.java)
-        val deliveryAccepted =
-            Gson().fromJson(payload.delivery, FirebaseSenderResponse::class.java)
 
         when (payload.type) {
             "DELIVERY_ACCEPTED" -> {
-                dialogSpiner?.dismiss()
-                addFragment(SenderPaymentDetailsFragment())
+
+                val bundle = Bundle()
+                bundle.putString("DELIVERY_ACCEPTED", payload.delivery)
+
+                addFragment(fragment = SenderPaymentDetailsFragment().apply {
+                    arguments = bundle
+                })
             }
 
             "DELIVERY_PICKED_UP" -> {

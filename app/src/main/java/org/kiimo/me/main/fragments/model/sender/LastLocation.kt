@@ -1,4 +1,4 @@
-package org.kiimo.me.main.sender.model.notifications
+package org.kiimo.me.main.fragments.model.sender
 
 
 import com.google.gson.annotations.SerializedName

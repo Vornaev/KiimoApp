@@ -1,17 +1,17 @@
 package org.kiimo.me.main.menu.mainViewModel
 
 import android.location.Location
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import okhttp3.MultipartBody
+import org.kiimo.me.main.fragments.model.deliveries.DeliveryCarrierItem
+import org.kiimo.me.main.fragments.model.sender.SenderOrderListResponse
 import org.kiimo.me.main.menu.model.CreditCardModel
 import org.kiimo.me.main.menu.model.UserProfileInformationResponse
 import org.kiimo.me.main.sender.model.request.CreateDeliveryRequest
-import org.kiimo.me.main.sender.model.request.Destination
 import org.kiimo.me.main.sender.model.request.Packages
 import org.kiimo.me.main.sender.model.request.PayRequest
 import org.kiimo.me.main.sender.model.request.pay.PayResponse
-import org.kiimo.me.main.sender.model.response.Package
 import org.kiimo.me.main.sender.model.response.SenderCreateDeliveryResponse
 import org.kiimo.me.models.*
 import org.kiimo.me.models.delivery.*
@@ -32,11 +32,14 @@ class MainMenuViewModel(private var repository: MainViewModelRepository) : ViewM
     var dropOffDeliveryLiveData = MutableLiveData<DropOffDeliveryResponse>()
     var acceptDeliveryLiveData = MutableLiveData<AcceptDeliveryResponse>()
     var isValidDelivererLiveData = MutableLiveData<IsValidDelivererResponse>()
-    val senderProperties = SenderProperties()
+    var senderProperties = SenderProperties()
     val destinationLiveData = MutableLiveData<DestinationData>()
     val statusLiveData = MutableLiveData<StatusResponse>()
     val payPackageLiveData = MutableLiveData<PayResponse>()
-    val photoLiveData = MutableLiveData<UploadImageResponse>()
+    val photoPackageLiveData = MutableLiveData<UploadImageResponse>()
+    val photoProfileLiveData = MutableLiveData<UploadImageResponse>()
+    val signatureLiveData = MutableLiveData<UploadImageResponse>()
+
     val preferredPayLiveData = MutableLiveData<PreferredPayResponse>()
 
     fun setPackageSize(packageID: String) {
@@ -45,10 +48,6 @@ class MainMenuViewModel(private var repository: MainViewModelRepository) : ViewM
 
     fun getUser() {
         repository.getUser(userProfileLiveData)
-    }
-
-    fun uploadPhotoToServer(photoRequest: UploadPhotoRequest){
-        repository.uploadPhoto(photoRequest, photoLiveData)
     }
 
     fun putDeviceToken() {
@@ -71,11 +70,22 @@ class MainMenuViewModel(private var repository: MainViewModelRepository) : ViewM
         repository.putLocation(locationModel)
     }
 
-    fun saveCreditCard(creditCardModel: CreditCardModel){
+
+    val deliveryListLiveData = MutableLiveData<MutableList<SenderOrderListResponse>>()
+    fun getDeliveryList() {
+        repository.getDeliveryList(deliveryListLiveData)
+    }
+
+    val ordersListLiveData = MutableLiveData<MutableList<SenderOrderListResponse>>()
+    fun getOrdersList() {
+        repository.getOrdersList(ordersListLiveData)
+    }
+
+    fun saveCreditCard(creditCardModel: CreditCardModel) {
 
     }
 
-    fun savePreferredPaymentType(preferredPaymentUser: PreferredPaymentUser){
+    fun savePreferredPaymentType(preferredPaymentUser: PreferredPaymentUser) {
         repository.savePreferredPaymentUser(preferredPaymentUser, preferredPayLiveData)
     }
 
@@ -117,6 +127,23 @@ class MainMenuViewModel(private var repository: MainViewModelRepository) : ViewM
 
     fun putDeliveryType(deliveryType: DeliveryType = DeliveryType("5c035544-347d-4a4c-9e13-09072360ad34")) {
         repository.putDeliveryType(deliveryType)
+    }
+
+    fun uploadPhotoForPackage(body: MultipartBody.Part) {
+        repository.uploadMultiFormDataImage(Type.Packages, body, photoPackageLiveData)
+    }
+
+    fun uploadPhotoForUser(body: MultipartBody.Part) {
+        repository.uploadMultiFormDataImage(Type.Users, body, photoProfileLiveData)
+    }
+
+    fun updateUserProfilePhoto(photoUrl :String){
+        repository.updateUserPhoto(photoUrl)
+    }
+
+
+    fun uploadSignaturePhoto(body: MultipartBody.Part){
+        repository.uploadMultiFormDataImage(Type.Signatures, body, signatureLiveData)
     }
 
 
@@ -167,12 +194,15 @@ class MainMenuViewModel(private var repository: MainViewModelRepository) : ViewM
                 destinationAddress = destinationAddressPoint.address,
                 distanceByFoot = this.distanceToRoute().roundToInt(),
                 distanceByCar = this.distanceToRoute().roundToInt(),
+                distanceByKickScooter = distanceToRoute().roundToInt(),
+                distanceByBike = distanceToRoute().roundToInt(),
                 originAddress = this.pickUpAddressPoint.address,
                 origin = this.pickUpAddressPoint.locationModel,
                 packages = packageDescritpion
             )
             return req
         }
+
 
         fun getCalculateRequest(): CalculateDeliveryRequest {
             return CalculateDeliveryRequest(

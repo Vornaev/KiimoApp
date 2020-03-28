@@ -4,5 +4,5 @@ import com.google.gson.annotations.SerializedName
 
 data class UserSmsCodeRequest(
 
-    @SerializedName("Username") val username: String
+    @SerializedName("username") val username: String
 )

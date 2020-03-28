@@ -9,6 +9,7 @@ import org.kiimo.me.R
 import org.kiimo.me.app.BaseMainFragment
 import org.kiimo.me.databinding.FragmentMenuPaymentTypeBinding
 import org.kiimo.me.main.menu.model.CreditCardModel
+import org.kiimo.me.models.payment.PreferredPaymentUser
 import org.kiimo.me.util.PreferenceUtils
 
 class MenuPaymentTypeFragment : BaseMainFragment() {
@@ -50,6 +51,8 @@ class MenuPaymentTypeFragment : BaseMainFragment() {
 
         binding.paymentSaveButton.setOnClickListener {
             onSaveClicked()
+
+            mainDeliveryViewModel().savePreferredPaymentType(PreferredPaymentUser("CASH"))
         }
 
         when (paymentType) {

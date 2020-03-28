@@ -6,22 +6,21 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
+import android.os.Handler
+import androidx.lifecycle.Observer
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.android.gms.maps.model.LatLng
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_kiimo_main_navigation.*
 import kotlinx.android.synthetic.main.nav_header_kiimo_main_navigation.view.*
 import org.kiimo.me.R
-import org.kiimo.me.app.BaseActivity
 import org.kiimo.me.dialogs.*
-import org.kiimo.me.inital.InitialActivity
-import org.kiimo.me.main.account.ChangeAccountTypeDialog
 import org.kiimo.me.main.fragments.MapFragment
 import org.kiimo.me.main.menu.KiimoMainNavigationActivity
 import org.kiimo.me.main.sender.SenderKiimoActivity
 import org.kiimo.me.models.*
-import org.kiimo.me.register.WelcomeActivity
 import org.kiimo.me.util.AppConstants
+import org.kiimo.me.util.DialogUtils
 import org.kiimo.me.util.PreferenceUtils
 
 class MainActivity : KiimoMainNavigationActivity(),
@@ -107,7 +106,7 @@ class MainActivity : KiimoMainNavigationActivity(),
         nav_view?.getHeaderView(0)?.buttonChangeAccountTypeUser?.text =
             getString(R.string.i_want_to_send_button)
 
-        handleNotificationReceived(intent)
+        Handler().postDelayed(Runnable { handlePayload(intent) }, 1000)
     }
 
     override fun onStart() {
@@ -115,6 +114,14 @@ class MainActivity : KiimoMainNavigationActivity(),
         LocalBroadcastManager.getInstance(this).registerReceiver(
             (messageReceiver),
             IntentFilter(AppConstants.FIREBASE_BROADCAST)
+        )
+
+
+        viewModel.signatureLiveData.observe(
+            this, Observer {
+                val signatureDefault = "https://img.deliverycoin.net/signatures/2019/11/5508abb2-0756-4827-ace7-95131b2b4986.png"
+                onDropOff(it.imageUrl)
+            }
         )
     }
 
@@ -165,11 +172,11 @@ class MainActivity : KiimoMainNavigationActivity(),
 
     private val messageReceiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent) {
-            handleNotificationReceived(intent)
+            handlePayload(intent)
         }
     }
 
-    fun handleNotificationReceived(notIntent: Intent) {
+    override fun handlePayload(notIntent: Intent) {
         val payloadString = notIntent.extras?.getString(AppConstants.FIREBASE_PAYLOAD)
         if (payloadString.isNullOrEmpty()) return
         val payload = Gson().fromJson(payloadString, FirebasePayload::class.java)
@@ -182,9 +189,12 @@ class MainActivity : KiimoMainNavigationActivity(),
                     getDestination(deliveryPaid.delivery)
                 )
             }
-        } else  {
+        } else if ("DELIVERY_REQUEST" == payload.type) {
             val delivery = Gson().fromJson(payload.delivery, Delivery::class.java)
             showDeliveryAlertDialog(delivery)
+        } else {
+            // DialogUtils.showErrorMessage(this,"error notification")
+            val typy = payload.type
         }
     }
 

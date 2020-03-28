@@ -5,7 +5,11 @@ import androidx.lifecycle.MutableLiveData
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import org.kiimo.me.BuildConfig
 import org.kiimo.me.app.IBaseViewFeatures
+import org.kiimo.me.models.UploadImageResponse
 import org.kiimo.me.register.model.*
 import org.kiimo.me.service.network.client.KiimoAppClient
 import org.kiimo.me.service.network.client.KiimoDeliverHttpClient
@@ -32,7 +36,10 @@ class RegisterAccountRepository(
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                     {
-                        PreferenceUtils.saveUserPassword(viewFeatures.getViewContext(), registerPhoneRequest.password)
+                        PreferenceUtils.saveUserPassword(
+                            viewFeatures.getViewContext(),
+                            registerPhoneRequest.password
+                        )
                         PreferenceUtils.saveUseToken(viewFeatures.getViewContext(), it.userID ?: "")
                         UserCreationProperties.handleResponse(it)
                         data.postValue(it.userID)
@@ -64,12 +71,11 @@ class RegisterAccountRepository(
     }
 
     fun sendSMSCodeToUser(
-        smsCode: String, phone: String, smsLiveData: MutableLiveData<UserRegisterResponse>
+        phone: String, smsLiveData: MutableLiveData<UserRegisterResponse>
     ) {
         disposableContainer.add(
             deliverHttpClient.sendCode(
-                viewFeatures.getUserToken()
-                , UserSmsCodeRequest(phone)
+                smsCodeRequest = UserSmsCodeRequest(phone)
             ).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                     {
@@ -151,5 +157,31 @@ class RegisterAccountRepository(
 
     fun onClear() {
         disposableContainer.dispose()
+    }
+
+    fun uploadMultiFormDataImage(
+        personalID: String,
+        body: MultipartBody.Part,
+        uploadPersonalID: MutableLiveData<UploadImageResponse>
+    ) {
+
+        val type = RequestBody.create(
+            okhttp3.MultipartBody.FORM, personalID
+        )
+
+        disposableContainer.add(
+            deliverHttpClient.uploadMultipardData(body, type)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    uploadPersonalID.postValue(it)
+                    if (BuildConfig.DEBUG) {
+                        viewFeatures.trackRequestSuccess("Photo uploaded")
+                    }
+                },
+                    {
+                        viewFeatures.handleApiError(it)
+                    })
+        )
     }
 }

@@ -4,15 +4,22 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.toolbar_back_button_title.view.*
 import org.kiimo.me.R
 import org.kiimo.me.app.BaseMainFragment
 import org.kiimo.me.databinding.FragmentMenuMyordersListBinding
+import org.kiimo.me.main.fragments.adapter.MenuMyDeliveriesAdapter
+import org.kiimo.me.main.fragments.adapter.MenuMyOrdersAdatper
+import org.kiimo.me.main.fragments.model.sender.SenderOrderListResponse
 
 class MenuMyOrdersFragment : BaseMainFragment() {
 
     lateinit var binding: FragmentMenuMyordersListBinding
-
+    val adapter: MenuMyOrdersAdatper by lazy {
+        MenuMyOrdersAdatper()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -33,6 +40,25 @@ class MenuMyOrdersFragment : BaseMainFragment() {
             requireActivity().onBackPressed()
         }
 
+        binding.startnewOrderBtn.setOnClickListener {
+            activity?.onBackPressed()
+        }
+
+        binding.recycleViewOrders.layoutManager = LinearLayoutManager(requireContext())
+        binding.recycleViewOrders.adapter = adapter
+
+        mainDeliveryViewModel().ordersListLiveData.observe(viewLifecycleOwner, Observer {
+            adapter.updateAdapter(it)
+            setViewState(it)
+        })
+
+        mainDeliveryViewModel().getOrdersList()
+
+    }
+
+    private fun setViewState(list: MutableList<SenderOrderListResponse>) {
+
+        binding.isEmptyState = list.size == 0
     }
 }
 

@@ -2,10 +2,11 @@ package org.kiimo.me.models
 
 import android.graphics.Bitmap
 import java.io.File
+import java.io.FileInputStream
 
 data class UploadPhotoRequest(
 
-    var media: File? = null,
+    var media: FileInputStream? = null,
     var type: String = ""
 )
 

@@ -5,6 +5,9 @@ import android.os.Bundle
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Observer
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.request.RequestOptions
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_kiimo_main_navigation.*
@@ -24,6 +27,8 @@ import org.kiimo.me.main.fragments.ProfileFragment
 import org.kiimo.me.main.menu.di.DaggerMainMenuComponent
 import org.kiimo.me.main.menu.di.MainManiActivityModule
 import org.kiimo.me.main.menu.mainViewModel.MainMenuViewModel
+import org.kiimo.me.main.sender.fragment.SenderMapFragment
+import org.kiimo.me.models.payment.PreferredPaymentUser
 import org.kiimo.me.register.WelcomeActivity
 import org.kiimo.me.services.MessageEvent
 import org.kiimo.me.util.NetworkResponseStatus
@@ -52,14 +57,12 @@ open class KiimoMainNavigationActivity : BaseActivity() {
 
         viewModel.getUser()
         viewModel.putDeviceToken()
-
-
-        composositeContainer.add(
-            RxBus.listen(MessageEvent::class.java).observeOn(AndroidSchedulers.mainThread()).subscribe {
-                onNewIntent(it.data)
-            })
+        viewModel.savePreferredPaymentType(PreferredPaymentUser())
 
     }
+
+    open fun handlePayload(newIntent: Intent) {}
+
 
     protected fun putDeliveryType() {
         viewModel.putDeliveryType()
@@ -72,7 +75,22 @@ open class KiimoMainNavigationActivity : BaseActivity() {
                     PreferenceUtils.saveUserProfile(this, it)
 
                     val username = "${it.firstName}  ${it.lastName}"
-                    userNameHeader.text = username
+                    nav_view?.getHeaderView(0)?.userNameHeader?.text = username
+
+                    if (it.photo.isNotEmpty()) {
+
+                        Glide.with(this).load(it.photo)
+                            .apply(
+                                RequestOptions().override(
+                                    300,
+                                    0
+                                ).skipMemoryCache(true).diskCacheStrategy(
+                                    DiskCacheStrategy.NONE
+                                )
+                            )
+                            .into(nav_view?.getHeaderView(0)?.imageView!!)
+
+                    }
                 }
             }
         )
@@ -160,6 +178,11 @@ open class KiimoMainNavigationActivity : BaseActivity() {
         } else {
 
             if (supportFragmentManager.backStackEntryCount == 1) {
+
+                val lastFrag = supportFragmentManager.fragments.last()
+//                if(lastFrag is SenderMapFragment){
+//                    lastFrag.shouldResetFragment()
+//                }
                 moveTaskToBack(true)
             } else {
                 super.onBackPressed()

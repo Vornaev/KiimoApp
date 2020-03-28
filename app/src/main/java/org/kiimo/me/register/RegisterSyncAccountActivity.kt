@@ -37,7 +37,11 @@ class RegisterSyncAccountActivity : BaseRegistrationServicesActivity() {
     private fun registerViewModelObservers() {
 
         viewModel.tokenData.observe(this, Observer {
+
+            val phoneNumber = activityRegisterCCpDialog.fullNumberWithPlus
+            viewModel.sendSmsCodeToUser(phoneNumber)
             startActivity(Intent(this, RegisterValidationCodeActivity::class.java))
+            //send sms code api url
         })
     }
 

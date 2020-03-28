@@ -1,5 +1,6 @@
 package org.kiimo.me.main.menu.mainViewModel
 
+import android.app.Activity
 import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import io.reactivex.Observable
@@ -7,8 +8,12 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import org.kiimo.me.BuildConfig
 import org.kiimo.me.app.IBaseViewFeatures
+import org.kiimo.me.main.fragments.model.deliveries.DeliveryCarrierItem
+import org.kiimo.me.main.fragments.model.sender.SenderOrderListResponse
 import org.kiimo.me.main.menu.model.GetUserRequestModel
 import org.kiimo.me.main.menu.model.UserProfileInformationResponse
 import org.kiimo.me.main.sender.model.request.CreateDeliveryRequest
@@ -23,6 +28,8 @@ import org.kiimo.me.register.model.*
 import org.kiimo.me.service.network.client.KiimoAppClient
 import org.kiimo.me.service.network.client.KiimoDeliverHttpClient
 import org.kiimo.me.util.AppConstants
+import org.kiimo.me.util.DialogUtils
+import retrofit2.http.Multipart
 import timber.log.Timber
 import java.util.*
 
@@ -304,30 +311,6 @@ class MainViewModelRepository(
         )
     }
 
-    fun uploadPhoto(
-        photoRequest: UploadPhotoRequest,
-        photoLiveData: MutableLiveData<UploadImageResponse>
-    ) {
-        disposableContainer.add(
-            deliveryClient.uploadImageToServer(
-                token = viewFeatures.getUserToken(),
-                uploadPhotoRequest = photoRequest
-            )
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                    {
-                        photoLiveData.postValue(it)
-                        if (BuildConfig.DEBUG) {
-                            viewFeatures.trackRequestSuccess("Photo uploaded")
-                        }
-                    },
-                    {
-                        viewFeatures.handleApiError(it)
-                    })
-        )
-    }
-
 
     fun savePreferredPaymentUser(
         preferredPaymentUser: PreferredPaymentUser,
@@ -350,6 +333,89 @@ class MainViewModelRepository(
                     {
                         viewFeatures.handleApiError(it)
                     })
+        )
+    }
+
+
+    fun uploadMultiFormDataImage(
+        type: String,
+        data: MultipartBody.Part,
+        photoLiveData: MutableLiveData<UploadImageResponse>
+    ) {
+
+        val type = RequestBody.create(
+            okhttp3.MultipartBody.FORM, type
+        )
+        disposableContainer.add(
+            deliveryClient.uploadMultipardData(data, type)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    photoLiveData.postValue(it)
+                    if (BuildConfig.DEBUG) {
+                        viewFeatures.trackRequestSuccess("Photo uploaded")
+                    }
+                },
+                    {
+                        viewFeatures.handleApiError(it)
+                    })
+        )
+    }
+
+    fun getDeliveryList(deliveryLiveData: MutableLiveData<MutableList<SenderOrderListResponse>>) {
+        disposableContainer.add(
+            deliveryClient.getDeliveriesList(
+                token = viewFeatures.getUserToken()
+            )
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                    {
+                        deliveryLiveData.postValue(it)
+                    },
+                    {
+                        viewFeatures.handleApiError(it)
+                    })
+        )
+
+    }
+
+    fun getOrdersList(ordersLiveDta: MutableLiveData<MutableList<SenderOrderListResponse>>) {
+        disposableContainer.add(
+            deliveryClient.getOrdersList(
+                token = viewFeatures.getUserToken()
+            )
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                    {
+                        ordersLiveDta.postValue(it)
+                        viewFeatures.trackRequestSuccess("orders list success")
+                    },
+                    {
+                        viewFeatures.handleApiError(it)
+                    })
+        )
+    }
+
+    fun updateUserPhoto(photoUrl: String) {
+        disposableContainer.add(
+            userClient.updateUserInformation(
+                UserProfileUpdatePhotoRequest(
+                    photoUrl,
+                    viewFeatures.getUserToken(),
+                    UserRegisterDataRequest()
+                )
+            )
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                    {
+                        viewFeatures.trackRequestSuccess("photo saved")
+                    }, {
+                        viewFeatures.handleApiError(it)
+                    }
+                )
         )
     }
 }

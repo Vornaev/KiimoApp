@@ -1,9 +1,9 @@
-package org.kiimo.me.main.sender.model.notifications
+package org.kiimo.me.main.fragments.model.sender
 
 
 import com.google.gson.annotations.SerializedName
 
-data class Destination(
+data class Origin(
     @SerializedName("lat")
     val lat: Double = 0.0,
     @SerializedName("lng")

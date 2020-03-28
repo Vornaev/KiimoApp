@@ -3,6 +3,9 @@ package org.kiimo.me.register.service
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import okhttp3.MultipartBody
+import org.kiimo.me.models.Type
+import org.kiimo.me.models.UploadImageResponse
 import org.kiimo.me.register.model.*
 
 class RegisterAccountViewModel(private var repository: RegisterAccountRepository) : ViewModel() {
@@ -13,6 +16,7 @@ class RegisterAccountViewModel(private var repository: RegisterAccountRepository
     var smsValidationCodeLiveData = MutableLiveData<SmsValidationResponse>()
     var userLoginLiveData = MutableLiveData<UserLoginResponse>()
     var activateUserLiveData = MutableLiveData<StatusMessageDataResponse>()
+    val uploadPersonalID = MutableLiveData<UploadImageResponse>()
 
 
     init {
@@ -45,8 +49,16 @@ class RegisterAccountViewModel(private var repository: RegisterAccountRepository
         repository.userLogin(userLoginLiveData)
     }
 
+    fun sendSmsCodeToUser(number: String) {
+        repository.sendSMSCodeToUser(number, smsCodeLiveData)
+    }
+
     fun ativateUser() {
         repository.activateUser(activateUserLiveData)
+    }
+
+    fun uploadPhotoPersonalID(body: MultipartBody.Part) {
+        repository.uploadMultiFormDataImage(Type.PersionalID, body, uploadPersonalID)
     }
 }
 

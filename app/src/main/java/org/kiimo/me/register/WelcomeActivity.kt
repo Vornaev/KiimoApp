@@ -58,7 +58,7 @@ class WelcomeActivity : BaseRegistrationServicesActivity() {
     }
 
     fun startInital() {
-        startActivity(Intent(this, InitialActivity::class.java).apply {
+        startActivity(Intent(this, RegisterProfileDeliverInformationActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK and Intent.FLAG_ACTIVITY_CLEAR_TASK
         })
     }

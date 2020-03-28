@@ -1,6 +1,10 @@
 package org.kiimo.me.service.network.client
 
 import io.reactivex.Observable
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import org.kiimo.me.main.fragments.model.deliveries.DeliveryCarrierItem
+import org.kiimo.me.main.fragments.model.sender.SenderOrderListResponse
 import org.kiimo.me.main.sender.model.request.CreateDeliveryRequest
 import org.kiimo.me.main.sender.model.request.PayRequest
 import org.kiimo.me.main.sender.model.request.pay.PayResponse
@@ -14,6 +18,7 @@ import org.kiimo.me.models.DeviceToken
 import org.kiimo.me.models.*
 import org.kiimo.me.models.delivery.CalculateDeliveryRequest
 import org.kiimo.me.models.delivery.CalculateDeliveryResponse
+import org.kiimo.me.models.delivery.UploadSignatureRequest
 import org.kiimo.me.models.payment.PreferredPayResponse
 import org.kiimo.me.models.payment.PreferredPaymentUser
 import org.kiimo.me.register.model.SmsValidationRequest
@@ -35,7 +40,7 @@ object HttpHeaders {
 interface KiimoDeliverHttpClient {
 
     @POST("api/sms/send-code")
-    fun sendCode(@Header(AuthorizationHeader) userID: String, @Body smsCodeRequest: UserSmsCodeRequest): Observable<UserRegisterResponse>
+    fun sendCode(@Header(ContentTypeHeader) contentType: String = jsonHeader, @Body smsCodeRequest: UserSmsCodeRequest): Observable<UserRegisterResponse>
 
 
     @POST("api/sms/validate-code")
@@ -147,7 +152,27 @@ interface KiimoDeliverHttpClient {
     fun uploadImageToServer(@Header(AuthorizationHeader) token: String, @Body uploadPhotoRequest: UploadPhotoRequest): Observable<UploadImageResponse>
 
 
-    @POST("api/self/preferred-payment")
+    @POST("api/upload")
+    @FormUrlEncoded()
+    fun uploadImageToServerField(
+        @Header(AuthorizationHeader) token: String, @Header(
+            ContentTypeHeader
+        ) contentHeader: String, @Field("media") media: ByteArray, @Field("signature") signatureRequest: String
+    ): Observable<UploadImageResponse>
+
+
+    @PUT("api/self/preferred-payment")
     fun savePreferredPayment(@Header(AuthorizationHeader) token: String, @Body preferedPay: PreferredPaymentUser): Observable<PreferredPayResponse>
+
+
+    @Multipart
+    @POST("api/upload")
+    fun uploadMultipardData(@Part media: MultipartBody.Part, @Part("type") requestBody: RequestBody): Observable<UploadImageResponse>
+
+    @POST("api/deliveries/sender")
+    fun getOrdersList(@Header(AuthorizationHeader) token: String): Observable<MutableList<SenderOrderListResponse>>
+
+    @GET("api/deliveries?userType=carrier")
+    fun getDeliveriesList(@Header(AuthorizationHeader) token: String): Observable<MutableList<SenderOrderListResponse>>
 
 }

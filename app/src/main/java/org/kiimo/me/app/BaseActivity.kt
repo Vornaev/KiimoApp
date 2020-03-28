@@ -1,6 +1,8 @@
 package org.kiimo.me.app
 
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.widget.EditText
 import android.widget.Toast
@@ -13,16 +15,17 @@ import org.kiimo.me.app.di.AppComponent
 import org.kiimo.me.models.DeviceToken
 import org.kiimo.me.util.AppConstants
 import org.kiimo.me.util.DialogUtils
+import org.kiimo.me.util.IMediaManagerImages
 import org.kiimo.me.util.PreferenceUtils
 
-abstract class BaseActivity : AppCompatActivity(), IBaseViewFeatures {
+abstract class BaseActivity : AppCompatActivity(), IBaseViewFeatures, IMediaManagerImages {
 
 
     override fun trackRequestSuccess(info: String) {
         if (BuildConfig.DEBUG)
             Toast.makeText(
                 this,
-                "Success PutLocation",
+                info,
                 Toast.LENGTH_SHORT
             ).show()
     }
@@ -115,5 +118,17 @@ abstract class BaseActivity : AppCompatActivity(), IBaseViewFeatures {
 
     override fun getUserPhoneNumber(): String {
         return PreferenceUtils.getUserPhoneNumber(this)
+    }
+
+    override fun getMediaContext(): Context {
+        return this
+    }
+
+    override fun startMediaActivity(createChooser: Intent?, requestImagePick: Int) {
+        startActivityForResult(createChooser, requestImagePick)
+    }
+
+    override fun getMediaActivity(): Activity {
+        return this
     }
 }

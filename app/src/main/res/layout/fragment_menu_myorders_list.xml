@@ -3,6 +3,15 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+                name="isEmptyState"
+                type="boolean" />
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -18,23 +27,23 @@
         <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/emptyState"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:visibility="@{isEmptyState ? View.VISIBLE: View.GONE}">
 
             <ImageView
                     android:id="@+id/emptyStateImageView"
                     android:layout_width="150dp"
                     android:layout_height="wrap_content"
-                    android:scaleType="centerInside"
                     android:layout_marginTop="150dp"
+                    android:scaleType="centerInside"
                     android:src="@drawable/mage_empty_state_my_orders"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
             <Button
-                    android:id="@+id/payment_save_button"
+                    android:id="@+id/startnewOrderBtn"
                     android:layout_width="0dp"
-                    app:layout_constraintWidth_percent="0.8"
                     android:layout_height="@dimen/big_button_height"
                     android:layout_marginTop="@dimen/margin_extra_large"
                     android:layout_marginBottom="@dimen/margin_extra_large"
@@ -46,10 +55,20 @@
                     android:textColor="@android:color/white"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent" />
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintWidth_percent="0.8" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+        <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycleViewOrders"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:visibility="@{isEmptyState ? View.GONE : View.VISIBLE}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

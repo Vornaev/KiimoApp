@@ -41,7 +41,7 @@ class SendItemDescriptionDialog : BaseKiimoDialog() {
             .setDuration(600000).setInterpolator(LinearInterpolator()).start()
 
 
-        builder.setView(binding.root)
+        builder.setView(binding.root).setCancelable(false)
 
         return builder.create()
     }
