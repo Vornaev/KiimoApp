@@ -89,7 +89,7 @@ open class RegisterProfileSenderInformationActivity : BaseRegistrationServicesAc
     }
 
     fun validateEmail(): Boolean {
-        val validEmail = layoutRegisterUserEmail.EditTextFieldValidation.textValue().isNotEmpty()
+        val validEmail = layoutRegisterUserEmail.EditTextFieldValidation.textValue().isNotBlank()
         displayValidationStatus(layoutRegisterUserEmail, validEmail)
 
         return validEmail
@@ -97,7 +97,7 @@ open class RegisterProfileSenderInformationActivity : BaseRegistrationServicesAc
 
     fun validateFirstName(): Boolean {
         val validFirstName =
-            layoutRegisterUserFirstName.EditTextFieldValidation.textValue().isNotEmpty()
+            layoutRegisterUserFirstName.EditTextFieldValidation.textValue().isNotBlank()
         displayValidationStatus(layoutRegisterUserFirstName, validFirstName)
 
         return validFirstName
@@ -105,7 +105,7 @@ open class RegisterProfileSenderInformationActivity : BaseRegistrationServicesAc
 
     fun validateLastName(): Boolean {
         val validLastName =
-            layoutRegisterUserLastName.EditTextFieldValidation.textValue().isNotEmpty()
+            layoutRegisterUserLastName.EditTextFieldValidation.textValue().isNotBlank()
         displayValidationStatus(layoutRegisterUserLastName, validLastName)
 
         return validLastName

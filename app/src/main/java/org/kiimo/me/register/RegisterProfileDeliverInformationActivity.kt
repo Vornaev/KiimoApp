@@ -55,7 +55,6 @@ class RegisterProfileDeliverInformationActivity : RegisterProfileSenderInformati
         layoutRegisterUserHouseNumber.EditTextFieldValidation.hint =
             getString(R.string.houne_number_hint)
 
-
         layoutRegisterProfileZipCode.EditTextFieldValidation.hint =
             getString(R.string.zip_cide_hint)
         layoutRegisterProfilePlace.EditTextFieldValidation.hint =
@@ -147,23 +146,20 @@ class RegisterProfileDeliverInformationActivity : RegisterProfileSenderInformati
             val width = 480
             val height = 640
 
-            if (width != null && height != null && width > 0 && height > 0) {
-                if (requestCode == MediaManager.REQUEST_IMAGE_CAPTURE) {
+            if (requestCode == MediaManager.REQUEST_IMAGE_CAPTURE) {
+                MediaManager.getBitmap(
+                    width.toFloat(), height.toFloat()
+                )?.apply {
+                    onSuccessGetImage(this)
+                }
+            } else if (requestCode == MediaManager.REQUEST_IMAGE_PICK) {
+                val uri = data?.data
 
-                    MediaManager.getBitmap(
-                        width.toFloat(), height.toFloat()
-                    )?.apply {
-                        onSuccessGetImage(this)
-                    }
-                } else if (requestCode == MediaManager.REQUEST_IMAGE_PICK) {
-                    val uri = data?.data
-
-                    MediaManager.getBitmapGallery(
-                        MediaStore.Images.Media.getBitmap(this.contentResolver, uri),
-                        width, height
-                    )?.apply {
-                        onSuccessGetImage(this)
-                    }
+                MediaManager.getBitmapGallery(
+                    MediaStore.Images.Media.getBitmap(this.contentResolver, uri),
+                    width, height
+                )?.apply {
+                    onSuccessGetImage(this)
                 }
             }
         }
@@ -175,28 +171,28 @@ class RegisterProfileDeliverInformationActivity : RegisterProfileSenderInformati
     }
 
     private fun validateHouseNumber(): Boolean {
-        val valid = layoutRegisterUserHouseNumber.EditTextFieldValidation.textValue().isNotEmpty()
+        val valid = layoutRegisterUserHouseNumber.EditTextFieldValidation.textValue().isNotBlank()
         displayValidationStatus(layoutRegisterUserHouseNumber, valid)
 
         return valid
     }
 
     private fun validateZipCode(): Boolean {
-        val valid = layoutRegisterProfileZipCode.EditTextFieldValidation.textValue().isNotEmpty()
+        val valid = layoutRegisterProfileZipCode.EditTextFieldValidation.textValue().isNotBlank()
         displayValidationStatus(layoutRegisterProfileZipCode, valid)
 
         return valid
     }
 
     private fun validateStreet(): Boolean {
-        val valid = layoutRegisterUserStreet.EditTextFieldValidation.textValue().isNotEmpty()
+        val valid = layoutRegisterUserStreet.EditTextFieldValidation.textValue().isNotBlank()
         displayValidationStatus(layoutRegisterUserStreet, valid)
 
         return valid
     }
 
     private fun validatePlace(): Boolean {
-        val valid = layoutRegisterProfilePlace.EditTextFieldValidation.textValue().isNotEmpty()
+        val valid = layoutRegisterProfilePlace.EditTextFieldValidation.textValue().isNotBlank()
         displayValidationStatus(layoutRegisterProfilePlace, valid)
 
         return valid
@@ -205,7 +201,7 @@ class RegisterProfileDeliverInformationActivity : RegisterProfileSenderInformati
 
     private fun validateCountryCode(): Boolean {
         val valid =
-            layoutRegisterProfileCountryCode.EditTextFieldValidation.textValue().isNotEmpty()
+            layoutRegisterProfileCountryCode.EditTextFieldValidation.textValue().isNotBlank()
         displayValidationStatus(layoutRegisterProfileCountryCode, valid)
 
         return valid
