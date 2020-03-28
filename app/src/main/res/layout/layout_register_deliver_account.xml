@@ -61,20 +61,14 @@
             app:layout_constraintStart_toEndOf="@id/layoutRegisterUserHouseNumber"
             app:layout_constraintTop_toBottomOf="@id/layoutRegisterProfileZipCode"
             app:layout_constraintWidth_percent="0.45" />
-    
 
-    <EditText
+
+    <include
             android:id="@+id/activityRegisterProfileVerificationField"
-            style="@style/EditTextRegisterInputStyles"
+            layout="@layout/layout_edit_field_with_validation"
             android:layout_width="0dp"
-            android:layout_height="30dp"
+            android:layout_height="40dp"
             android:layout_marginTop="14dp"
-            android:focusable="false"
-            android:hint="VERFICATION ID*"
-            android:inputType="text|number"
-            android:padding="0dp"
-            android:textAlignment="center"
-            android:textSize="12sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/layoutRegisterProfilePlace"
@@ -89,16 +83,17 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.26"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/activityRegisterProfileVerificationField" />
+            app:layout_constraintTop_toTopOf="@id/activityRegisterProfileVerificationField"
+            app:layout_constraintVertical_bias="0.5" />
 
     <ImageView
             android:id="@+id/registerValidationImageVerificationPreview"
             android:layout_width="0dp"
             android:layout_height="200dp"
             android:layout_marginTop="24dp"
-            android:visibility="gone"
             android:adjustViewBounds="true"
             android:scaleType="centerCrop"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/activityRegisterProfileVerificationField"

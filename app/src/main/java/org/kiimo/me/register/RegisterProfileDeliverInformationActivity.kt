@@ -6,6 +6,7 @@ import android.graphics.Bitmap
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.View
+import android.widget.EditText
 import androidx.lifecycle.Observer
 import kotlinx.android.synthetic.main.activity_register_profile_information.*
 import kotlinx.android.synthetic.main.layout_edit_field_with_validation.view.*
@@ -71,6 +72,11 @@ class RegisterProfileDeliverInformationActivity : RegisterProfileSenderInformati
 
         layoutRegisterUserStreet.EditTextFieldValidation.hint =
             getString(R.string.street_hint)
+
+        activityRegisterProfileVerificationField.EditTextFieldValidation.setText(getString(R.string.verification_id_field))
+        activityRegisterProfileVerificationField.EditTextFieldValidation.isFocusable = false
+        activityRegisterProfileVerificationField.EditTextFieldValidation.textAlignment = EditText.TEXT_ALIGNMENT_CENTER
+
     }
 
 
@@ -135,9 +141,11 @@ class RegisterProfileDeliverInformationActivity : RegisterProfileSenderInformati
         val validUser = super.registerInformationValidation()
         val validStreet = validateStreet()
 
+        val validPhoto = validateImageField()
+
 
         val valid =
-            validZipCode && validPlace && validCountryCode && validHouseNumber && validUser && validStreet && personalIDPhotoURL.isNotBlank()
+            validZipCode && validPlace && validCountryCode && validHouseNumber && validUser && validStreet && validPhoto
         return valid
     }
 
@@ -146,9 +154,10 @@ class RegisterProfileDeliverInformationActivity : RegisterProfileSenderInformati
 
         viewModel.uploadPersonalID.observe(this, Observer {
             personalIDPhotoURL = it.imageUrl
+            validateImageField()
         })
 
-        activityRegisterProfileVerificationField.setOnClickListener {
+        activityRegisterProfileVerificationField.EditTextFieldValidation.setOnClickListener {
             MediaManager.showMediaOptionsDialog(this)
         }
     }
@@ -243,6 +252,17 @@ class RegisterProfileDeliverInformationActivity : RegisterProfileSenderInformati
         displayValidationStatus(layoutRegisterProfileCountryCode, valid)
 
         return valid
+    }
+
+    private fun validateImageField(): Boolean {
+
+        val valid = personalIDPhotoURL.isNotBlank()
+        displayValidationStatus(
+            activityRegisterProfileVerificationField,
+            personalIDPhotoURL.isNotBlank()
+        )
+        return valid
+
     }
 
 
