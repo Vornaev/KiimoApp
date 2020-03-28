@@ -10,6 +10,9 @@ import androidx.lifecycle.Observer
 import kotlinx.android.synthetic.main.activity_register_profile_information.*
 import kotlinx.android.synthetic.main.layout_edit_field_with_validation.view.*
 import kotlinx.android.synthetic.main.layout_register_deliver_account.*
+import okhttp3.MediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import org.kiimo.me.R
 import org.kiimo.me.main.MainActivity
 import org.kiimo.me.register.model.UserAddressDataRequest
@@ -17,8 +20,12 @@ import org.kiimo.me.register.model.UserProfileInformationRequest
 import org.kiimo.me.register.model.UserRegisterDataRequest
 import org.kiimo.me.util.MediaManager
 import org.kiimo.me.util.PreferenceUtils
+import java.io.ByteArrayOutputStream
 
 class RegisterProfileDeliverInformationActivity : RegisterProfileSenderInformationActivity() {
+
+
+    private var personalIDPhotoURL = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -106,6 +113,7 @@ class RegisterProfileDeliverInformationActivity : RegisterProfileSenderInformati
                             zip = layoutRegisterProfileZipCode.EditTextFieldValidation.textValue()
                         ),
                         email = layoutRegisterUserEmail.EditTextFieldValidation.textValue(),
+                        personalID = personalIDPhotoURL,
                         firstName = layoutRegisterUserFirstName.EditTextFieldValidation.textValue(),
                         lastName = layoutRegisterUserLastName.EditTextFieldValidation.textValue(),
                         userID = PreferenceUtils.getUserToken(this),
@@ -129,11 +137,17 @@ class RegisterProfileDeliverInformationActivity : RegisterProfileSenderInformati
 
 
         val valid =
-            validZipCode && validPlace && validCountryCode && validHouseNumber && validUser && validStreet
+            validZipCode && validPlace && validCountryCode && validHouseNumber && validUser && validStreet && personalIDPhotoURL.isNotBlank()
         return valid
     }
 
+
     private fun setListenerCamera() {
+
+        viewModel.uploadPersonalID.observe(this, Observer {
+            personalIDPhotoURL = it.imageUrl
+        })
+
         activityRegisterProfileVerificationField.setOnClickListener {
             MediaManager.showMediaOptionsDialog(this)
         }
@@ -168,6 +182,30 @@ class RegisterProfileDeliverInformationActivity : RegisterProfileSenderInformati
     private fun onSuccessGetImage(bitmap: Bitmap) {
         registerValidationImageVerificationPreview.visibility = View.VISIBLE
         registerValidationImageVerificationPreview.setImageBitmap(bitmap)
+        uploadBitmap(bitmap)
+    }
+
+    fun uploadBitmap(bitmap: Bitmap) {
+
+        val stream = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream)
+        var byteArray = stream.toByteArray()
+
+        val fileRequest = RequestBody.create(
+            MediaType.parse("image/*"),
+            byteArray
+        )
+
+        val body = MultipartBody.Part.createFormData(
+            "media",
+            "${System.currentTimeMillis()}.jpg",
+            fileRequest
+        );
+
+        viewModel.uploadPhotoPersonalID(body)
+
+        stream.flush()
+        stream.close()
     }
 
     private fun validateHouseNumber(): Boolean {

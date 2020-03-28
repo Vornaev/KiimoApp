@@ -61,6 +61,7 @@
             app:layout_constraintStart_toEndOf="@id/layoutRegisterUserHouseNumber"
             app:layout_constraintTop_toBottomOf="@id/layoutRegisterProfileZipCode"
             app:layout_constraintWidth_percent="0.45" />
+    
 
     <EditText
             android:id="@+id/activityRegisterProfileVerificationField"
