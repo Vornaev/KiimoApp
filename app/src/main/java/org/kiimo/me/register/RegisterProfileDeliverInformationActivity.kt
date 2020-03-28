@@ -1,7 +1,10 @@
 package org.kiimo.me.register
 
+import android.app.Activity
 import android.content.Intent
+import android.graphics.Bitmap
 import android.os.Bundle
+import android.provider.MediaStore
 import android.view.View
 import androidx.lifecycle.Observer
 import kotlinx.android.synthetic.main.activity_register_profile_information.*
@@ -9,10 +12,10 @@ import kotlinx.android.synthetic.main.layout_edit_field_with_validation.view.*
 import kotlinx.android.synthetic.main.layout_register_deliver_account.*
 import org.kiimo.me.R
 import org.kiimo.me.main.MainActivity
-import org.kiimo.me.main.menu.KiimoMainNavigationActivity
 import org.kiimo.me.register.model.UserAddressDataRequest
 import org.kiimo.me.register.model.UserProfileInformationRequest
 import org.kiimo.me.register.model.UserRegisterDataRequest
+import org.kiimo.me.util.MediaManager
 import org.kiimo.me.util.PreferenceUtils
 
 class RegisterProfileDeliverInformationActivity : RegisterProfileSenderInformationActivity() {
@@ -23,7 +26,6 @@ class RegisterProfileDeliverInformationActivity : RegisterProfileSenderInformati
         registerDeliverLayout.visibility = View.VISIBLE
 
         setListenerCamera()
-
 
 
     }
@@ -133,7 +135,43 @@ class RegisterProfileDeliverInformationActivity : RegisterProfileSenderInformati
     }
 
     private fun setListenerCamera() {
-        // MediaManager.showMediaOptionsDialog()
+        activityRegisterProfileVerificationField.setOnClickListener {
+            MediaManager.showMediaOptionsDialog(this)
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == Activity.RESULT_OK) {
+
+            val width = 480
+            val height = 640
+
+            if (width != null && height != null && width > 0 && height > 0) {
+                if (requestCode == MediaManager.REQUEST_IMAGE_CAPTURE) {
+
+                    MediaManager.getBitmap(
+                        width.toFloat(), height.toFloat()
+                    )?.apply {
+                        onSuccessGetImage(this)
+                    }
+                } else if (requestCode == MediaManager.REQUEST_IMAGE_PICK) {
+                    val uri = data?.data
+
+                    MediaManager.getBitmapGallery(
+                        MediaStore.Images.Media.getBitmap(this.contentResolver, uri),
+                        width, height
+                    )?.apply {
+                        onSuccessGetImage(this)
+                    }
+                }
+            }
+        }
+    }
+
+    private fun onSuccessGetImage(bitmap: Bitmap) {
+        registerValidationImageVerificationPreview.visibility = View.VISIBLE
+        registerValidationImageVerificationPreview.setImageBitmap(bitmap)
     }
 
     private fun validateHouseNumber(): Boolean {

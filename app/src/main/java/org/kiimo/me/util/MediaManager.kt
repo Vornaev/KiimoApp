@@ -1,7 +1,6 @@
 package org.kiimo.me.util
 
 import android.app.Activity
-import android.app.Application
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
@@ -18,12 +17,19 @@ import androidx.core.net.toUri
 import androidx.exifinterface.media.ExifInterface
 import org.kiimo.me.BuildConfig
 import org.kiimo.me.R
-import org.kiimo.me.app.App
-import org.kiimo.me.app.BaseFragment
 import java.io.File
 import java.io.IOException
 import java.util.*
 
+
+interface IMediaManagerImages{
+
+    fun getMediaContext(): Context
+    fun startMediaActivity(createChooser: Intent?, requestImagePick: Int)
+    fun getMediaActivity(): Activity
+
+
+}
 
 object MediaManager {
 
@@ -32,8 +38,8 @@ object MediaManager {
     const val REQUEST_IMAGE_CAPTURE = 1
     const val REQUEST_IMAGE_PICK = 2
 
-    fun showMediaOptionsDialog(baseFragment: BaseFragment) {
-        val dialogBuilder = AlertDialog.Builder(baseFragment.requireContext())
+    fun showMediaOptionsDialog(iMediaItem: IMediaManagerImages) {
+        val dialogBuilder = AlertDialog.Builder(iMediaItem.getMediaContext())
 
         val pickMediaOptions = arrayOf<CharSequence>(
             "take photo",
@@ -42,8 +48,8 @@ object MediaManager {
 
         val dialogListener = DialogInterface.OnClickListener { _, which ->
             when (which) {
-                0 -> getDispatchTakePictureIntent(baseFragment)
-                1 -> openMedia(baseFragment)
+                0 -> getDispatchTakePictureIntent(iMediaItem)
+                1 -> openMedia(iMediaItem)
             }
         }
 
@@ -56,18 +62,18 @@ object MediaManager {
         }
 
         dialog.setButton(
-            AlertDialog.BUTTON_NEGATIVE, baseFragment.getString(R.string.general_cancel_button),
+            AlertDialog.BUTTON_NEGATIVE, iMediaItem.getMediaContext().getString(R.string.general_cancel_button),
             dialogNegativeButtonListener
         )
 
         dialog.show()
     }
 
-    private fun openMedia(baseFragment: BaseFragment) {
+    private fun openMedia(iMediaItem: IMediaManagerImages) {
         val intent = Intent()
         intent.type = "image/*"
         intent.action = Intent.ACTION_GET_CONTENT
-        baseFragment.startActivityForResult(
+        iMediaItem.startMediaActivity(
             Intent.createChooser(
                 intent,
                 "select image"
@@ -75,15 +81,15 @@ object MediaManager {
         )
     }
 
-    private fun getDispatchTakePictureIntent(baseFragment: BaseFragment) {
-        if (hasCamera(baseFragment.requireActivity())) {
+    private fun getDispatchTakePictureIntent(iMediaItem: IMediaManagerImages) {
+        if (hasCamera(iMediaItem.getMediaActivity())) {
             Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
                 // Ensure that there's a camera activity to handle the intent
-                takePictureIntent.resolveActivity(baseFragment.requireActivity().packageManager)
+                takePictureIntent.resolveActivity(iMediaItem.getMediaActivity().packageManager)
                     ?.also {
                         // Create the File where the photo should go
                         val photoFile: File? = try {
-                            createImageFile(baseFragment.requireActivity())
+                            createImageFile(iMediaItem.getMediaActivity())
                         } catch (ex: IOException) {
                             // Error occurred while creating the File
                             null
@@ -91,13 +97,13 @@ object MediaManager {
                         // Continue only if the File was successfully created
                         photoFile?.also {
                             val localPhotoURI = FileProvider.getUriForFile(
-                                baseFragment.requireActivity(),
+                                iMediaItem.getMediaActivity(),
                                 "${BuildConfig.APPLICATION_ID}.contentprovider",
                                 it
                             )
                             takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, localPhotoURI)
 
-                            baseFragment.startActivityForResult(
+                            iMediaItem.startMediaActivity(
                                 takePictureIntent,
                                 REQUEST_IMAGE_CAPTURE
                             )

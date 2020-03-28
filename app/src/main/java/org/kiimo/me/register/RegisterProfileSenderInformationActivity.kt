@@ -75,8 +75,6 @@ open class RegisterProfileSenderInformationActivity : BaseRegistrationServicesAc
                         user = UserRegisterDataRequest()
                     )
                 )
-            } else {
-                startActivity(Intent(this, SenderKiimoActivity::class.java))
             }
         }
     }

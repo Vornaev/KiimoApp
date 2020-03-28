@@ -109,7 +109,6 @@ class SenderCreateDeliveryFragment : BaseMainFragment() {
             if (width != null && height != null && width > 0 && height > 0) {
                 if (requestCode == MediaManager.REQUEST_IMAGE_CAPTURE) {
 
-
                     MediaManager.getBitmap(
                         width.toFloat(), height.toFloat()
                     )?.apply {
