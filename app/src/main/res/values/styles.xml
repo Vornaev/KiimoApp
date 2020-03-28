@@ -40,6 +40,10 @@
         <item name="android:textSize">14sp</item>
     </style>
 
+    <style name="TextView.PersonalIDStyle" parent="EditTextRegisterInputStyles">
+        <item name="android:padding">8dp</item>
+    </style>
+
     <style name="MenuGrayEditFieldsStyle" parent="EditTextRegisterInputStyles">
 
     </style>

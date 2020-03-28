@@ -6,11 +6,11 @@ import android.graphics.Bitmap
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.View
-import android.widget.EditText
 import androidx.lifecycle.Observer
 import kotlinx.android.synthetic.main.activity_register_profile_information.*
 import kotlinx.android.synthetic.main.layout_edit_field_with_validation.view.*
 import kotlinx.android.synthetic.main.layout_register_deliver_account.*
+import kotlinx.android.synthetic.main.layout_register_personal_id.view.*
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -72,11 +72,6 @@ class RegisterProfileDeliverInformationActivity : RegisterProfileSenderInformati
 
         layoutRegisterUserStreet.EditTextFieldValidation.hint =
             getString(R.string.street_hint)
-
-        activityRegisterProfileVerificationField.EditTextFieldValidation.setText(getString(R.string.verification_id_field))
-        activityRegisterProfileVerificationField.EditTextFieldValidation.isFocusable = false
-        activityRegisterProfileVerificationField.EditTextFieldValidation.textAlignment = EditText.TEXT_ALIGNMENT_CENTER
-
     }
 
 
@@ -157,7 +152,7 @@ class RegisterProfileDeliverInformationActivity : RegisterProfileSenderInformati
             validateImageField()
         })
 
-        activityRegisterProfileVerificationField.EditTextFieldValidation.setOnClickListener {
+        activityRegisterProfileVerificationField.TextFieldPersonalID.setOnClickListener {
             MediaManager.showMediaOptionsDialog(this)
         }
     }
@@ -189,8 +184,15 @@ class RegisterProfileDeliverInformationActivity : RegisterProfileSenderInformati
     }
 
     private fun onSuccessGetImage(bitmap: Bitmap) {
-        registerValidationImageVerificationPreview.visibility = View.VISIBLE
-        registerValidationImageVerificationPreview.setImageBitmap(bitmap)
+        activityRegisterProfileVerificationField.registerValidationImageVerificationPreview.visibility =
+            View.VISIBLE
+        activityRegisterProfileVerificationField.registerValidationImageVerificationPreview.setImageBitmap(
+            bitmap
+        )
+        displayValidationStatus(
+            activityRegisterProfileVerificationField,
+            true
+        )
         uploadBitmap(bitmap)
     }
 
@@ -257,6 +259,7 @@ class RegisterProfileDeliverInformationActivity : RegisterProfileSenderInformati
     private fun validateImageField(): Boolean {
 
         val valid = personalIDPhotoURL.isNotBlank()
+
         displayValidationStatus(
             activityRegisterProfileVerificationField,
             personalIDPhotoURL.isNotBlank()

@@ -65,38 +65,13 @@
 
     <include
             android:id="@+id/activityRegisterProfileVerificationField"
-            layout="@layout/layout_edit_field_with_validation"
+            layout="@layout/layout_register_personal_id"
             android:layout_width="0dp"
-            android:layout_height="40dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="14dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/layoutRegisterProfilePlace"
-            app:layout_constraintWidth_percent="0.9" />
-
-    <ImageView
-            android:id="@+id/activityRegisterProfileVerificationImgLogo"
-            android:layout_width="23dp"
-            android:layout_height="23dp"
-            android:src="@drawable/ic_verifiction_upload"
-            app:layout_constraintBottom_toBottomOf="@id/activityRegisterProfileVerificationField"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.26"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/activityRegisterProfileVerificationField"
-            app:layout_constraintVertical_bias="0.5" />
-
-    <ImageView
-            android:id="@+id/registerValidationImageVerificationPreview"
-            android:layout_width="0dp"
-            android:layout_height="200dp"
-            android:layout_marginTop="24dp"
-            android:adjustViewBounds="true"
-            android:scaleType="centerCrop"
-            android:visibility="gone"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/activityRegisterProfileVerificationField"
-            app:layout_constraintWidth_percent="0.9" />
+            app:layout_constraintWidth_percent="0.95" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
