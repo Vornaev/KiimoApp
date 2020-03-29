@@ -38,8 +38,6 @@ class RegisterProfileDeliverInformationActivity : RegisterProfileSenderInformati
         registerDeliverLayout.visibility = View.VISIBLE
 
         setListenerCamera()
-
-
     }
 
 
