@@ -85,6 +85,12 @@ object PreferenceUtils {
         getPreferences(context)[USER_PROFILE_KEY] = string
     }
 
+    fun saveUserProfile(context: Context, user: UserProfileInformationRequest) {
+        val string = JsonUtil.getJsonStringFromModel(user)
+
+        getPreferences(context)[USER_PROFILE_KEY] = string
+    }
+
     fun getUserProfile(context: Context): String {
         return getPreferences(context).getString(USER_PROFILE_KEY, "") ?: ""
     }

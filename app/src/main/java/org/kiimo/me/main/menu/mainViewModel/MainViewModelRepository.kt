@@ -34,9 +34,9 @@ import timber.log.Timber
 import java.util.*
 
 class MainViewModelRepository(
-    private val userClient: KiimoAppClient,
-    private val deliveryClient: KiimoDeliverHttpClient,
-    private val viewFeatures: IBaseViewFeatures
+        private val userClient: KiimoAppClient,
+        private val deliveryClient: KiimoDeliverHttpClient,
+        private val viewFeatures: IBaseViewFeatures
 ) {
 
     private val disposableContainer: CompositeDisposable = CompositeDisposable()
@@ -58,8 +58,8 @@ class MainViewModelRepository(
     }
 
     fun calculateDelivery(
-        deliveryCalculateRequest: CalculateDeliveryRequest,
-        calculateDeliveryData: MutableLiveData<CalculateDeliveryResponse>
+            deliveryCalculateRequest: CalculateDeliveryRequest,
+            calculateDeliveryData: MutableLiveData<CalculateDeliveryResponse>
     ) {
         disposableContainer.add(
             deliveryClient.deliveryCalculate(
@@ -148,10 +148,10 @@ class MainViewModelRepository(
 
 
     fun <D, F> reactiveSubsribe(
-        serviceMethod: (token: String, body: F) -> Observable<D>,
-        data: MutableLiveData<D>,
-        token: String,
-        body: F
+            serviceMethod: (token: String, body: F) -> Observable<D>,
+            data: MutableLiveData<D>,
+            token: String,
+            body: F
     ) {
 
         disposableContainer.add(
@@ -215,8 +215,8 @@ class MainViewModelRepository(
     }
 
     fun createPackageForDelivery(
-        request: CreateDeliveryRequest,
-        data: MutableLiveData<SenderCreateDeliveryResponse>
+            request: CreateDeliveryRequest,
+            data: MutableLiveData<SenderCreateDeliveryResponse>
     ) {
         disposableContainer.add(
             deliveryClient.createPackageForDelivery(
@@ -239,8 +239,8 @@ class MainViewModelRepository(
     }
 
     fun saveUserData(
-        userProfileInformationRequest: UserProfileInformationRequest,
-        updateUserProfileLiveData: MutableLiveData<UserRegisterResponse>
+            userProfileInformationRequest: UserProfileInformationRequest,
+            updateUserProfileLiveData: MutableLiveData<UserRegisterResponse>
     ) {
         disposableContainer.add(
             userClient.updateUserInformation(
@@ -313,8 +313,8 @@ class MainViewModelRepository(
 
 
     fun savePreferredPaymentUser(
-        preferredPaymentUser: PreferredPaymentUser,
-        prefferedLiveData: MutableLiveData<PreferredPayResponse>
+            preferredPaymentUser: PreferredPaymentUser,
+            prefferedLiveData: MutableLiveData<PreferredPayResponse>
     ) {
         disposableContainer.add(
             deliveryClient.savePreferredPayment(
@@ -338,9 +338,9 @@ class MainViewModelRepository(
 
 
     fun uploadMultiFormDataImage(
-        type: String,
-        data: MultipartBody.Part,
-        photoLiveData: MutableLiveData<UploadImageResponse>
+            type: String,
+            data: MultipartBody.Part,
+            photoLiveData: MutableLiveData<UploadImageResponse>
     ) {
 
         val type = RequestBody.create(
@@ -398,7 +398,7 @@ class MainViewModelRepository(
         )
     }
 
-    fun updateUserPhoto(photoUrl: String) {
+    fun updateUserPhoto(photoUrl: String, updateData: MutableLiveData<UserRegisterResponse>) {
         disposableContainer.add(
             userClient.updateUserInformation(
                 UserProfileUpdatePhotoRequest(
@@ -411,6 +411,25 @@ class MainViewModelRepository(
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                     {
+                        updateData.postValue(it)
+                        viewFeatures.trackRequestSuccess("photo saved")
+                    }, {
+                        viewFeatures.handleApiError(it)
+                    }
+                )
+        )
+    }
+
+    fun updateUserFragmentFields(updateRequest: UserProfileFragmentUpdateRequest, updateData: MutableLiveData<UserRegisterResponse>) {
+        disposableContainer.add(
+            userClient.updateUserInformation(
+                updateRequest
+            )
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                    {
+                        updateData.postValue(it)
                         viewFeatures.trackRequestSuccess("photo saved")
                     }, {
                         viewFeatures.handleApiError(it)

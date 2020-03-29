@@ -27,6 +27,8 @@ import org.kiimo.me.main.modules.ProfileModule
 import org.kiimo.me.main.viewmodels.ProfileViewModel
 import org.kiimo.me.main.viewmodels.ProfileViewModelFactory
 import org.kiimo.me.models.Profile
+import org.kiimo.me.register.model.UserProfileFragmentUpdateRequest
+import org.kiimo.me.register.model.UserRegisterDataRequest
 import org.kiimo.me.util.JsonUtil
 import org.kiimo.me.util.MediaManager
 import org.kiimo.me.util.PreferenceUtils
@@ -38,6 +40,9 @@ class ProfileFragment : BaseMainFragment() {
     @Inject
     lateinit var profileViewModelFactory: ProfileViewModelFactory
 
+    val profileString: String by lazy { PreferenceUtils.getUserProfile(requireContext()) }
+    var profilePhoto = ""
+
     private val profileViewModel: ProfileViewModel by viewModels {
         profileViewModelFactory
     }
@@ -45,9 +50,9 @@ class ProfileFragment : BaseMainFragment() {
     private lateinit var binding: FragmentProfileBinding
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         binding = FragmentProfileBinding.inflate(inflater, container, false)
 
@@ -109,7 +114,6 @@ class ProfileFragment : BaseMainFragment() {
 
         mainDeliveryViewModel().uploadPhotoForUser(body)
 
-
     }
 
     private fun subscribeUi() {
@@ -148,14 +152,57 @@ class ProfileFragment : BaseMainFragment() {
         }
     }
 
+    override fun onStop() {
+        saveProfileData()
+        super.onStop()
+    }
+
     fun saveProfileData() {
 
+        var shouldUpdate = false
+
+        val updateRequest = UserProfileFragmentUpdateRequest(
+            profileCache.email,
+            profileCache.name,
+            profileCache.lastName,
+            PreferenceUtils.getUserToken(requireContext()),
+            user = UserRegisterDataRequest()
+        )
+
+        val emailField = binding.profileLayout.emailAddressEditText.text.toString()
+        val firstanmeField = binding.profileLayout.nameEditText.text.toString()
+        val lastNameField = binding.profileLayout.lastNameEditText.text.toString()
+
+        if (isEmailValid(emailField) && !emailField.equals(updateRequest.email, false)) {
+            updateRequest.email = emailField
+            shouldUpdate = true
+        }
+
+        if (firstanmeField.isNotBlank() && !firstanmeField.equals(updateRequest.firstName)) {
+            shouldUpdate = true
+            updateRequest.firstName = firstanmeField
+        }
+
+        if (lastNameField.isNotBlank() && !lastNameField.equals(updateRequest.lastName)) {
+            shouldUpdate = true
+            updateRequest.lastName = lastNameField
+        }
+
+        if (shouldUpdate) {
+            getNavigationActivity().viewModel.updateUserNameProfile(
+                updateRequest
+            )
+        }
     }
+
+    fun isEmailValid(email: String): Boolean {
+        return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
+    }
+
+    var profileCache = Profile()
 
     private fun setDummyData() {
 
-        val profileString = PreferenceUtils.getUserProfile(requireContext())
-        var profileCache = Profile()
 
         if (profileString.isNotEmpty()) {
             profileCache = Profile().loadFromCache(
@@ -164,8 +211,8 @@ class ProfileFragment : BaseMainFragment() {
             )
 
             if (profileCache.photoUserUrl.isNotEmpty()) {
-                Glide.with(requireContext()).load(profileCache.photoUserUrl)
-                    .apply(RequestOptions().override(300, 0))
+                Glide.with(requireContext()).load(profileCache.photoUserUrl).override(300, 0)
+                    .centerCrop()
                     .into(binding.profileLayout.profileImageView)
             }
         }

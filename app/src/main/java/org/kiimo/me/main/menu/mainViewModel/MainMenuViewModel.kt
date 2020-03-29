@@ -18,6 +18,7 @@ import org.kiimo.me.models.delivery.*
 import org.kiimo.me.models.payment.PreferredPayResponse
 import org.kiimo.me.models.payment.PreferredPaymentUser
 import org.kiimo.me.register.model.IsValidDelivererResponse
+import org.kiimo.me.register.model.UserProfileFragmentUpdateRequest
 import org.kiimo.me.register.model.UserProfileInformationRequest
 import org.kiimo.me.register.model.UserRegisterResponse
 import kotlin.math.roundToInt
@@ -39,6 +40,8 @@ class MainMenuViewModel(private var repository: MainViewModelRepository) : ViewM
     val photoPackageLiveData = MutableLiveData<UploadImageResponse>()
     val photoProfileLiveData = MutableLiveData<UploadImageResponse>()
     val signatureLiveData = MutableLiveData<UploadImageResponse>()
+
+    val userProfileFieldsUpdateLiveData = MutableLiveData<UserRegisterResponse>()
 
     val preferredPayLiveData = MutableLiveData<PreferredPayResponse>()
 
@@ -138,7 +141,11 @@ class MainMenuViewModel(private var repository: MainViewModelRepository) : ViewM
     }
 
     fun updateUserProfilePhoto(photoUrl: String) {
-        repository.updateUserPhoto(photoUrl)
+        repository.updateUserPhoto(photoUrl, userProfileFieldsUpdateLiveData)
+    }
+
+    fun updateUserNameProfile(updateRequest: UserProfileFragmentUpdateRequest) {
+        repository.updateUserFragmentFields(updateRequest, userProfileFieldsUpdateLiveData)
     }
 
 

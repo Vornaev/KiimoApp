@@ -94,6 +94,11 @@ open class KiimoMainNavigationActivity : BaseActivity() {
                 }
             }
         )
+
+        viewModel.userProfileFieldsUpdateLiveData.observe(this,
+            Observer{
+                viewModel.getUser()
+            })
     }
 
 
