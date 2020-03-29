@@ -1,22 +1,22 @@
 package org.kiimo.me.app
 
+import android.Manifest
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import org.kiimo.me.BuildConfig
 import org.kiimo.me.R
 import org.kiimo.me.app.di.AppComponent
 import org.kiimo.me.models.DeviceToken
-import org.kiimo.me.util.AppConstants
-import org.kiimo.me.util.DialogUtils
-import org.kiimo.me.util.IMediaManagerImages
-import org.kiimo.me.util.PreferenceUtils
+import org.kiimo.me.util.*
 
 abstract class BaseActivity : AppCompatActivity(), IBaseViewFeatures, IMediaManagerImages {
 
@@ -130,5 +130,42 @@ abstract class BaseActivity : AppCompatActivity(), IBaseViewFeatures, IMediaMana
 
     override fun getMediaActivity(): Activity {
         return this
+    }
+
+
+   private val MY_PERMISSION_CAMERA = 301
+    fun hasCameraPermission(): Boolean {
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.CAMERA
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            return false
+        }
+        return true
+    }
+
+    fun requestCameraPermission() {
+        ActivityCompat.requestPermissions(
+            this,
+            arrayOf(Manifest.permission.CAMERA),
+            MY_PERMISSION_CAMERA
+        )
+    }
+
+    override fun onRequestPermissionsResult(
+            requestCode: Int,
+            permissions: Array<out String>,
+            grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        when (requestCode) {
+            MY_PERMISSION_CAMERA -> {
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    MediaManager.showMediaOptionsDialog(this)
+                }
+            }
+        }
     }
 }

@@ -4,6 +4,7 @@ import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -36,6 +37,7 @@ class ChangeAccountTypeDialog : BaseKiimoDialog() {
     lateinit var binding: DialogChangeAccountTypeUserBinding
     lateinit var viewModel: MainMenuViewModel
     var userRequest: UserProfileInformationRequest? = null
+    var personalIDImageUrl = ""
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
 
@@ -58,7 +60,7 @@ class ChangeAccountTypeDialog : BaseKiimoDialog() {
         binding.changeAccountTypeSaveButton.setOnClickListener {
 
             if (userRequest != null) {
-
+                userRequest!!.personalID = personalIDImageUrl
                 userRequest!!.address = UserAddressDataRequest(
                     countryCode = binding.registerDeliverLayout.layoutRegisterProfileCountryCode.EditTextFieldValidation.text.toString(),
                     houseNumber = binding.registerDeliverLayout.layoutRegisterUserHouseNumber.EditTextFieldValidation.text.toString(),
@@ -78,7 +80,8 @@ class ChangeAccountTypeDialog : BaseKiimoDialog() {
     }
 
     fun setUser(
-        userProfileInformationRequest: UserProfileInformationRequest,viewModel: MainMenuViewModel ){
+            userProfileInformationRequest: UserProfileInformationRequest,
+            viewModel: MainMenuViewModel) {
 
         this.userRequest = userProfileInformationRequest
         this.viewModel = viewModel
@@ -100,14 +103,22 @@ class ChangeAccountTypeDialog : BaseKiimoDialog() {
             getString(R.string.street_hint)
     }
 
-    fun setListeners(){
+    fun setListeners() {
         binding.registerDeliverLayout.activityRegisterProfileVerificationField.TextFieldPersonalID.setOnClickListener {
-                MediaManager.showMediaOptionsDialog(requireActivity() as IMediaManagerImages)
+            MediaManager.showMediaOptionsDialog(requireActivity() as IMediaManagerImages)
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
+    fun onNewBitmap(bitmap: Bitmap) {
+        binding.registerDeliverLayout.activityRegisterProfileVerificationField.registerValidationImageVerificationPreview.setImageBitmap(
+            bitmap
+        )
+        binding.registerDeliverLayout.activityRegisterProfileVerificationField.registerValidationImageVerificationPreview.visibility =
+            View.VISIBLE
     }
+
+    fun setServerImageUrl(imageUrl: String) {
+        personalIDImageUrl = imageUrl
+    }
+
 }

@@ -1,11 +1,14 @@
 package org.kiimo.me.main.sender
 
+import android.app.Activity
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.os.Handler
+import android.provider.MediaStore
 import androidx.lifecycle.Observer
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.gson.Gson
@@ -29,7 +32,9 @@ import org.kiimo.me.main.sender.model.notifications.ConfirmPickUpNotification.Co
 import org.kiimo.me.main.sender.model.request.pay.PayResponse
 import org.kiimo.me.models.FirebasePayload
 import org.kiimo.me.util.AppConstants
+import org.kiimo.me.util.Image.BitmapNetworkUtil
 import org.kiimo.me.util.JsonUtil
+import org.kiimo.me.util.MediaManager
 import org.kiimo.me.util.PreferenceUtils
 import timber.log.Timber
 
@@ -38,6 +43,7 @@ class SenderKiimoActivity : KiimoMainNavigationActivity() {
 
     var dialogSpiner: SendItemDescriptionDialog? = null
     var mapFragment: SenderMapFragment? = null
+    var changeAccountTypeDialog : ChangeAccountTypeDialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,9 +62,9 @@ class SenderKiimoActivity : KiimoMainNavigationActivity() {
         nav_view?.getHeaderView(0)?.buttonChangeAccountTypeUser?.setOnClickListener {
             val userProfile = PreferenceUtils.getUserParsed(this)
             if (userProfile.address.street.isEmpty()) {
-                val dialog = ChangeAccountTypeDialog()
-                dialog.setUser(userProfile, viewModel)
-                dialog.show(supportFragmentManager, "changeAccountDialog")
+                changeAccountTypeDialog = ChangeAccountTypeDialog()
+                changeAccountTypeDialog?.setUser(userProfile, viewModel)
+                changeAccountTypeDialog?.show(supportFragmentManager, "changeAccountDialog")
             } else {
                 openDeliver()
             }
@@ -90,6 +96,10 @@ class SenderKiimoActivity : KiimoMainNavigationActivity() {
             this, Observer {
                 openDeliver()
             })
+
+        viewModel.personalIDLveData.observe(this, Observer {
+            changeAccountTypeDialog?.setServerImageUrl(it.imageUrl)
+        })
     }
 
 
@@ -135,6 +145,38 @@ class SenderKiimoActivity : KiimoMainNavigationActivity() {
         addFragment(SenderDeliveryPackageSummaryFragment())
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (resultCode == Activity.RESULT_OK) {
+
+            val width = 480
+            val height = 640
+
+            if (requestCode == MediaManager.REQUEST_IMAGE_CAPTURE) {
+                MediaManager.getBitmap(
+                    width.toFloat(), height.toFloat()
+                )?.apply {
+                    onSuccessGetImage(this)
+                }
+            } else if (requestCode == MediaManager.REQUEST_IMAGE_PICK) {
+                val uri = data?.data
+
+                MediaManager.getBitmapGallery(
+                    MediaStore.Images.Media.getBitmap(this.contentResolver, uri),
+                    width, height
+                )?.apply {
+                    onSuccessGetImage(this)
+                }
+            }
+        }
+    }
+
+    private fun onSuccessGetImage(bitmap: Bitmap) {
+        changeAccountTypeDialog?.onNewBitmap(bitmap)
+        val body = BitmapNetworkUtil.getMultipartBody(bitmap)
+        viewModel.uploadPersonalIDPhoto(body)
+    }
 
     override fun setupDeliveriesFragment() {
         menuItemMyDelivery.textViewMenuItem.text = "My orders"

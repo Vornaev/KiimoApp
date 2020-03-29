@@ -155,11 +155,7 @@ class RegisterProfileDeliverInformationActivity : RegisterProfileSenderInformati
         })
 
         activityRegisterProfileVerificationField.TextFieldPersonalID.setOnClickListener {
-            if (hasCameraPermission()) {
-                MediaManager.showMediaOptionsDialog(this)
-            } else {
-                requestCameraPermission()
-            }
+            MediaManager.showMediaOptionsDialog(this)
         }
     }
 
@@ -189,40 +185,7 @@ class RegisterProfileDeliverInformationActivity : RegisterProfileSenderInformati
         }
     }
 
-    fun hasCameraPermission(): Boolean {
-        if (ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.CAMERA
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            return false
-        }
-        return true
-    }
 
-    fun requestCameraPermission() {
-        ActivityCompat.requestPermissions(
-            this,
-            arrayOf(Manifest.permission.CAMERA),
-            MY_PERMISSION_CAMERA
-        )
-    }
-
-    override fun onRequestPermissionsResult(
-            requestCode: Int,
-            permissions: Array<out String>,
-            grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-
-        when (requestCode) {
-            MY_PERMISSION_CAMERA -> {
-                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    MediaManager.showMediaOptionsDialog(this)
-                }
-            }
-        }
-    }
 
     private fun onSuccessGetImage(bitmap: Bitmap) {
         activityRegisterProfileVerificationField.registerValidationImageVerificationPreview.visibility =

@@ -137,13 +137,19 @@ class MainMenuViewModel(private var repository: MainViewModelRepository) : ViewM
         repository.uploadMultiFormDataImage(Type.Users, body, photoProfileLiveData)
     }
 
-    fun updateUserProfilePhoto(photoUrl :String){
+    fun updateUserProfilePhoto(photoUrl: String) {
         repository.updateUserPhoto(photoUrl)
     }
 
 
-    fun uploadSignaturePhoto(body: MultipartBody.Part){
+    fun uploadSignaturePhoto(body: MultipartBody.Part) {
         repository.uploadMultiFormDataImage(Type.Signatures, body, signatureLiveData)
+    }
+
+
+    val personalIDLveData = MutableLiveData<UploadImageResponse>()
+    fun uploadPersonalIDPhoto(body: MultipartBody.Part) {
+        repository.uploadMultiFormDataImage(Type.PersionalID, body, personalIDLveData)
     }
 
 
@@ -213,8 +219,8 @@ class MainMenuViewModel(private var repository: MainViewModelRepository) : ViewM
     }
 
     data class AddressPoint(
-        var address: String = "",
-        var locationModel: LocationModel? = null
+            var address: String = "",
+            var locationModel: LocationModel? = null
     )
 }
 
