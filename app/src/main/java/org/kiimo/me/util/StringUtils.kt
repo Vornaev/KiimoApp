@@ -60,4 +60,8 @@ object StringUtils {
 
         return context.getString(R.string.general_error_message)
     }
+
+    fun isEmailValid(email: String): Boolean {
+        return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
+    }
 }

@@ -17,6 +17,7 @@ import org.kiimo.me.register.model.UserProfileInformationRequest
 import org.kiimo.me.register.model.UserRegisterDataRequest
 import org.kiimo.me.service.network.client.RetrofitConsts
 import org.kiimo.me.util.PreferenceUtils
+import org.kiimo.me.util.StringUtils
 
 open class RegisterProfileSenderInformationActivity : BaseRegistrationServicesActivity() {
 
@@ -89,7 +90,7 @@ open class RegisterProfileSenderInformationActivity : BaseRegistrationServicesAc
     }
 
     fun validateEmail(): Boolean {
-        val validEmail = layoutRegisterUserEmail.EditTextFieldValidation.textValue().isNotBlank()
+        val validEmail = StringUtils.isEmailValid(layoutRegisterUserEmail.EditTextFieldValidation.textValue())
         displayValidationStatus(layoutRegisterUserEmail, validEmail)
 
         return validEmail
