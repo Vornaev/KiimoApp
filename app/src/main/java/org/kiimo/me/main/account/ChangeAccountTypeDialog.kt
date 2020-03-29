@@ -16,6 +16,7 @@ import kotlinx.android.synthetic.main.dialog_digit_code.view.*
 import kotlinx.android.synthetic.main.layout_edit_field_with_validation.view.*
 import kotlinx.android.synthetic.main.layout_register_deliver_account.*
 import kotlinx.android.synthetic.main.layout_register_deliver_account.view.*
+import kotlinx.android.synthetic.main.layout_register_personal_id.view.*
 import org.kiimo.me.R
 import org.kiimo.me.databinding.DialogChangeAccountTypeUserBinding
 import org.kiimo.me.dialogs.BaseKiimoDialog
@@ -25,6 +26,8 @@ import org.kiimo.me.main.menu.mainViewModel.MainMenuViewModel
 import org.kiimo.me.register.model.UserAddressDataRequest
 import org.kiimo.me.register.model.UserProfileInformationRequest
 import org.kiimo.me.register.model.UserRegisterDataRequest
+import org.kiimo.me.util.IMediaManagerImages
+import org.kiimo.me.util.MediaManager
 import org.kiimo.me.util.PreferenceUtils
 
 class ChangeAccountTypeDialog : BaseKiimoDialog() {
@@ -49,7 +52,7 @@ class ChangeAccountTypeDialog : BaseKiimoDialog() {
         )
         dialog.setView(binding.root)
         setHints()
-
+        setListeners()
 
 
         binding.changeAccountTypeSaveButton.setOnClickListener {
@@ -97,4 +100,14 @@ class ChangeAccountTypeDialog : BaseKiimoDialog() {
             getString(R.string.street_hint)
     }
 
+    fun setListeners(){
+        binding.registerDeliverLayout.activityRegisterProfileVerificationField.TextFieldPersonalID.setOnClickListener {
+                MediaManager.showMediaOptionsDialog(requireActivity() as IMediaManagerImages)
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+    }
 }
