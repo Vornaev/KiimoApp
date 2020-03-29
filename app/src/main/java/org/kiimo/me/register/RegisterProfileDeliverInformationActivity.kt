@@ -1,11 +1,15 @@
 package org.kiimo.me.register
 
+import android.Manifest
 import android.app.Activity
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.View
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import kotlinx.android.synthetic.main.activity_register_profile_information.*
 import kotlinx.android.synthetic.main.layout_edit_field_with_validation.view.*
@@ -25,7 +29,7 @@ import java.io.ByteArrayOutputStream
 
 class RegisterProfileDeliverInformationActivity : RegisterProfileSenderInformationActivity() {
 
-
+    private val MY_PERMISSION_CAMERA = 200
     private var personalIDPhotoURL = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -153,7 +157,11 @@ class RegisterProfileDeliverInformationActivity : RegisterProfileSenderInformati
         })
 
         activityRegisterProfileVerificationField.TextFieldPersonalID.setOnClickListener {
-            MediaManager.showMediaOptionsDialog(this)
+            if (hasCameraPermission()) {
+                MediaManager.showMediaOptionsDialog(this)
+            } else {
+                requestCameraPermission()
+            }
         }
     }
 
@@ -178,6 +186,41 @@ class RegisterProfileDeliverInformationActivity : RegisterProfileSenderInformati
                     width, height
                 )?.apply {
                     onSuccessGetImage(this)
+                }
+            }
+        }
+    }
+
+    fun hasCameraPermission(): Boolean {
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.CAMERA
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            return false
+        }
+        return true
+    }
+
+    fun requestCameraPermission() {
+        ActivityCompat.requestPermissions(
+            this,
+            arrayOf(Manifest.permission.CAMERA),
+            MY_PERMISSION_CAMERA
+        )
+    }
+
+    override fun onRequestPermissionsResult(
+            requestCode: Int,
+            permissions: Array<out String>,
+            grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        when (requestCode) {
+            MY_PERMISSION_CAMERA -> {
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    MediaManager.showMediaOptionsDialog(this)
                 }
             }
         }

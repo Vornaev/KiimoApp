@@ -9,6 +9,8 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import org.kiimo.me.BuildConfig
 import org.kiimo.me.app.IBaseViewFeatures
+import org.kiimo.me.main.menu.model.GetUserRequestModel
+import org.kiimo.me.main.menu.model.UserProfileInformationResponse
 import org.kiimo.me.models.UploadImageResponse
 import org.kiimo.me.register.model.*
 import org.kiimo.me.service.network.client.KiimoAppClient
@@ -16,17 +18,17 @@ import org.kiimo.me.service.network.client.KiimoDeliverHttpClient
 import org.kiimo.me.util.PreferenceUtils
 
 class RegisterAccountRepository(
-    private val client: KiimoAppClient,
-    private val deliverHttpClient: KiimoDeliverHttpClient,
-    private val viewFeatures: IBaseViewFeatures
+        private val client: KiimoAppClient,
+        private val deliverHttpClient: KiimoDeliverHttpClient,
+        private val viewFeatures: IBaseViewFeatures
 ) {
 
     private val disposableContainer: CompositeDisposable = CompositeDisposable()
 
 
     fun sendPhoneNumber(
-        registerPhoneRequest: UserRegisterPhoneRequest,
-        data: MutableLiveData<String>
+            registerPhoneRequest: UserRegisterPhoneRequest,
+            data: MutableLiveData<String>
     ) {
         disposableContainer.add(
             client.registerUserPhoneNumber(
@@ -51,8 +53,8 @@ class RegisterAccountRepository(
     }
 
     fun saveUserProfileInformation(
-        userProfileInformationRequest: UserProfileInformationRequest,
-        userResponseData: MutableLiveData<UserRegisterResponse>
+            userProfileInformationRequest: UserProfileInformationRequest,
+            userResponseData: MutableLiveData<UserRegisterResponse>
     ) {
         disposableContainer.add(
             client.updateUserInformation(
@@ -71,7 +73,7 @@ class RegisterAccountRepository(
     }
 
     fun sendSMSCodeToUser(
-        phone: String, smsLiveData: MutableLiveData<UserRegisterResponse>
+            phone: String, smsLiveData: MutableLiveData<UserRegisterResponse>
     ) {
         disposableContainer.add(
             deliverHttpClient.sendCode(
@@ -87,11 +89,27 @@ class RegisterAccountRepository(
                 ))
     }
 
+    fun getUserByID(userProfileLiveData: MutableLiveData<UserProfileInformationResponse>) {
+        disposableContainer.add(client.getUserByID(
+            data = GetUserRequestModel(
+                UserRegisterDataRequest(), viewFeatures.getUserToken()
+            )
+        )
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeOn(Schedulers.io()).subscribe(
+                {
+                    userProfileLiveData.postValue(it)
+                }, {
+                    viewFeatures.handleApiError(it)
+                }
+            ))
+    }
+
 
     fun validateSmsCode(
-        smsCode: String,
-        phone: String,
-        smsLiveData: MutableLiveData<SmsValidationResponse>
+            smsCode: String,
+            phone: String,
+            smsLiveData: MutableLiveData<SmsValidationResponse>
     ) {
         disposableContainer.add(
             deliverHttpClient.validateSmsCode(
@@ -160,9 +178,9 @@ class RegisterAccountRepository(
     }
 
     fun uploadMultiFormDataImage(
-        personalID: String,
-        body: MultipartBody.Part,
-        uploadPersonalID: MutableLiveData<UploadImageResponse>
+            personalID: String,
+            body: MultipartBody.Part,
+            uploadPersonalID: MutableLiveData<UploadImageResponse>
     ) {
 
         val type = RequestBody.create(
