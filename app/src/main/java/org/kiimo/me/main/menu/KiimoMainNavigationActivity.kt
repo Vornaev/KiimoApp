@@ -79,15 +79,7 @@ open class KiimoMainNavigationActivity : BaseActivity() {
 
                     if (it.photo.isNotEmpty()) {
 
-                        Glide.with(this).load(it.photo)
-                            .apply(
-                                RequestOptions().override(
-                                    300,
-                                    0
-                                ).skipMemoryCache(true).diskCacheStrategy(
-                                    DiskCacheStrategy.NONE
-                                )
-                            )
+                        Glide.with(this).load(it.photo).override(300, 0)
                             .into(nav_view?.getHeaderView(0)?.imageView!!)
 
                     }
@@ -96,7 +88,7 @@ open class KiimoMainNavigationActivity : BaseActivity() {
         )
 
         viewModel.userProfileFieldsUpdateLiveData.observe(this,
-            Observer{
+            Observer {
                 viewModel.getUser()
             })
     }

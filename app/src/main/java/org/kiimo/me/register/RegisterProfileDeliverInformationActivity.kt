@@ -11,6 +11,7 @@ import android.view.View
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
+import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.activity_register_profile_information.*
 import kotlinx.android.synthetic.main.layout_edit_field_with_validation.view.*
 import kotlinx.android.synthetic.main.layout_register_deliver_account.*
@@ -186,13 +187,12 @@ class RegisterProfileDeliverInformationActivity : RegisterProfileSenderInformati
     }
 
 
-
     private fun onSuccessGetImage(bitmap: Bitmap) {
         activityRegisterProfileVerificationField.registerValidationImageVerificationPreview.visibility =
             View.VISIBLE
-        activityRegisterProfileVerificationField.registerValidationImageVerificationPreview.setImageBitmap(
-            bitmap
-        )
+        Glide.with(this).load(bitmap).override(600, 0).centerCrop()
+            .into(activityRegisterProfileVerificationField.registerValidationImageVerificationPreview)
+
         displayValidationStatus(
             activityRegisterProfileVerificationField,
             true

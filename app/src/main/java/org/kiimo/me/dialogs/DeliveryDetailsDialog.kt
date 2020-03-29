@@ -61,7 +61,7 @@ class DeliveryDetailsDialog : DialogFragment() {
         if (image.isEmpty()) {
             binding.deliveryImageView.visibility = View.GONE
         } else {
-            Glide.with(this).load(getDeliveryImage()).into(binding.deliveryImageView)
+            Glide.with(this).load(image).override(500,0).centerCrop().into(binding.deliveryImageView)
         }
     }
 

@@ -73,8 +73,8 @@ class ProfileFragment : BaseMainFragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == RESULT_OK) {
-            val width = profileViewModel.profileImageViewWidth.value
-            val height = profileViewModel.profileImageViewHeight.value
+            val width = 300
+            val height = 400
             if (width != null && height != null && width > 0 && height > 0) {
                 if (requestCode == MediaManager.REQUEST_IMAGE_CAPTURE) {
                     MediaManager.getBitmap(
