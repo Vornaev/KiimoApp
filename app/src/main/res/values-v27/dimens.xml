@@ -2,4 +2,6 @@
 <resources>
     <dimen name="font_size_heading">21sp</dimen>
     <dimen name="font_size_button_large">17sp</dimen>
+    <dimen name="sizeImageDrawer">75dp</dimen>
+    <dimen name="sender_map_delivery_icon">65dp</dimen>
 </resources>

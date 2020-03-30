@@ -14,8 +14,9 @@
             <ImageView
                     android:id="@+id/delivery_image_view"
                     android:layout_width="0dp"
-                    app:layout_constraintWidth_percent="0.9"
+                    app:layout_constraintWidth_percent="1"
                     android:layout_height="230dp"
+                    android:src="@drawable/no_image_placeholder"
                     android:scaleType="centerCrop"
                     android:adjustViewBounds="true"
                     android:contentDescription="@string/delivery_image_content_description"
@@ -25,9 +26,10 @@
 
             <ImageView
                     android:id="@+id/package_size_image_view"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_small"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:scaleType="centerInside"
+                    android:layout_marginTop="@dimen/margin_medium"
                     android:contentDescription="@string/package_size_content_description"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/delivery_image_view"
@@ -38,7 +40,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin_small"
+                    android:textSize="13sp"
                     android:text="@string/package_size"
+                    android:fontFamily="@font/roboto_regular"
                     app:layout_constraintBottom_toBottomOf="@id/package_size_image_view"
                     app:layout_constraintStart_toEndOf="@id/package_size_image_view"
                     app:layout_constraintTop_toTopOf="@id/package_size_image_view" />
@@ -56,6 +60,8 @@
                     android:id="@+id/description_text_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_regular"
+                    android:textSize="13sp"
                     android:layout_marginTop="@dimen/margin_small"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/package_size_image_view" />

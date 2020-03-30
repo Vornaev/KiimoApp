@@ -59,9 +59,10 @@ class DeliveryDetailsDialog : DialogFragment() {
     private fun setDeliveryImage() {
         val image = getDeliveryImage()
         if (image.isEmpty()) {
-            binding.deliveryImageView.visibility = View.GONE
+//            binding.deliveryImageView.visibility = View.GONE
         } else {
-            Glide.with(this).load(image).override(500,0).centerCrop().into(binding.deliveryImageView)
+            Glide.with(this).load(image).override(500, 0).centerCrop()
+                .into(binding.deliveryImageView)
         }
     }
 
@@ -85,7 +86,9 @@ class DeliveryDetailsDialog : DialogFragment() {
         delivery?.packages?.let {
             for (pack in it) {
                 pack?.description?.let { description ->
-                    return description
+
+                    if (description.isBlank()) return "No description available"
+                    else return description
                 }
             }
         }

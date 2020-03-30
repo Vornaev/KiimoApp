@@ -38,7 +38,7 @@ class MainActivity : KiimoMainNavigationActivity(),
     interface MainActivityInterface {
         fun acceptDelivery(deliveryId: String)
         fun onOriginReady(origin: LatLng, originAddress: String, destinationAddress: String)
-        fun onOriginDestinationReady(origin: LatLng, destination: LatLng)
+        fun onOriginDestinationReady(deliveryPaid: DeliveryPaid)
         fun onDeliveryReady(delivery: Delivery?)
         fun validateCode(code: String)
         fun onDropOff(signature: String)
@@ -185,8 +185,7 @@ class MainActivity : KiimoMainNavigationActivity(),
             val deliveryPaid = Gson().fromJson(payload.delivery, DeliveryPaid::class.java)
             if (isDeliveryValidData(deliveryPaid.delivery)) {
                 mainActivityInterface.onOriginDestinationReady(
-                    getOrigin(deliveryPaid.delivery),
-                    getDestination(deliveryPaid.delivery)
+                    deliveryPaid
                 )
             }
         } else if ("DELIVERY_REQUEST" == payload.type) {

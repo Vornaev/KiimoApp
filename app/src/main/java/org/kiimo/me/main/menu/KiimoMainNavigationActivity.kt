@@ -82,6 +82,9 @@ open class KiimoMainNavigationActivity : BaseActivity() {
                         Glide.with(this).load(it.photo).override(300, 0)
                             .into(nav_view?.getHeaderView(0)?.imageView!!)
 
+                        Glide.with(this).load(it.photo).override(300, 0).centerCrop()
+                            .into(imageViewProfileDrawer)
+
                     }
                 }
             }

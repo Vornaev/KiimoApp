@@ -21,6 +21,8 @@ import androidx.annotation.DrawableRes
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -31,6 +33,7 @@ import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.widget.Autocomplete
 import com.google.android.libraries.places.widget.AutocompleteActivity
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
+import kotlinx.android.synthetic.main.fragment_map.*
 import org.kiimo.me.R
 import org.kiimo.me.app.BaseMainFragment
 import org.kiimo.me.databinding.FragmentMapBinding
@@ -40,9 +43,11 @@ import org.kiimo.me.main.modules.MapModule
 import org.kiimo.me.main.viewmodels.MapViewModel
 import org.kiimo.me.main.viewmodels.MapViewModelFactory
 import org.kiimo.me.models.*
+import org.kiimo.me.models.events.ProfilePhotoEvent
 import org.kiimo.me.services.LocationServicesKiimo
 import org.kiimo.me.util.DeliveryTypeID
 import org.kiimo.me.util.PreferenceUtils
+import org.kiimo.me.util.RxBus
 import org.kiimo.me.util.StringUtils
 import java.util.*
 import javax.inject.Inject
@@ -77,9 +82,9 @@ class MapFragment : BaseMainFragment(), OnMapReadyCallback, GoogleMap.OnMapClick
     private var markers = arrayListOf<Marker>()
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         binding = FragmentMapBinding.inflate(inflater, container, false)
 
@@ -94,6 +99,19 @@ class MapFragment : BaseMainFragment(), OnMapReadyCallback, GoogleMap.OnMapClick
         setObservers()
 
         mapViewModel.getSelf(userToken)
+
+        val userProf = PreferenceUtils.getUserParsed(requireContext())
+        if (userProf.photo.isNotBlank()) {
+            Glide.with(this).load(userProf.photo).override(350, 0).centerCrop()
+                .into(binding.imageViewProfileDrawer)
+        }
+
+        mainDeliveryViewModel().photoProfileLiveData.observe(
+            viewLifecycleOwner,
+            androidx.lifecycle.Observer {
+                Glide.with(this).load(it.imageUrl).override(350, 0).centerCrop()
+                    .into(binding.imageViewProfileDrawer)
+            })
 
         binding.travelModeActiveId = 0
 
@@ -169,12 +187,17 @@ class MapFragment : BaseMainFragment(), OnMapReadyCallback, GoogleMap.OnMapClick
     override fun onProviderDisabled(p0: String?) {
     }
 
-    override fun onOriginDestinationReady(origin: LatLng, destination: LatLng) {
+    override fun onOriginDestinationReady(deliveryPaid: DeliveryPaid) {
         binding.isShowMapRoute = true
         binding.isConfirmDropOff = false
+        setPinText(
+            deliveryPaid.delivery.originAddress ?: "",
+            deliveryPaid.delivery.destinationAddress ?: ""
+        )
         markerPoints.clear()
-        addMarker(origin)
-        addMarker(destination)
+        addMarker(getOrigin(deliveryPaid.delivery))
+        addMarker(getDestination(deliveryPaid.delivery))
+        this.delivery = deliveryPaid.delivery
     }
 
     override fun acceptDelivery(deliveryId: String) {
@@ -182,9 +205,9 @@ class MapFragment : BaseMainFragment(), OnMapReadyCallback, GoogleMap.OnMapClick
     }
 
     override fun onOriginReady(
-        origin: LatLng,
-        originAddress: String,
-        destinationAddress: String
+            origin: LatLng,
+            originAddress: String,
+            destinationAddress: String
     ) {
         addMarker(origin)
         setPinText(originAddress, destinationAddress)
@@ -336,7 +359,9 @@ class MapFragment : BaseMainFragment(), OnMapReadyCallback, GoogleMap.OnMapClick
         }
     }
 
-    private fun bitmapDescriptorFromVector(context: Context, @DrawableRes vectorDrawableResourceId: Int): BitmapDescriptor? {
+    private fun bitmapDescriptorFromVector(
+            context: Context,
+            @DrawableRes vectorDrawableResourceId: Int): BitmapDescriptor? {
         val vectorDrawable = ContextCompat.getDrawable(context, vectorDrawableResourceId)
         vectorDrawable?.setBounds(
             0,
@@ -581,6 +606,20 @@ class MapFragment : BaseMainFragment(), OnMapReadyCallback, GoogleMap.OnMapClick
                 binding.layoutPin.dropOffText = leg.endAddress ?: ""
             }
         }
+    }
+
+    private fun getOrigin(delivery: Delivery?): LatLng {
+        val lat = delivery?.origin?.lat
+        val lng = delivery?.origin?.lng
+
+        return LatLng(lat!!, lng!!)
+    }
+
+    private fun getDestination(delivery: Delivery?): LatLng {
+        val lat = delivery?.destination?.lat
+        val lng = delivery?.destination?.lng
+
+        return LatLng(lat!!, lng!!)
     }
 
     private fun setPinText(originAddress: String, destinationAddress: String) {

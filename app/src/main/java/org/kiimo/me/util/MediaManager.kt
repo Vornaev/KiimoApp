@@ -17,12 +17,13 @@ import androidx.core.net.toUri
 import androidx.exifinterface.media.ExifInterface
 import org.kiimo.me.BuildConfig
 import org.kiimo.me.R
+import org.kiimo.me.util.Image.ImageUtil
 import java.io.File
 import java.io.IOException
 import java.util.*
 
 
-interface IMediaManagerImages{
+interface IMediaManagerImages {
 
     fun getMediaContext(): Context
     fun startMediaActivity(createChooser: Intent?, requestImagePick: Int)
@@ -62,7 +63,8 @@ object MediaManager {
         }
 
         dialog.setButton(
-            AlertDialog.BUTTON_NEGATIVE, iMediaItem.getMediaContext().getString(R.string.general_cancel_button),
+            AlertDialog.BUTTON_NEGATIVE,
+            iMediaItem.getMediaContext().getString(R.string.general_cancel_button),
             dialogNegativeButtonListener
         )
 
@@ -163,8 +165,8 @@ object MediaManager {
     }
 
     fun getBitmap(
-        targetWidth: Float,
-        targetHeight: Float
+            targetWidth: Float,
+            targetHeight: Float
     ): Bitmap? {
         val bmOptions = BitmapFactory.Options()
         val currentPhotoPath = this.currentPhotoPath ?: return null
@@ -173,12 +175,17 @@ object MediaManager {
                 // Get the dimensions of the bitmap
                 inJustDecodeBounds = true
 
-                val photoW: Float = bitmap.width.toFloat()
-                val photoH: Float = bitmap.height.toFloat()
+                val photoW: Int = bitmap.width
+                val photoH: Int = bitmap.height
 
                 // Determine how much to scale down the image
-                val scaleFactor: Float =
-                    (photoW / targetWidth).coerceAtMost(photoH / targetHeight)
+//                val scaleFactor: Float =
+//                    (photoW / targetWidth).coerceAtMost(photoH / targetHeight)
+
+                // Determine how much to scale down the image
+                val scaleFactor: Int =
+                    Math.min(photoW / targetWidth.toInt(), photoH / targetHeight.toInt())
+
 
                 // Decode the image file into a Bitmap sized to fill the View
                 inJustDecodeBounds = false
@@ -193,10 +200,10 @@ object MediaManager {
     }
 
     fun getBitmapGallery(
-        bitmap: Bitmap,
-        targetWidth: Int,
-        targetHeight: Int
+            bitmap: Bitmap,
+            targetWidth: Int,
+            targetHeight: Int
     ): Bitmap? {
-        return Bitmap.createScaledBitmap(bitmap, targetWidth, targetHeight, false)
+        return ImageUtil.getScaledBitmap(bitmap, targetWidth, targetHeight)
     }
 }

@@ -59,7 +59,7 @@ class MenuMyOrdersAdatper : RecyclerView.Adapter<MenuMyOrdersAdatper.MyOrdersVie
                 )
 
                 viewHolderTranTypeImg.setImageResource(
-                    when (item.carrierDelivery.deliveryTypeId) {
+                    when (item.carrierDelivery?.deliveryTypeId) {
                         DeliveryTypeID.FOOT -> R.drawable.ic_foot
                         DeliveryTypeID.CAR -> R.drawable.ic_car
                         DeliveryTypeID.BIKE -> R.drawable.ic_bicycle

@@ -55,6 +55,10 @@ class MenuPaymentTypeFragment : BaseMainFragment() {
             mainDeliveryViewModel().savePreferredPaymentType(PreferredPaymentUser("CASH"))
         }
 
+        binding.toolbar.arrow_back_image_view.setOnClickListener {
+            requireActivity().onBackPressed()
+        }
+
         when (paymentType) {
             0 -> onCashTypeClicked()
             1 -> onCreditCardClicked().also {

@@ -39,17 +39,17 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-
-        <ImageView
+        <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/imageViewProfileDrawer"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
+                android:layout_width="@dimen/sizeImageDrawer"
+                android:layout_height="@dimen/sizeImageDrawer"
                 android:layout_marginStart="@dimen/margin_medium_large"
                 android:layout_marginTop="@dimen/margin_medium_large"
                 android:elevation="10dp"
                 android:src="@drawable/ic_user_profile"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
 
         <fragment
                 android:id="@+id/senderMap"
@@ -125,10 +125,10 @@
                 app:layout_constraintStart_toStartOf="parent">
 
 
-            <ImageView
+            <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/imageViewCarrier"
-                    android:layout_width="55dp"
-                    android:layout_height="55dp"
+                    android:layout_width="@dimen/sender_map_delivery_icon"
+                    android:layout_height="@dimen/sender_map_delivery_icon"
                     android:layout_marginStart="32dp"
                     android:layout_marginTop="8dp"
                     android:src="@drawable/ic_user_profile"
@@ -189,8 +189,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/margin_medium"
-                    android:text="45687"
                     android:fontFamily="@font/roboto_medium"
+                    android:text="45687"
                     android:textSize="15sp"
                     android:visibility="@{notificationCodeReceived ? View.VISIBLE : View.GONE}"
                     app:layout_constraintEnd_toEndOf="parent"

@@ -10,12 +10,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.Observer
+import com.bumptech.glide.Glide
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.widget.Autocomplete
 import com.google.android.libraries.places.widget.AutocompleteActivity
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
+import kotlinx.android.synthetic.main.fragment_sender_layout.*
 import org.kiimo.me.R
 import org.kiimo.me.app.BaseMainFragment
 import org.kiimo.me.databinding.FragmentSenderLayoutBinding
@@ -27,7 +29,10 @@ import org.kiimo.me.main.sender.map.SenderMapFeatures
 import org.kiimo.me.main.sender.model.notifications.ConfirmPickUpNotification.ConfirmPickUpFcmData
 import org.kiimo.me.main.sender.model.request.pay.PayResponse
 import org.kiimo.me.models.LocationModel
+import org.kiimo.me.models.events.ProfilePhotoEvent
 import org.kiimo.me.services.LocationServicesKiimo
+import org.kiimo.me.util.PreferenceUtils
+import org.kiimo.me.util.RxBus
 import org.kiimo.me.util.StringUtils
 
 class SenderMapFragment : BaseMainFragment() {
@@ -38,9 +43,9 @@ class SenderMapFragment : BaseMainFragment() {
     val viewModel: MainMenuViewModel by lazy { getNavigationActivity().viewModel }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
 
         binding = FragmentSenderLayoutBinding.inflate(inflater, container, false)
@@ -61,6 +66,22 @@ class SenderMapFragment : BaseMainFragment() {
             senderMapFeatures?.onRouteReady(it)
         })
 
+        val userProf = PreferenceUtils.getUserParsed(requireContext())
+        if (userProf.photo.isNotBlank()) {
+            Glide.with(this).load(userProf.photo).override(350, 0).centerCrop()
+                .into(binding.imageViewProfileDrawer)
+        }
+
+        viewModel.photoProfileLiveData.observe(requireActivity(), Observer {
+            Glide.with(this).load(it.imageUrl).override(350, 0).centerCrop()
+                .into(binding.imageViewProfileDrawer)
+        })
+    }
+
+    private fun setNavigation() {
+        binding.imageViewProfileDrawer.setOnClickListener {
+            getNavigationActivity().onOpenDrawerClicked()
+        }
     }
 
 
@@ -87,12 +108,6 @@ class SenderMapFragment : BaseMainFragment() {
             (activity as SenderKiimoActivity).openCreateDeliveryItemDialog()
         }
 
-    }
-
-    private fun setNavigation() {
-        binding.imageViewProfileDrawer.setOnClickListener {
-            getNavigationActivity().onOpenDrawerClicked()
-        }
     }
 
     private fun loadMap() {
@@ -257,6 +272,12 @@ class SenderMapFragment : BaseMainFragment() {
         val carrierName =
             "${deliveryPayedResponse.carrier.firstName} ${deliveryPayedResponse.carrier.lastName}"
 
+        if (!deliveryPayedResponse.carrier.photo.isNullOrBlank()) {
+            Glide.with(this).load(deliveryPayedResponse.carrier.photo).override(350, 0).centerCrop()
+                .into(binding.imageViewCarrier)
+        }
+
+
         binding.carrierName.text = carrierName
         binding.pinLayoutDropOffPacakgeCarrier.pickUpText =
             deliveryPayedResponse.delivery.originAddress
@@ -266,6 +287,11 @@ class SenderMapFragment : BaseMainFragment() {
     }
 
     fun receviedCodePickUP(deliveryAccepted: ConfirmPickUpFcmData) {
+
+        if (!deliveryAccepted.carrier.photo.isNullOrBlank()) {
+            Glide.with(this).load(deliveryAccepted.carrier.photo).override(350, 0).centerCrop()
+                .into(binding.imageViewCarrier)
+        }
         binding.notificationPickUPReceived = true
         binding.notificationCodeReceived = true
         binding.carrierNameDescription.text = "Its on his way to the destination"

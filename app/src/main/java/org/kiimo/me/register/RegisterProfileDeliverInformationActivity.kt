@@ -164,8 +164,8 @@ class RegisterProfileDeliverInformationActivity : RegisterProfileSenderInformati
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK) {
 
-            val width = 480
-            val height = 640
+            val width = 640
+            val height = 480
 
             if (requestCode == MediaManager.REQUEST_IMAGE_CAPTURE) {
                 MediaManager.getBitmap(

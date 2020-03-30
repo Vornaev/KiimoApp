@@ -27,11 +27,13 @@ import org.kiimo.me.main.modules.ProfileModule
 import org.kiimo.me.main.viewmodels.ProfileViewModel
 import org.kiimo.me.main.viewmodels.ProfileViewModelFactory
 import org.kiimo.me.models.Profile
+import org.kiimo.me.models.events.ProfilePhotoEvent
 import org.kiimo.me.register.model.UserProfileFragmentUpdateRequest
 import org.kiimo.me.register.model.UserRegisterDataRequest
 import org.kiimo.me.util.JsonUtil
 import org.kiimo.me.util.MediaManager
 import org.kiimo.me.util.PreferenceUtils
+import org.kiimo.me.util.RxBus
 import java.io.ByteArrayOutputStream
 import javax.inject.Inject
 
@@ -73,8 +75,9 @@ class ProfileFragment : BaseMainFragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == RESULT_OK) {
-            val width = 300
-            val height = 400
+            val width = 350
+            val height = 480
+
             if (width != null && height != null && width > 0 && height > 0) {
                 if (requestCode == MediaManager.REQUEST_IMAGE_CAPTURE) {
                     MediaManager.getBitmap(
@@ -118,7 +121,8 @@ class ProfileFragment : BaseMainFragment() {
 
     private fun subscribeUi() {
         profileViewModel.profileImageViewBitmap.observe(viewLifecycleOwner, Observer {
-            binding.profileLayout.profileImageView.setImageBitmap(it)
+
+           Glide.with(this).load(it).override(300,0).centerCrop().into(binding.profileLayout.profileImageView)
             uploadBitmap(it)
         })
     }
