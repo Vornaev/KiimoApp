@@ -2,6 +2,13 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <data>
+
+        <variable
+                name="ratingCount"
+                type="Integer" />
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -37,15 +44,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="0dp"
-                android:paddingStart="16dp"
                 android:layout_marginTop="@dimen/margin_small"
                 android:fontFamily="@font/roboto_regular"
+                android:paddingStart="16dp"
                 android:text="Viktor Manev"
                 android:textAlignment="center"
                 android:textColor="@color/colorPrimaryDark"
                 android:textSize="15sp"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/rateUserAvatarImage" />
 
         <ImageView
@@ -54,7 +61,7 @@
                 android:layout_height="@dimen/rate_size_image"
                 android:layout_marginStart="@dimen/margin_medium"
                 android:layout_marginTop="@dimen/margin_small"
-                android:src="@drawable/icon__star_gray"
+                android:src="@{ratingCount > 0 ? @drawable/icon_star_red: @drawable/icon__star_gray}"
                 app:layout_constraintEnd_toStartOf="@id/rateStarTwo"
                 app:layout_constraintHorizontal_chainStyle="packed"
                 app:layout_constraintStart_toStartOf="parent"
@@ -66,7 +73,7 @@
                 android:layout_height="@dimen/rate_size_image"
                 android:layout_marginStart="@dimen/margin_medium"
                 android:layout_marginTop="@dimen/margin_small"
-                android:src="@drawable/icon__star_gray"
+                android:src="@{ratingCount > 1 ? @drawable/icon_star_red: @drawable/icon__star_gray}"
                 app:layout_constraintEnd_toStartOf="@id/rateStarThree"
                 app:layout_constraintHorizontal_chainStyle="packed"
                 app:layout_constraintStart_toEndOf="@id/rateStarOne"
@@ -78,7 +85,7 @@
                 android:layout_height="@dimen/rate_size_image"
                 android:layout_marginStart="@dimen/margin_medium"
                 android:layout_marginTop="@dimen/margin_small"
-                android:src="@drawable/icon__star_gray"
+                android:src="@{ratingCount > 2 ? @drawable/icon_star_red: @drawable/icon__star_gray}"
                 app:layout_constraintEnd_toStartOf="@id/rateStarFour"
                 app:layout_constraintHorizontal_chainStyle="packed"
                 app:layout_constraintStart_toEndOf="@id/rateStarTwo"
@@ -90,7 +97,7 @@
                 android:layout_height="@dimen/rate_size_image"
                 android:layout_marginStart="@dimen/margin_medium"
                 android:layout_marginTop="@dimen/margin_small"
-                android:src="@drawable/icon__star_gray"
+                android:src="@{ratingCount > 3 ? @drawable/icon_star_red: @drawable/icon__star_gray}"
                 app:layout_constraintEnd_toStartOf="@id/rateStarFive"
                 app:layout_constraintHorizontal_chainStyle="packed"
                 app:layout_constraintStart_toEndOf="@id/rateStarThree"
@@ -102,8 +109,8 @@
                 android:layout_height="@dimen/rate_size_image"
                 android:layout_marginStart="@dimen/margin_medium"
                 android:layout_marginTop="@dimen/margin_small"
-                android:src="@drawable/icon__star_gray"
                 android:layout_marginEnd="16dp"
+                android:src="@{ratingCount > 4 ? @drawable/icon_star_red: @drawable/icon__star_gray}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_chainStyle="packed"
                 app:layout_constraintStart_toEndOf="@id/rateStarFour"
@@ -112,21 +119,21 @@
         <EditText
                 android:id="@+id/rateUserComment"
                 android:layout_width="match_parent"
-                android:minHeight="120dp"
-                android:padding="12dp"
-                android:paddingTop="18dp"
-                android:gravity="top"
-                android:textSize="12sp"
-                android:hint="@string/insert_comment"
-                android:textColor="@color/colorPrimaryDark"
-                android:inputType="textMultiLine|textImeMultiLine"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_medium"
                 android:layout_marginTop="@dimen/margin_medium"
                 android:layout_marginEnd="@dimen/margin_medium"
                 android:background="@drawable/edit_text_cornered_background_gray"
-                app:layout_constraintTop_toBottomOf="@id/rateStarFive"
-                android:importantForAutofill="no" />
+                android:gravity="top"
+                android:hint="@string/insert_comment"
+                android:importantForAutofill="no"
+                android:inputType="textMultiLine|textImeMultiLine"
+                android:minHeight="120dp"
+                android:padding="12dp"
+                android:paddingTop="18dp"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="12sp"
+                app:layout_constraintTop_toBottomOf="@id/rateStarFive" />
 
 
         <Button
@@ -137,8 +144,8 @@
                 android:layout_marginTop="@dimen/margin_extra_large"
                 android:layout_marginBottom="@dimen/margin_extra_large"
                 android:text="@string/dialog_confirm"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/rateUserComment"
                 app:layout_constraintWidth_percent="0.8" />

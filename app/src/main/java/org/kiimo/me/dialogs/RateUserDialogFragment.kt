@@ -21,19 +21,28 @@ class RateUserDialogFragment : BaseKiimoDialog() {
             null,
             false
         )
-
+        
         val dialog = AlertDialog.Builder(
             requireContext(),
-            R.style.ThemeOverlay_MaterialComponents_Dialog_Alert
+            R.style.AppCompatAlertDialogStyle
         )
+
         dialog.setView(binding.root)
 
+
         setListeners()
+
+        binding.ratingCount = 0
 
         return dialog.create()
     }
 
     private fun setListeners() {
 
+        binding.rateStarOne.setOnClickListener { binding.ratingCount = 1 }
+        binding.rateStarTwo.setOnClickListener { binding.ratingCount = 2 }
+        binding.rateStarThree.setOnClickListener { binding.ratingCount = 3 }
+        binding.rateStarFour.setOnClickListener { binding.ratingCount = 4 }
+        binding.rateStarFive.setOnClickListener { binding.ratingCount = 5 }
     }
 }
