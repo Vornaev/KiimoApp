@@ -14,7 +14,7 @@ import org.kiimo.me.databinding.DialogDeliveryDetailsBinding
 import org.kiimo.me.models.Delivery
 import org.kiimo.me.util.StringUtils
 
-class DeliveryDetailsDialog : DialogFragment() {
+class DeliveryDetailsDialog : BaseKiimoDialog() {
 
     private lateinit var binding: DialogDeliveryDetailsBinding
 

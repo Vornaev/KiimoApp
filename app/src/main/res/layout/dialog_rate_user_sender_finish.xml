@@ -10,6 +10,7 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/topDialogRateLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -137,7 +138,7 @@
 
 
         <Button
-                android:id="@+id/changeAccountTypeSaveButton"
+                android:id="@+id/ratingButtonConfirm"
                 style="@style/ButtonStyleDefaultOrange"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/big_button_height"

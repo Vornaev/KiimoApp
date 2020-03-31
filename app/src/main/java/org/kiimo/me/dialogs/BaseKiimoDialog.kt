@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
+import org.kiimo.me.R
 
 abstract class BaseKiimoDialog : DialogFragment() {
 
@@ -21,4 +22,5 @@ abstract class BaseKiimoDialog : DialogFragment() {
     ): View? {
         return super.onCreateView(inflater, container, savedInstanceState)
     }
+
 }

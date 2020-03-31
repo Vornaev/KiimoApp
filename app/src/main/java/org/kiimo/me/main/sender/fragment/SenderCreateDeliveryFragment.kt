@@ -34,7 +34,7 @@ class SenderCreateDeliveryFragment : BaseMainFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-
+        viewModel.senderProperties.packageDescritpion.images.clear()
 
         viewModel.photoPackageLiveData.observe(viewLifecycleOwner, Observer {
             viewModel.senderProperties.packageDescritpion.images.clear()
@@ -94,7 +94,8 @@ class SenderCreateDeliveryFragment : BaseMainFragment() {
 
     private fun onSuccessGetImage(bitmap: Bitmap) {
         binding.havePhoto = true
-        Glide.with(requireContext()).load(bitmap).override(300,0).centerCrop().into(binding.imageViewDeliveryPackage)
+        Glide.with(requireContext()).load(bitmap).override(300, 0).centerCrop()
+            .into(binding.imageViewDeliveryPackage)
         //binding.imageViewDeliveryPackage.setImageBitmap(bitmap)
         uploadBitmap(bitmap)
     }

@@ -43,10 +43,7 @@ class ChangeAccountTypeDialog : BaseKiimoDialog() {
             false
         )
 
-        val dialog = AlertDialog.Builder(
-            requireContext(),
-            R.style.ThemeOverlay_MaterialComponents_Dialog_Alert
-        )
+        val dialog = AlertDialog.Builder(requireContext())
         dialog.setView(binding.root)
         setHints()
         setListeners()

@@ -243,7 +243,8 @@ class SenderKiimoActivity : KiimoMainNavigationActivity() {
             }
 
             "DELIVERY_DROP_OFF" -> {
-                mapFragment!!.finishedDelivery()
+                val dialog = RateUserDialogFragment()
+                dialog.show(supportFragmentManager, "rateUser")
             }
 
             "CARRIER_NOT_FOUND" -> {
@@ -251,6 +252,10 @@ class SenderKiimoActivity : KiimoMainNavigationActivity() {
             }
 
         }
+    }
+
+    fun onDissmissDialogRateUser(){
+        mapFragment!!.finishedDelivery()
     }
 
     private fun onPayReceived(payResponse: PayResponse) {

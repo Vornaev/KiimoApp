@@ -23,7 +23,7 @@
             android:theme="@style/AppTheme"
             tools:ignore="GoogleAppIndexingWarning">
         <activity
-                android:name=".main.sender.SenderKiimoActivity"
+                android:name=".main.sender.SenderKiimoActivity" android:launchMode="standard"
                 android:windowSoftInputMode="adjustResize"></activity>
 
         <meta-data

@@ -14,7 +14,7 @@ import org.kiimo.me.R
 import org.kiimo.me.databinding.DialogDigitCodeBinding
 import java.util.*
 
-class DigitCodeDialog : DialogFragment() {
+class DigitCodeDialog : BaseKiimoDialog() {
 
     private lateinit var binding: DialogDigitCodeBinding
 

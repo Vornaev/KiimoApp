@@ -50,7 +50,6 @@
 
     <style name="AppCompatAlertDialogStyle" parent="Theme.MaterialComponents.Light.Dialog.Alert">
         <item name="android:background">@drawable/cornered_dialog_bacground</item>
-        <item name="android:windowSoftInputMode">adjustPan</item>
     </style>
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>

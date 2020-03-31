@@ -13,7 +13,7 @@ import org.kiimo.me.models.Delivery
 import org.kiimo.me.util.SpanUtils
 import org.kiimo.me.util.StringUtils
 
-class DeliveryAlertDialog : DialogFragment() {
+class DeliveryAlertDialog : BaseKiimoDialog() {
 
     private lateinit var binding: DialogDeliveryAlertBinding
 
