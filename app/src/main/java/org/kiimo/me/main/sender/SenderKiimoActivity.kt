@@ -16,6 +16,7 @@ import kotlinx.android.synthetic.main.activity_kiimo_main_navigation.*
 import kotlinx.android.synthetic.main.layout_menu_item.view.*
 import kotlinx.android.synthetic.main.nav_header_kiimo_main_navigation.view.*
 import org.kiimo.me.R
+import org.kiimo.me.dialogs.RateUserDialogFragment
 import org.kiimo.me.main.FragmentTags
 import org.kiimo.me.main.MainActivity
 import org.kiimo.me.main.account.ChangeAccountTypeDialog
@@ -124,6 +125,9 @@ class SenderKiimoActivity : KiimoMainNavigationActivity() {
             (messageReceiver),
             IntentFilter(AppConstants.FIREBASE_BROADCAST)
         )
+
+        val dialog = RateUserDialogFragment()
+        dialog.show(supportFragmentManager, "rateUser")
     }
 
     override fun onStop() {

@@ -1,12 +1,15 @@
 package org.kiimo.me.main.menu
 
 import android.content.Intent
+import android.graphics.Bitmap
 import android.os.Bundle
+import androidx.core.graphics.BitmapCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.bumptech.glide.request.RequestOptions
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -79,10 +82,12 @@ open class KiimoMainNavigationActivity : BaseActivity() {
 
                     if (it.photo.isNotEmpty()) {
 
-                        Glide.with(this).load(it.photo).override(300, 0)
+                        Glide.with(this).load(it.photo)
+                            .apply(RequestOptions.bitmapTransform(CircleCrop()).override(0, 400))
                             .into(nav_view?.getHeaderView(0)?.imageView!!)
 
-                        Glide.with(this).load(it.photo).override(300, 0).centerCrop()
+                        Glide.with(this).load(it.photo)
+                            .apply(RequestOptions.bitmapTransform(CircleCrop()).override(0, 400))
                             .into(imageViewProfileDrawer)
 
                     }

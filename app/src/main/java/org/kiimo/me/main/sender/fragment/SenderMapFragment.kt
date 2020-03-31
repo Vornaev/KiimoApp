@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.libraries.places.api.model.Place
@@ -68,7 +69,7 @@ class SenderMapFragment : BaseMainFragment() {
 
         val userProf = PreferenceUtils.getUserParsed(requireContext())
         if (userProf.photo.isNotBlank()) {
-            Glide.with(this).load(userProf.photo).override(350, 0).centerCrop()
+            Glide.with(this).load(userProf.photo).apply(RequestOptions.circleCropTransform().override(350, 0))
                 .into(binding.imageViewProfileDrawer)
         }
 
