@@ -75,7 +75,7 @@ class ProfileFragment : BaseMainFragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == RESULT_OK) {
-            val width = 350
+            val width = 450
             val height = 480
 
             if (width != null && height != null && width > 0 && height > 0) {

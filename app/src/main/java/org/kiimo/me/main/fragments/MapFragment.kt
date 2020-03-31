@@ -21,6 +21,7 @@ import androidx.annotation.DrawableRes
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
+import androidx.transition.ChangeImageTransform
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.google.android.gms.location.LocationServices
@@ -102,14 +103,14 @@ class MapFragment : BaseMainFragment(), OnMapReadyCallback, GoogleMap.OnMapClick
 
         val userProf = PreferenceUtils.getUserParsed(requireContext())
         if (userProf.photo.isNotBlank()) {
-            Glide.with(this).load(userProf.photo).override(350, 0).centerCrop()
+            Glide.with(this).load(userProf.photo).apply(RequestOptions.circleCropTransform().override(0, 400))
                 .into(binding.imageViewProfileDrawer)
         }
 
         mainDeliveryViewModel().photoProfileLiveData.observe(
             viewLifecycleOwner,
             androidx.lifecycle.Observer {
-                Glide.with(this).load(it.imageUrl).override(350, 0).centerCrop()
+                Glide.with(this).load(it.imageUrl).apply(RequestOptions.circleCropTransform().override(0,480))
                     .into(binding.imageViewProfileDrawer)
             })
 
