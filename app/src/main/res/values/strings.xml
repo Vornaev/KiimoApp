@@ -135,4 +135,5 @@
     <string name="carrier_not_found">Carrier not found</string>
     <string name="verification_id_field">VERFICATION ID*</string>
     <string name="rate_user">Rate User</string>
+    <string name="insert_comment">Insert comment ...</string>
 </resources>
