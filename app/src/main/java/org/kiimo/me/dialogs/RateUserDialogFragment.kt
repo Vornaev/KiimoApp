@@ -10,6 +10,7 @@ import androidx.databinding.DataBindingUtil
 import org.kiimo.me.R
 import org.kiimo.me.databinding.DialogRateUserSenderFinishBinding
 import org.kiimo.me.main.sender.SenderKiimoActivity
+import java.lang.Exception
 
 class RateUserDialogFragment : BaseKiimoDialog() {
 
@@ -53,9 +54,13 @@ class RateUserDialogFragment : BaseKiimoDialog() {
 
         binding.topDialogRateLayout.setOnClickListener {
             if (binding.rateUserComment.hasFocus()) {
-                val imm = binding.rateUserComment.context
-                    .getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                imm.hideSoftInputFromWindow(binding.rateUserComment.windowToken, 0)
+                try {
+                    val imm = binding.rateUserComment.context
+                        .getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                    imm.hideSoftInputFromWindow(binding.rateUserComment.windowToken, 0)
+                } catch (ex: Exception) {
+
+                }
             }
         }
 
