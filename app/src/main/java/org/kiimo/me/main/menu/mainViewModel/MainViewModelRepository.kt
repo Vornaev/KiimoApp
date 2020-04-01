@@ -411,8 +411,7 @@ class MainViewModelRepository(
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                     {
-                        updateData.postValue(it)
-                        viewFeatures.trackRequestSuccess("photo saved")
+                        //updateData.postValue(it)
                     }, {
                         viewFeatures.handleApiError(it)
                     }

@@ -9,7 +9,7 @@ data class UserProfileInformationRequest(
     @SerializedName("firstName") var firstName: String,
     @SerializedName("lastName") var lastName: String,
     @SerializedName("personalID") var personalID: String = "",
-    @SerializedName("photo") val photo: String = "",
+    @SerializedName("photo") var photo: String = "",
     @SerializedName("user") var user: UserRegisterDataRequest,
     @SerializedName("userID") val userID: String
 )

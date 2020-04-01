@@ -95,12 +95,27 @@ open class KiimoMainNavigationActivity : BaseActivity() {
             }
         )
 
+        viewModel.photoProfileLiveData.observe(this, Observer {
+            loadImage(it.imageUrl)
+            PreferenceUtils.saveUserNewPhoto(this, it.imageUrl)
+        })
+
         viewModel.userProfileFieldsUpdateLiveData.observe(this,
             Observer {
                 viewModel.getUser()
             })
     }
 
+    private fun loadImage(photoUrl: String) {
+
+        Glide.with(this).load(photoUrl)
+            .apply(RequestOptions.bitmapTransform(CircleCrop()).override(0, 400))
+            .into(nav_view?.getHeaderView(0)?.imageView!!)
+
+        Glide.with(this).load(photoUrl)
+            .apply(RequestOptions.bitmapTransform(CircleCrop()).override(0, 400))
+            .into(imageViewProfileDrawer)
+    }
 
     protected fun injectComponent() {
         val component = DaggerMainMenuComponent.builder().appComponent(getAppComponent())

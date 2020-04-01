@@ -69,12 +69,12 @@ class SenderMapFragment : BaseMainFragment() {
 
         val userProf = PreferenceUtils.getUserParsed(requireContext())
         if (userProf.photo.isNotBlank()) {
-            Glide.with(this).load(userProf.photo).apply(RequestOptions.circleCropTransform().override(350, 0))
+            Glide.with(this).load(userProf.photo).apply(RequestOptions.circleCropTransform().override(0, 350))
                 .into(binding.imageViewProfileDrawer)
         }
 
         viewModel.photoProfileLiveData.observe(requireActivity(), Observer {
-            Glide.with(this).load(it.imageUrl).override(350, 0).centerCrop()
+            Glide.with(this).load(it.imageUrl).apply(RequestOptions.circleCropTransform().override(0, 350))
                 .into(binding.imageViewProfileDrawer)
         })
     }

@@ -103,14 +103,14 @@ class MapFragment : BaseMainFragment(), OnMapReadyCallback, GoogleMap.OnMapClick
 
         val userProf = PreferenceUtils.getUserParsed(requireContext())
         if (userProf.photo.isNotBlank()) {
-            Glide.with(this).load(userProf.photo).apply(RequestOptions.circleCropTransform().override(0, 400))
+            Glide.with(this).load(userProf.photo).apply(RequestOptions.circleCropTransform().override(0, 350))
                 .into(binding.imageViewProfileDrawer)
         }
 
         mainDeliveryViewModel().photoProfileLiveData.observe(
             viewLifecycleOwner,
             androidx.lifecycle.Observer {
-                Glide.with(this).load(it.imageUrl).apply(RequestOptions.circleCropTransform().override(0,480))
+                Glide.with(this).load(it.imageUrl).apply(RequestOptions.circleCropTransform().override(0,350))
                     .into(binding.imageViewProfileDrawer)
             })
 

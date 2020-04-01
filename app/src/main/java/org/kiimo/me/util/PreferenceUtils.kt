@@ -43,8 +43,8 @@ object PreferenceUtils {
      * @param defaultValue  Optional default value - will take null for strings, false for bool and -1 for numeric values if [defaultValue] is not specified
      */
     private inline fun <reified T : Any> SharedPreferences.get(
-        key: String,
-        defaultValue: T? = null
+            key: String,
+            defaultValue: T? = null
     ): T? =
         when (T::class) {
             String::class -> getString(key, defaultValue as? String) as T?
@@ -87,7 +87,6 @@ object PreferenceUtils {
 
     fun saveUserProfile(context: Context, user: UserProfileInformationRequest) {
         val string = JsonUtil.getJsonStringFromModel(user)
-
         getPreferences(context)[USER_PROFILE_KEY] = string
     }
 
@@ -167,6 +166,12 @@ object PreferenceUtils {
             return JsonUtil.loadModelFromJson(card)
         }
         return null
+    }
+
+    fun saveUserNewPhoto(context: Context, imageUrl: String) {
+        val user = getUserParsed(context)
+        user.photo = imageUrl
+        saveUserProfile(context, user)
     }
 }
 
