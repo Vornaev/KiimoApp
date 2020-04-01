@@ -12,6 +12,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import com.crashlytics.android.Crashlytics
+import com.google.firebase.analytics.FirebaseAnalytics
 import org.kiimo.me.BuildConfig
 import org.kiimo.me.R
 import org.kiimo.me.app.di.AppComponent
@@ -43,7 +45,8 @@ abstract class BaseActivity : AppCompatActivity(), IBaseViewFeatures, IMediaMana
     }
 
     override fun handleApiError(throwable: Throwable) {
-        DialogUtils.showErrorMessage(this, throwable.message)
+        //DialogUtils.showErrorMessage(this, throwable.message)
+        Crashlytics.logException(throwable)
     }
 
     override fun getFcmToken(): DeviceToken {
@@ -133,7 +136,7 @@ abstract class BaseActivity : AppCompatActivity(), IBaseViewFeatures, IMediaMana
     }
 
 
-   private val MY_PERMISSION_CAMERA = 301
+    private val MY_PERMISSION_CAMERA = 301
     fun hasCameraPermission(): Boolean {
         if (ActivityCompat.checkSelfPermission(
                 this,

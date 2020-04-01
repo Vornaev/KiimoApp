@@ -69,7 +69,7 @@ open class KiimoMainNavigationActivity : BaseActivity() {
 
 
     protected fun putDeliveryType() {
-        viewModel.putDeliveryType()
+       // viewModel.putDeliveryType()
     }
 
     fun observeLiveData() {

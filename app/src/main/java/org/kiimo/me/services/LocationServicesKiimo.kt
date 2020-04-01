@@ -44,9 +44,9 @@ object LocationServicesKiimo {
 
 
     fun getPeriodicLocationUpdates(
-        context: Context,
-        locationCallback: LocationCallback,
-        interval: Long
+            context: Context,
+            locationCallback: LocationCallback,
+            interval: Long
     ) {
 
         val locSer = LocationServices.getFusedLocationProviderClient(context);
@@ -71,7 +71,11 @@ object LocationServicesKiimo {
         return null
     }
 
-    fun getAddressForLocation(latLng: LatLng, context: Context): Address? {
+    fun getAddressForLocation(latLng: LatLng?, context: Context): Address? {
+        if (latLng == null) {
+            return null
+        }
+
         try {
             val geocoder = Geocoder(context, Locale.getDefault())
             val addressList = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1)

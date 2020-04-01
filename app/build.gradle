@@ -21,7 +21,7 @@ android {
     defaultConfig {
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 236
+        versionCode 238
         versionName "0.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -58,6 +58,12 @@ android {
             keyAlias 'kiimo'
             keyPassword '@kiimostore'
             storeFile file('C:\\REPOSITORIES\\KiimoRepository\\kiimoandroid\\Kiimo\\kiimo.jks')
+            storePassword '@kiimostore'
+        }
+        playStore{
+            keyAlias 'kiimo'
+            keyPassword '@kiimostore'
+            storeFile file('C:\\REPOSITORIES\\KiimoRepository\\KiimoApp\\kiimo.jks')
             storePassword '@kiimostore'
         }
 

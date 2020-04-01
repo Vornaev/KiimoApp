@@ -15,6 +15,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.libraries.places.api.model.Place
+import com.google.android.libraries.places.api.model.TypeFilter
 import com.google.android.libraries.places.widget.Autocomplete
 import com.google.android.libraries.places.widget.AutocompleteActivity
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
@@ -160,6 +161,13 @@ class SenderMapFragment : BaseMainFragment() {
         senderMapFeatures?.animateUserLocation(deviceLoc)
     }
 
+    val myCountrryCode = {
+        LocationServicesKiimo.getAddressForLocation(
+            viewModel.senderProperties.userLocation?.toLatLng(),
+            requireContext()
+        )?.countryCode
+    }
+
     private fun openLocationSearchRequest() {
         // Start the autocomplete intent.
         val intent = Autocomplete.IntentBuilder(
@@ -167,7 +175,7 @@ class SenderMapFragment : BaseMainFragment() {
                 Place.Field.ID, Place.Field.NAME, Place.Field.ADDRESS,
                 Place.Field.LAT_LNG
             )
-        ).build(activity!!)
+        ).setTypeFilter(TypeFilter.GEOCODE).setCountry(myCountrryCode()).build(activity!!)
 
         startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE)
     }
@@ -335,5 +343,4 @@ class SenderMapFragment : BaseMainFragment() {
         binding.notificationPickUPReceived = false
         viewModel.senderProperties = MainMenuViewModel.SenderProperties()
     }
-
 }

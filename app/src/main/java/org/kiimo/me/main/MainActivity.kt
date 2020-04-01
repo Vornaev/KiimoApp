@@ -107,6 +107,13 @@ class MainActivity : KiimoMainNavigationActivity(),
             getString(R.string.i_want_to_send_button)
 
         Handler().postDelayed(Runnable { handlePayload(intent) }, 1000)
+
+        viewModel.signatureLiveData.observe(
+            this, Observer {
+                val signatureDefault = "https://img.deliverycoin.net/signatures/2019/11/5508abb2-0756-4827-ace7-95131b2b4986.png"
+                onDropOff(it.imageUrl)
+            }
+        )
     }
 
     override fun onStart() {
@@ -114,14 +121,6 @@ class MainActivity : KiimoMainNavigationActivity(),
         LocalBroadcastManager.getInstance(this).registerReceiver(
             (messageReceiver),
             IntentFilter(AppConstants.FIREBASE_BROADCAST)
-        )
-
-
-        viewModel.signatureLiveData.observe(
-            this, Observer {
-                val signatureDefault = "https://img.deliverycoin.net/signatures/2019/11/5508abb2-0756-4827-ace7-95131b2b4986.png"
-                onDropOff(it.imageUrl)
-            }
         )
     }
 

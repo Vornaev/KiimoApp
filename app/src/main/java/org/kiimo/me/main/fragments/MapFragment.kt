@@ -24,6 +24,7 @@ import androidx.lifecycle.observe
 import androidx.transition.ChangeImageTransform
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.crashlytics.android.Crashlytics
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -102,10 +103,10 @@ class MapFragment : BaseMainFragment(), OnMapReadyCallback, GoogleMap.OnMapClick
         mapViewModel.getSelf(userToken)
 
 
-        mainDeliveryViewModel().photoProfileLiveData.observe(
+        mainDeliveryViewModel().userProfileLiveData.observe(
             viewLifecycleOwner,
             androidx.lifecycle.Observer {
-                loadProfileImage(it.imageUrl)
+                loadProfileImage(it.photo)
             })
 
         mainDeliveryViewModel().photoProfileLiveData.observe(
@@ -119,7 +120,7 @@ class MapFragment : BaseMainFragment(), OnMapReadyCallback, GoogleMap.OnMapClick
         return binding.root
     }
 
-    private fun loadFromPreference(){
+    private fun loadFromPreference() {
         val userProf = PreferenceUtils.getUserParsed(requireContext())
         userProf?.let {
 
@@ -129,7 +130,7 @@ class MapFragment : BaseMainFragment(), OnMapReadyCallback, GoogleMap.OnMapClick
         }
     }
 
-   private fun loadProfileImage(imageUrl: String) {
+    private fun loadProfileImage(imageUrl: String) {
         if (imageUrl.isBlank()) return
 
         Glide.with(this).load(imageUrl).placeholder(R.drawable.ic_user_profile)
@@ -442,8 +443,8 @@ class MapFragment : BaseMainFragment(), OnMapReadyCallback, GoogleMap.OnMapClick
                 val locationManager = activity.getSystemService(LOCATION_SERVICE) as LocationManager
                 locationManager.requestLocationUpdates(
                     LocationManager.GPS_PROVIDER,
-                    3000L,
-                    5f,
+                    1000L,
+                    10f,
                     this
                 )
 
@@ -475,17 +476,25 @@ class MapFragment : BaseMainFragment(), OnMapReadyCallback, GoogleMap.OnMapClick
 
             parseData(it)
         }
-        mapViewModel.exception.observe(viewLifecycleOwner) {
-            it?.apply {
-                Toast.makeText(activity, this.localizedMessage, Toast.LENGTH_SHORT).show()
+        mapViewModel.exception.observe(viewLifecycleOwner) { throwable ->
+            throwable?.apply {
+                Crashlytics.logException(this)
+                // Toast.makeText(activity, this.localizedMessage, Toast.LENGTH_SHORT).show()
             }
         }
-        mapViewModel.selfLiveData.observe(viewLifecycleOwner) {
-            binding.isOnline = it?.userStatus?.online == true
-//            it?.userStatus?.deliveryTypeId?.let {
-//                onDeliveryTypeLoaded(it)
-//            }
-            getMainActivity()!!.viewModel.isValidDeliverer()
+        mapViewModel.selfLiveData.observe(viewLifecycleOwner) { self ->
+            binding.isOnline = self?.userStatus?.online == true
+
+            if (self?.userStatus?.deliveryTypeId == null) {
+                mainDeliveryViewModel().putDeliveryType()
+                onDeliveryTypeLoaded(DeliveryTypeID.FOOT)
+            }
+
+            self?.userStatus?.deliveryTypeId?.let {
+                onDeliveryTypeLoaded(it)
+            }
+
+            mainDeliveryViewModel().isValidDeliverer()
         }
 
 
