@@ -19,6 +19,7 @@ import org.kiimo.me.main.menu.model.UserProfileInformationResponse
 import org.kiimo.me.main.sender.model.request.CreateDeliveryRequest
 import org.kiimo.me.main.sender.model.request.PayRequest
 import org.kiimo.me.main.sender.model.request.pay.PayResponse
+import org.kiimo.me.main.sender.model.request.rate.RateDeliveryRequest
 import org.kiimo.me.main.sender.model.response.SenderCreateDeliveryResponse
 import org.kiimo.me.models.*
 import org.kiimo.me.models.delivery.*
@@ -419,7 +420,9 @@ class MainViewModelRepository(
         )
     }
 
-    fun updateUserFragmentFields(updateRequest: UserProfileFragmentUpdateRequest, updateData: MutableLiveData<UserRegisterResponse>) {
+    fun updateUserFragmentFields(
+            updateRequest: UserProfileFragmentUpdateRequest,
+            updateData: MutableLiveData<UserRegisterResponse>) {
         disposableContainer.add(
             userClient.updateUserInformation(
                 updateRequest
@@ -429,6 +432,24 @@ class MainViewModelRepository(
                 .subscribe(
                     {
                         updateData.postValue(it)
+                        viewFeatures.trackRequestSuccess("photo saved")
+                    }, {
+                        viewFeatures.handleApiError(it)
+                    }
+                )
+        )
+    }
+
+    fun rateUserForDelivery(rateDeliveryRequest: RateDeliveryRequest) {
+        disposableContainer.add(
+            deliveryClient.rateUser(
+                token = viewFeatures.getUserToken(),
+                rateDeliveryRequest = rateDeliveryRequest
+            )
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                    {
                         viewFeatures.trackRequestSuccess("photo saved")
                     }, {
                         viewFeatures.handleApiError(it)

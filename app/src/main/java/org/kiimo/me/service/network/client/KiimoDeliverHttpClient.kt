@@ -1,5 +1,6 @@
 package org.kiimo.me.service.network.client
 
+import io.reactivex.Completable
 import io.reactivex.Observable
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -8,6 +9,7 @@ import org.kiimo.me.main.fragments.model.sender.SenderOrderListResponse
 import org.kiimo.me.main.sender.model.request.CreateDeliveryRequest
 import org.kiimo.me.main.sender.model.request.PayRequest
 import org.kiimo.me.main.sender.model.request.pay.PayResponse
+import org.kiimo.me.main.sender.model.request.rate.RateDeliveryRequest
 import org.kiimo.me.main.sender.model.response.SenderCreateDeliveryResponse
 import org.kiimo.me.service.network.client.HttpHeaders.ContentTypeHeader
 
@@ -40,15 +42,19 @@ object HttpHeaders {
 interface KiimoDeliverHttpClient {
 
     @POST("api/sms/send-code")
-    fun sendCode(@Header(ContentTypeHeader) contentType: String = jsonHeader, @Body smsCodeRequest: UserSmsCodeRequest): Observable<UserRegisterResponse>
+    fun sendCode(
+            @Header(ContentTypeHeader) contentType: String = jsonHeader,
+            @Body smsCodeRequest: UserSmsCodeRequest): Observable<UserRegisterResponse>
 
 
     @POST("api/sms/validate-code")
-    fun validateSmsCode(@Header(AuthorizationHeader) userID: String, @Body smsCodeRequest: SmsValidationRequest): Observable<SmsValidationResponse>
+    fun validateSmsCode(
+            @Header(AuthorizationHeader) userID: String,
+            @Body smsCodeRequest: SmsValidationRequest): Observable<SmsValidationResponse>
 
     @GET("api/self")
     fun getSelf(
-        @Header("Authorization") token: String
+            @Header("Authorization") token: String
     ): Observable<Self>
 
 
@@ -68,7 +74,9 @@ interface KiimoDeliverHttpClient {
 //    fun putDeviceToken(@Header(AuthorizationHeader) token: String, @Body deviceToken: DeviceToken): Observable<Response<Void>>
 //
     @POST("api/deliveries/calculate")
-    fun deliveryCalculate(@Header(AuthorizationHeader) token: String, @Body delivryCalculateRequest: CalculateDeliveryRequest): Observable<CalculateDeliveryResponse>
+    fun deliveryCalculate(
+            @Header(AuthorizationHeader) token: String,
+            @Body delivryCalculateRequest: CalculateDeliveryRequest): Observable<CalculateDeliveryResponse>
 //
 //    @POST("api/deliveries/{id}/accept")
 //    fun acceptDelivery(token: String, @Path("id") deliveryID: String): Observable<AcceptDeliveryResponse>
@@ -83,53 +91,53 @@ interface KiimoDeliverHttpClient {
 
     @PUT("api/self/location")
     fun putLocation(
-        @Header(ContentTypeHeader) contentType: String = jsonHeader,
-        @Header(AuthorizationHeader) token: String,
-        @Body locationRequest: LocationRequest
+            @Header(ContentTypeHeader) contentType: String = jsonHeader,
+            @Header(AuthorizationHeader) token: String,
+            @Body locationRequest: LocationRequest
     ): Observable<Response<Void>>
 
     @PUT("api/self/delivery-type")
     fun putDeliveryType(
-        @Header(ContentTypeHeader) contentType: String = jsonHeader,
-        @Header(AuthorizationHeader) token: String,
-        @Body deliveryType: DeliveryType
+            @Header(ContentTypeHeader) contentType: String = jsonHeader,
+            @Header(AuthorizationHeader) token: String,
+            @Body deliveryType: DeliveryType
     ): Observable<Response<Void>>
 
     @PUT("api/self/deviceToken")
     fun putDeviceToken(
-        @Header(ContentTypeHeader) contentType: String = jsonHeader,
-        @Header(AuthorizationHeader) token: String,
-        @Body deviceToken: DeviceToken
+            @Header(ContentTypeHeader) contentType: String = jsonHeader,
+            @Header(AuthorizationHeader) token: String,
+            @Body deviceToken: DeviceToken
     ): Observable<Response<Void>>
 
     @PUT("api/self/status")
     fun putStatus(
-        @Header(ContentTypeHeader) contentType: String,
-        @Header(AuthorizationHeader) token: String,
-        @Body status: Status
+            @Header(ContentTypeHeader) contentType: String,
+            @Header(AuthorizationHeader) token: String,
+            @Body status: Status
     ): Observable<StatusResponse?>
 
     @POST("api/deliveries/{id}/accept")
     fun acceptDelivery(
-        @Header(AuthorizationHeader) token: String,
-        @Path("id") id: String
+            @Header(AuthorizationHeader) token: String,
+            @Path("id") id: String
     ): Observable<Response<Void>>
 
     @POST("api/deliveries/pick-up")
     fun pickUp(
-        @Header(AuthorizationHeader) token: String
+            @Header(AuthorizationHeader) token: String
     ): Observable<Response<Void>>
 
     @POST("api/deliveries/validate-code")
     fun validateCode(
-        @Header(AuthorizationHeader) token: String,
-        @Body code: ValidateCodeRequest
+            @Header(AuthorizationHeader) token: String,
+            @Body code: ValidateCodeRequest
     ): Observable<ValidateCodeResponse?>
 
     @POST("api/deliveries/drop-off")
     fun dropOff(
-        @Header(AuthorizationHeader) token: String,
-        @Body dropOffRequest: DropOffRequest
+            @Header(AuthorizationHeader) token: String,
+            @Body dropOffRequest: DropOffRequest
     ): Observable<DropOffResponse?>
 
 
@@ -137,37 +145,48 @@ interface KiimoDeliverHttpClient {
     fun getDestinationData(@Url url: String): Observable<DestinationData?>
 
     @POST("api/deliveries")
-    fun createPackageForDelivery(@Header(AuthorizationHeader) token: String, @Body request: CreateDeliveryRequest): Observable<SenderCreateDeliveryResponse>
+    fun createPackageForDelivery(
+            @Header(AuthorizationHeader) token: String,
+            @Body request: CreateDeliveryRequest): Observable<SenderCreateDeliveryResponse>
 
 
     @POST("api/deliveries/pay")
     fun payForPackage(
-        @Header(ContentTypeHeader) contentType: String = jsonHeader, @Header(
-            AuthorizationHeader
-        ) token: String, @Body payRequest: PayRequest
+            @Header(ContentTypeHeader) contentType: String = jsonHeader, @Header(
+                AuthorizationHeader
+            ) token: String, @Body payRequest: PayRequest
     ): Observable<PayResponse>
 
 
     @POST("api/upload")
-    fun uploadImageToServer(@Header(AuthorizationHeader) token: String, @Body uploadPhotoRequest: UploadPhotoRequest): Observable<UploadImageResponse>
+    fun uploadImageToServer(
+            @Header(AuthorizationHeader) token: String,
+            @Body uploadPhotoRequest: UploadPhotoRequest): Observable<UploadImageResponse>
 
 
     @POST("api/upload")
     @FormUrlEncoded()
     fun uploadImageToServerField(
-        @Header(AuthorizationHeader) token: String, @Header(
-            ContentTypeHeader
-        ) contentHeader: String, @Field("media") media: ByteArray, @Field("signature") signatureRequest: String
+            @Header(AuthorizationHeader) token: String,
+            @Header(
+                ContentTypeHeader
+            ) contentHeader: String,
+            @Field("media") media: ByteArray,
+            @Field("signature") signatureRequest: String
     ): Observable<UploadImageResponse>
 
 
     @PUT("api/self/preferred-payment")
-    fun savePreferredPayment(@Header(AuthorizationHeader) token: String, @Body preferedPay: PreferredPaymentUser): Observable<PreferredPayResponse>
+    fun savePreferredPayment(
+            @Header(AuthorizationHeader) token: String,
+            @Body preferedPay: PreferredPaymentUser): Observable<PreferredPayResponse>
 
 
     @Multipart
     @POST("api/upload")
-    fun uploadMultipardData(@Part media: MultipartBody.Part, @Part("type") requestBody: RequestBody): Observable<UploadImageResponse>
+    fun uploadMultipardData(
+            @Part media: MultipartBody.Part,
+            @Part("type") requestBody: RequestBody): Observable<UploadImageResponse>
 
     @POST("api/deliveries/sender")
     fun getOrdersList(@Header(AuthorizationHeader) token: String): Observable<MutableList<SenderOrderListResponse>>
@@ -175,4 +194,8 @@ interface KiimoDeliverHttpClient {
     @GET("api/deliveries?userType=carrier")
     fun getDeliveriesList(@Header(AuthorizationHeader) token: String): Observable<MutableList<SenderOrderListResponse>>
 
+    @POST("api/deliveries/accept")
+    fun rateUser(
+            @Header(AuthorizationHeader) token: String,
+            @Body rateDeliveryRequest: RateDeliveryRequest): Completable
 }

@@ -13,9 +13,10 @@ import org.kiimo.me.R
 import org.kiimo.me.databinding.DialogRateUserSenderFinishBinding
 import org.kiimo.me.main.sender.SenderKiimoActivity
 import org.kiimo.me.main.sender.model.notifications.dropOffDeliverySender.FcmResponseOnDropOffDelivery
+import org.kiimo.me.main.sender.model.request.rate.RateDeliveryRequest
 import java.lang.Exception
 
-class RateUserDialogFragment(val data :FcmResponseOnDropOffDelivery) : BaseKiimoDialog() {
+class RateUserDialogFragment(val data: FcmResponseOnDropOffDelivery) : BaseKiimoDialog() {
 
     lateinit var binding: DialogRateUserSenderFinishBinding
     var dropOffDelivery: FcmResponseOnDropOffDelivery? = null
@@ -79,7 +80,11 @@ class RateUserDialogFragment(val data :FcmResponseOnDropOffDelivery) : BaseKiimo
 
         binding.ratingButtonConfirm.setOnClickListener {
             this.dismiss()
-            startActivity(Intent(requireContext(),SenderKiimoActivity::class.java))
+
+//            (requireActivity() as SenderKiimoActivity).viewModel.rateUserForDelivery(
+//                RateDeliveryRequest(binding.ratingCount!!)
+//            )
+            startActivity(Intent(requireContext(), SenderKiimoActivity::class.java))
             //(requireActivity() as SenderKiimoActivity).onDissmissDialogRateUser()
         }
     }

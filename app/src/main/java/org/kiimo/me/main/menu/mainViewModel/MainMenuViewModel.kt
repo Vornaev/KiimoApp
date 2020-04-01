@@ -12,6 +12,7 @@ import org.kiimo.me.main.sender.model.request.CreateDeliveryRequest
 import org.kiimo.me.main.sender.model.request.Packages
 import org.kiimo.me.main.sender.model.request.PayRequest
 import org.kiimo.me.main.sender.model.request.pay.PayResponse
+import org.kiimo.me.main.sender.model.request.rate.RateDeliveryRequest
 import org.kiimo.me.main.sender.model.response.SenderCreateDeliveryResponse
 import org.kiimo.me.models.*
 import org.kiimo.me.models.delivery.*
@@ -71,6 +72,10 @@ class MainMenuViewModel(private var repository: MainViewModelRepository) : ViewM
 
     fun putLocation(locationModel: LocationModel) {
         repository.putLocation(locationModel)
+    }
+
+    fun rateUserForDelivery(rateDeliveryRequest: RateDeliveryRequest){
+        repository.rateUserForDelivery(rateDeliveryRequest)
     }
 
 

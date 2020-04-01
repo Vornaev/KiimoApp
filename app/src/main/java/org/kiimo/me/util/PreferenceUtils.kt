@@ -6,6 +6,7 @@ import android.preference.PreferenceManager
 import org.kiimo.me.main.menu.model.CreditCardModel
 import org.kiimo.me.main.menu.model.UserProfileInformationResponse
 import org.kiimo.me.models.Profile
+import org.kiimo.me.register.model.UserAddressDataRequest
 import org.kiimo.me.register.model.UserProfileInformationRequest
 
 object PreferenceUtils {
@@ -94,10 +95,16 @@ object PreferenceUtils {
         return getPreferences(context).getString(USER_PROFILE_KEY, "") ?: ""
     }
 
-    fun getUserParsed(context: Context): UserProfileInformationRequest {
-        return JsonUtil.loadModelFromJson(
-            getPreferences(context).getString(USER_PROFILE_KEY, "") ?: ""
-        )
+    fun getUserParsed(context: Context): UserProfileInformationRequest? {
+
+        val stringRes = getPreferences(context).getString(USER_PROFILE_KEY, "")
+
+        return if (stringRes.isNullOrBlank()) {
+            null
+        } else
+            JsonUtil.loadModelFromJson(
+                stringRes
+            )
     }
 
     //Password
@@ -170,8 +177,10 @@ object PreferenceUtils {
 
     fun saveUserNewPhoto(context: Context, imageUrl: String) {
         val user = getUserParsed(context)
-        user.photo = imageUrl
-        saveUserProfile(context, user)
+        user?.let {
+            it.photo = imageUrl
+            saveUserProfile(context, it)
+        }
     }
 }
 

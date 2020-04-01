@@ -46,7 +46,7 @@ class SenderKiimoActivity : KiimoMainNavigationActivity() {
 
     var dialogSpiner: SendItemDescriptionDialog? = null
     var mapFragment: SenderMapFragment? = null
-    var changeAccountTypeDialog : ChangeAccountTypeDialog? = null
+    var changeAccountTypeDialog: ChangeAccountTypeDialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,7 +63,8 @@ class SenderKiimoActivity : KiimoMainNavigationActivity() {
     fun setupHeaderView() {
 
         nav_view?.getHeaderView(0)?.buttonChangeAccountTypeUser?.setOnClickListener {
-            val userProfile = PreferenceUtils.getUserParsed(this)
+
+            val userProfile = PreferenceUtils.getUserParsed(this) ?: return@setOnClickListener
             if (userProfile.address.street.isEmpty()) {
                 changeAccountTypeDialog = ChangeAccountTypeDialog()
                 changeAccountTypeDialog?.setUser(userProfile, viewModel)
@@ -242,7 +243,8 @@ class SenderKiimoActivity : KiimoMainNavigationActivity() {
             }
 
             "DELIVERY_DROP_OFF" -> {
-                val dropOffResponse = JsonUtil.loadModelFromJson<FcmResponseOnDropOffDelivery>(payload.delivery)
+                val dropOffResponse =
+                    JsonUtil.loadModelFromJson<FcmResponseOnDropOffDelivery>(payload.delivery)
                 val dialog = RateUserDialogFragment(dropOffResponse)
                 dialog.show(supportFragmentManager, "rateUser")
                 //dialog.setValue(dropOffResponse)
@@ -255,7 +257,7 @@ class SenderKiimoActivity : KiimoMainNavigationActivity() {
         }
     }
 
-    fun onDissmissDialogRateUser(){
+    fun onDissmissDialogRateUser() {
         mapFragment!!.finishedDelivery()
     }
 

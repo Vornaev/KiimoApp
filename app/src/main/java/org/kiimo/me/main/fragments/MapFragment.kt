@@ -101,22 +101,40 @@ class MapFragment : BaseMainFragment(), OnMapReadyCallback, GoogleMap.OnMapClick
 
         mapViewModel.getSelf(userToken)
 
-        val userProf = PreferenceUtils.getUserParsed(requireContext())
-        if (userProf.photo.isNotBlank()) {
-            Glide.with(this).load(userProf.photo).apply(RequestOptions.circleCropTransform().override(0, 350))
-                .into(binding.imageViewProfileDrawer)
-        }
 
         mainDeliveryViewModel().photoProfileLiveData.observe(
             viewLifecycleOwner,
             androidx.lifecycle.Observer {
-                Glide.with(this).load(it.imageUrl).apply(RequestOptions.circleCropTransform().override(0,350))
-                    .into(binding.imageViewProfileDrawer)
+                loadProfileImage(it.imageUrl)
+            })
+
+        mainDeliveryViewModel().photoProfileLiveData.observe(
+            viewLifecycleOwner,
+            androidx.lifecycle.Observer {
+                loadProfileImage(it.imageUrl)
             })
 
         binding.travelModeActiveId = 0
 
         return binding.root
+    }
+
+    private fun loadFromPreference(){
+        val userProf = PreferenceUtils.getUserParsed(requireContext())
+        userProf?.let {
+
+            if (it.photo.isNotBlank()) {
+                loadProfileImage(it.photo)
+            }
+        }
+    }
+
+   private fun loadProfileImage(imageUrl: String) {
+        if (imageUrl.isBlank()) return
+
+        Glide.with(this).load(imageUrl).placeholder(R.drawable.ic_user_profile)
+            .apply(RequestOptions.circleCropTransform().override(0, 350))
+            .into(binding.imageViewProfileDrawer)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

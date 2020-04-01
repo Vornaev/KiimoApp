@@ -67,16 +67,30 @@ class SenderMapFragment : BaseMainFragment() {
             senderMapFeatures?.onRouteReady(it)
         })
 
-        val userProf = PreferenceUtils.getUserParsed(requireContext())
-        if (userProf.photo.isNotBlank()) {
-            Glide.with(this).load(userProf.photo).apply(RequestOptions.circleCropTransform().override(0, 350))
-                .into(binding.imageViewProfileDrawer)
-        }
+        // loadImageFromPreference()
+
+        viewModel.userProfileLiveData.observe(viewLifecycleOwner, Observer {
+            loadImageProfile(it.photo)
+        })
+
 
         viewModel.photoProfileLiveData.observe(requireActivity(), Observer {
-            Glide.with(this).load(it.imageUrl).apply(RequestOptions.circleCropTransform().override(0, 350))
-                .into(binding.imageViewProfileDrawer)
+            loadImageProfile(it.imageUrl)
         })
+    }
+
+    private fun loadImageFromPreference() {
+        val userProfile = PreferenceUtils.getUserParsed(requireContext())
+        userProfile?.let {
+            loadImageProfile(it.photo)
+        }
+    }
+
+    private fun loadImageProfile(url: String) {
+        if (url.isBlank()) return
+        Glide.with(this).load(url).placeholder(R.drawable.ic_user_profile)
+            .apply(RequestOptions.circleCropTransform().override(0, 350))
+            .into(binding.imageViewProfileDrawer)
     }
 
     private fun setNavigation() {
@@ -274,7 +288,8 @@ class SenderMapFragment : BaseMainFragment() {
             "${deliveryPayedResponse.carrier.firstName} ${deliveryPayedResponse.carrier.lastName}"
 
         if (!deliveryPayedResponse.carrier.photo.isNullOrBlank()) {
-            Glide.with(this).load(deliveryPayedResponse.carrier.photo).override(350, 0).centerCrop()
+            Glide.with(this).load(deliveryPayedResponse.carrier.photo).override(0, 350).centerCrop()
+                .placeholder(R.drawable.ic_user_profile)
                 .into(binding.imageViewCarrier)
         }
 
@@ -290,7 +305,8 @@ class SenderMapFragment : BaseMainFragment() {
     fun receviedCodePickUP(deliveryAccepted: ConfirmPickUpFcmData) {
 
         if (!deliveryAccepted.carrier.photo.isNullOrBlank()) {
-            Glide.with(this).load(deliveryAccepted.carrier.photo).override(350, 0).centerCrop()
+            Glide.with(this).load(deliveryAccepted.carrier.photo).override(0, 350).centerCrop()
+                .placeholder(R.drawable.ic_user_profile)
                 .into(binding.imageViewCarrier)
         }
         binding.notificationPickUPReceived = true

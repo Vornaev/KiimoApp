@@ -15,7 +15,7 @@
             android:layout_marginTop="@dimen/margin_medium_large"
             android:elevation="0dp"
             android:scaleType="centerCrop"
-            android:src="@color/colorPrimaryDark" />
+            android:src="@drawable/ic_user_profile" />
 
     <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"

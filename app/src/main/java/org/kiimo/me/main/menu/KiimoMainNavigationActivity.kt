@@ -31,6 +31,7 @@ import org.kiimo.me.main.menu.di.DaggerMainMenuComponent
 import org.kiimo.me.main.menu.di.MainManiActivityModule
 import org.kiimo.me.main.menu.mainViewModel.MainMenuViewModel
 import org.kiimo.me.main.sender.fragment.SenderMapFragment
+import org.kiimo.me.models.Status
 import org.kiimo.me.models.payment.PreferredPaymentUser
 import org.kiimo.me.register.WelcomeActivity
 import org.kiimo.me.services.MessageEvent
@@ -213,6 +214,7 @@ open class KiimoMainNavigationActivity : BaseActivity() {
 
     fun logout() {
         PreferenceUtils.logout(this)
+        viewModel.putStatus(Status(false))
         val intent = Intent(this, WelcomeActivity::class.java)
         startActivity(intent)
         finish()
