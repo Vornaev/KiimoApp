@@ -11,6 +11,7 @@ import android.os.Handler
 import android.provider.MediaStore
 import androidx.lifecycle.Observer
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import com.google.android.gms.common.util.JsonUtils
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_kiimo_main_navigation.*
 import kotlinx.android.synthetic.main.layout_menu_item.view.*
@@ -30,6 +31,7 @@ import org.kiimo.me.main.sender.fragment.SenderDeliveryPackageSummaryFragment
 import org.kiimo.me.main.sender.fragment.SenderMapFragment
 import org.kiimo.me.main.sender.fragment.SenderPaymentDetailsFragment
 import org.kiimo.me.main.sender.model.notifications.ConfirmPickUpNotification.ConfirmPickUpFcmData
+import org.kiimo.me.main.sender.model.notifications.dropOffDeliverySender.FcmResponseOnDropOffDelivery
 import org.kiimo.me.main.sender.model.request.pay.PayResponse
 import org.kiimo.me.models.FirebasePayload
 import org.kiimo.me.util.AppConstants
@@ -125,9 +127,6 @@ class SenderKiimoActivity : KiimoMainNavigationActivity() {
             (messageReceiver),
             IntentFilter(AppConstants.FIREBASE_BROADCAST)
         )
-
-        val dialog = RateUserDialogFragment()
-        dialog.show(supportFragmentManager, "rateUser")
     }
 
     override fun onStop() {
@@ -243,8 +242,10 @@ class SenderKiimoActivity : KiimoMainNavigationActivity() {
             }
 
             "DELIVERY_DROP_OFF" -> {
-                val dialog = RateUserDialogFragment()
+                val dropOffResponse = JsonUtil.loadModelFromJson<FcmResponseOnDropOffDelivery>(payload.delivery)
+                val dialog = RateUserDialogFragment(dropOffResponse)
                 dialog.show(supportFragmentManager, "rateUser")
+                //dialog.setValue(dropOffResponse)
             }
 
             "CARRIER_NOT_FOUND" -> {

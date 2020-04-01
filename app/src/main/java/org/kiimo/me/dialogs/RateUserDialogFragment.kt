@@ -3,21 +3,27 @@ package org.kiimo.me.dialogs
 import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.inputmethod.InputMethodManager
 import androidx.databinding.DataBindingUtil
+import com.squareup.picasso.Picasso
 import org.kiimo.me.R
 import org.kiimo.me.databinding.DialogRateUserSenderFinishBinding
 import org.kiimo.me.main.sender.SenderKiimoActivity
+import org.kiimo.me.main.sender.model.notifications.dropOffDeliverySender.FcmResponseOnDropOffDelivery
 import java.lang.Exception
 
-class RateUserDialogFragment : BaseKiimoDialog() {
+class RateUserDialogFragment(val data :FcmResponseOnDropOffDelivery) : BaseKiimoDialog() {
 
     lateinit var binding: DialogRateUserSenderFinishBinding
+    var dropOffDelivery: FcmResponseOnDropOffDelivery? = null
 
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+
+        dropOffDelivery = data
 
         binding = DataBindingUtil.inflate(
             LayoutInflater.from(context),
@@ -44,6 +50,7 @@ class RateUserDialogFragment : BaseKiimoDialog() {
 
 
         setListeners()
+        setValue(data)
 
         binding.ratingCount = 0
 
@@ -71,7 +78,21 @@ class RateUserDialogFragment : BaseKiimoDialog() {
         binding.rateStarFive.setOnClickListener { binding.ratingCount = 5 }
 
         binding.ratingButtonConfirm.setOnClickListener {
-            (requireActivity() as SenderKiimoActivity).onDissmissDialogRateUser()
+            this.dismiss()
+            startActivity(Intent(requireContext(),SenderKiimoActivity::class.java))
+            //(requireActivity() as SenderKiimoActivity).onDissmissDialogRateUser()
         }
+    }
+
+    fun setValue(thisRef: FcmResponseOnDropOffDelivery) {
+        this.dropOffDelivery = thisRef
+        binding.rateUserAvatarImage
+        if (thisRef.carrier.photo.isNotBlank()) {
+            Picasso.get().load(thisRef.carrier.photo).fit().centerCrop()
+                .into(binding.rateUserAvatarImage)
+        }
+
+        val name = "${thisRef.carrier.firstName} ${thisRef.carrier.lastName}"
+        binding.titleRateUserName.text = name
     }
 }
