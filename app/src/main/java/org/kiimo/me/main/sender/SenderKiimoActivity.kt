@@ -216,7 +216,7 @@ class SenderKiimoActivity : KiimoMainNavigationActivity() {
     }
 
     override fun handlePayload(newIntent: Intent) {
-
+             return
 
         val payloadString = newIntent.extras?.getString(AppConstants.FIREBASE_PAYLOAD)
         if (payloadString.isNullOrEmpty()) return

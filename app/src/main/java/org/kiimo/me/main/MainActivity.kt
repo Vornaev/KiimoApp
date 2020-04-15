@@ -176,6 +176,9 @@ class MainActivity : KiimoMainNavigationActivity(),
     }
 
     override fun handlePayload(notIntent: Intent) {
+
+        return
+
         val payloadString = notIntent.extras?.getString(AppConstants.FIREBASE_PAYLOAD)
         if (payloadString.isNullOrEmpty()) return
         val payload = Gson().fromJson(payloadString, FirebasePayload::class.java)
