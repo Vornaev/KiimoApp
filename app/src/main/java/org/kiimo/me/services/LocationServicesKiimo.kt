@@ -2,9 +2,11 @@ package org.kiimo.me.services
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.location.Address
 import android.location.Geocoder
 import android.location.Location
+import android.net.Uri
 import android.os.Looper
 import android.widget.Toast
 import com.google.android.gms.location.LocationCallback
@@ -103,4 +105,27 @@ object LocationServicesKiimo {
     }
 
 
+    fun openMapsDirectionsActivity(
+            context: Context,
+            latitude: Double,
+            longitude: Double,
+            travelMode: String) {
+        val uri: String = String.format(
+            Locale.ENGLISH,
+            "google.navigation:q=%f,%f&mode=$travelMode)",
+            latitude,
+            longitude
+        )
+
+        val mapIntent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
+        mapIntent.setPackage("com.google.android.apps.maps")
+        context.startActivity(mapIntent)
+    }
+
+    object TravelModes {
+        val drive = "d"
+        val bicycle = "b"
+        val walking = "w"
+        val scooter = "l"
+    }
 }

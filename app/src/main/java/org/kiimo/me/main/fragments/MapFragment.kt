@@ -218,6 +218,25 @@ class MapFragment : BaseMainFragment(), OnMapReadyCallback, GoogleMap.OnMapClick
         addMarker(getOrigin(deliveryPaid.delivery))
         addMarker(getDestination(deliveryPaid.delivery))
         this.delivery = deliveryPaid.delivery
+
+        binding.navigateButton.setOnClickListener {
+            LocationServicesKiimo.openMapsDirectionsActivity(
+                requireContext()
+                , deliveryPaid.delivery.destination?.lat!!
+                , deliveryPaid.delivery.destination?.lng!!
+                , travelMode = getTravelModeMaps()
+            )
+        }
+    }
+
+    fun getTravelModeMaps(): String {
+        return when (binding.travelModeActiveId) {
+            0 -> LocationServicesKiimo.TravelModes.walking
+            1 -> LocationServicesKiimo.TravelModes.bicycle
+            2 -> LocationServicesKiimo.TravelModes.scooter
+            3 -> LocationServicesKiimo.TravelModes.drive
+            else -> LocationServicesKiimo.TravelModes.drive
+        }
     }
 
     override fun acceptDelivery(deliveryId: String) {
