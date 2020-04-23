@@ -43,6 +43,7 @@ class ProfileFragment : BaseMainFragment() {
     lateinit var profileViewModelFactory: ProfileViewModelFactory
 
     val profileString: String by lazy { PreferenceUtils.getUserProfile(requireContext()) }
+    val isSender:Boolean by lazy { PreferenceUtils.getAccountTypeIsSender(requireActivity())}
     var profilePhoto = ""
 
     private val profileViewModel: ProfileViewModel by viewModels {
@@ -69,7 +70,15 @@ class ProfileFragment : BaseMainFragment() {
             mainDeliveryViewModel().updateUserProfilePhoto(it.imageUrl)
         })
 
+
+
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        binding.profileLayout.deliveryLayout.visibility =   if(isSender) View.GONE else View.VISIBLE
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -206,7 +215,6 @@ class ProfileFragment : BaseMainFragment() {
     var profileCache = Profile()
 
     private fun setDummyData() {
-
 
         if (profileString.isNotEmpty()) {
             profileCache = Profile().loadFromCache(

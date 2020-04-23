@@ -5,7 +5,7 @@ import org.kiimo.me.register.model.UserAddressDataRequest
 import org.kiimo.me.register.model.UserRegisterDataRequest
 
 data class UserProfileInformationResponse(
-    @SerializedName("address") val address: UserAddressDataRequest,
+    @SerializedName("address") val address: UserAddressDataRequest = UserAddressDataRequest(),
     @SerializedName("email") val email: String,
     @SerializedName("firstName") val firstName: String,
     @SerializedName("lastName") val lastName: String = "",

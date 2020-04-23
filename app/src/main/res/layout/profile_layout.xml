@@ -195,16 +195,170 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/phone_text_view" />
 
-            <TextView
-                    android:id="@+id/logout"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/margin_medium"
-                    android:layout_marginTop="@dimen/margin_medium"
-                    android:text="@{underlineText}"
-                    android:textColor="@color/colorPrimary"
-                    app:layout_constraintStart_toStartOf="parent"
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/deliveryLayout"
                     app:layout_constraintTop_toBottomOf="@id/phone_edit_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                <TextView
+                        android:id="@+id/street_text_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_large"
+                        android:layout_marginTop="@dimen/margin_medium"
+                        android:text="@string/street_header"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                <EditText
+                        android:id="@+id/street_edit_text"
+                        style="@style/EditTextRegisterInputStyles"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_medium"
+                        android:layout_marginTop="@dimen/margin_small"
+                        android:layout_marginEnd="@dimen/margin_medium"
+                        android:hint="@string/street_header"
+                        android:clickable="false"
+                        android:focusable="false"
+                        android:importantForAutofill="no"
+                        android:inputType="phone"
+                        android:text="@{profile.street}"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/street_text_view" />
+
+
+                <TextView
+                        android:id="@+id/housenum_text_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_large"
+                        android:layout_marginTop="@dimen/margin_medium"
+                        android:text="@string/number_header"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/street_edit_text" />
+
+                <EditText
+                        android:id="@+id/house_edit_text"
+                        style="@style/EditTextRegisterInputStyles"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_medium"
+                        android:layout_marginTop="@dimen/margin_small"
+                        android:layout_marginEnd="@dimen/margin_medium"
+                        android:hint="@string/number_header"
+                        android:clickable="false"
+                        android:focusable="false"
+                        android:importantForAutofill="no"
+                        android:inputType="phone"
+                        android:text="@{profile.houseNumber}"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/housenum_text_view" />
+
+
+                <TextView
+                        android:id="@+id/zip_text_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_large"
+                        android:layout_marginTop="@dimen/margin_medium"
+                        android:text="@string/zip_code_header"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/house_edit_text" />
+
+                <EditText
+                        android:id="@+id/zip_edit_text"
+                        style="@style/EditTextRegisterInputStyles"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_medium"
+                        android:layout_marginTop="@dimen/margin_small"
+                        android:layout_marginEnd="@dimen/margin_medium"
+                        android:hint="@string/zip_code_header"
+                        android:clickable="false"
+                        android:focusable="false"
+                        android:importantForAutofill="no"
+                        android:inputType="phone"
+                        android:text="@{profile.zip}"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/zip_text_view" />
+
+                <TextView
+                        android:id="@+id/place_text_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_large"
+                        android:layout_marginTop="@dimen/margin_medium"
+                        android:text="@string/palce_header"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/zip_edit_text" />
+
+                <EditText
+                        android:id="@+id/place_edit_text"
+                        style="@style/EditTextRegisterInputStyles"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_medium"
+                        android:layout_marginTop="@dimen/margin_small"
+                        android:layout_marginEnd="@dimen/margin_medium"
+                        android:hint="@string/palce_header"
+                        android:clickable="false"
+                        android:focusable="false"
+                        android:importantForAutofill="no"
+                        android:inputType="phone"
+                        android:text="@{profile.place}"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/place_text_view" />
+
+                <TextView
+                        android:id="@+id/country_text_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_large"
+                        android:layout_marginTop="@dimen/margin_medium"
+                        android:text="@string/country_header"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/place_edit_text" />
+
+                <EditText
+                        android:id="@+id/country_edit_text"
+                        style="@style/EditTextRegisterInputStyles"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_medium"
+                        android:layout_marginTop="@dimen/margin_small"
+                        android:layout_marginEnd="@dimen/margin_medium"
+                        android:hint="@string/country_header"
+                        android:clickable="false"
+                        android:focusable="false"
+                        android:importantForAutofill="no"
+                        android:inputType="phone"
+                        android:text="@{profile.country}"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/country_text_view" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            <Button
+                    android:id="@+id/logout"
+                    android:layout_width="0dp"
+                    app:layout_constraintWidth_percent="0.9"
+                    android:layout_height="@dimen/big_button_height"
+                    android:layout_marginStart="@dimen/margin_medium"
+                    android:layout_marginTop="@dimen/margin_large"
+                    style="@style/ButtonStyleDefaultOrange"
+                    android:text="Logout"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/deliveryLayout"
                     tools:text="Одлогирај се" />
 
 

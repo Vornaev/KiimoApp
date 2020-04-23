@@ -136,4 +136,9 @@
     <string name="verification_id_field">VERFICATION ID*</string>
     <string name="rate_user">Rate User</string>
     <string name="insert_comment">Insert comment ...</string>
+    <string name="street_header">Street</string>
+    <string name="zip_code_header">Zip Code</string>
+    <string name="number_header">Number</string>
+    <string name="palce_header">Place</string>
+    <string name="country_header">Country</string>
 </resources>
