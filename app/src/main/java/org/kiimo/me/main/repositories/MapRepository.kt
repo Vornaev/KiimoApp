@@ -146,7 +146,7 @@ class MapRepository {
 
     fun pickUp(token: String, imagePath : String) {
         disposableContainer.add(
-            kiimoDeliverHttpClient.pickUp(token, imagePath)
+            kiimoDeliverHttpClient.pickUp(token, PackageImageRequest(imagePath))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
