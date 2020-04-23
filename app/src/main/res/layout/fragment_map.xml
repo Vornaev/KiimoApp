@@ -89,6 +89,25 @@
                     app:layout_constraintTop_toBottomOf="@id/layout_pin" />
 
             <Button
+                    android:id="@+id/navigate_package_image"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_medium"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="@dimen/margin_medium"
+                    android:layout_marginBottom="@dimen/margin_medium"
+                    android:visibility="@{isConfirmDropOff ? View.GONE : View.VISIBLE}"
+                    android:background="@drawable/corner_white_background_black_border"
+                    android:paddingStart="@dimen/margin_medium"
+                    android:paddingEnd="@dimen/margin_medium"
+                    android:text="Package Image"
+                    android:textAllCaps="false"
+                    android:textColor="@android:color/black"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/navigate_button" />
+
+            <Button
                     android:id="@+id/confirm_button"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -105,7 +124,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/navigate_button"
+                    app:layout_constraintTop_toBottomOf="@id/navigate_package_image"
                     tools:text="Confirm pick-up" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 

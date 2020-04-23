@@ -61,7 +61,7 @@ class DeliveryDetailsDialog : BaseKiimoDialog() {
         if (image.isEmpty()) {
 //            binding.deliveryImageView.visibility = View.GONE
         } else {
-            Glide.with(this).load(image).override(500, 0).centerCrop()
+            Glide.with(this).load(image).placeholder(R.drawable.no_image_placeholder).override(500, 0).centerCrop()
                 .into(binding.deliveryImageView)
         }
     }

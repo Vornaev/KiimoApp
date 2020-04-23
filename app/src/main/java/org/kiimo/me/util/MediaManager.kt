@@ -83,7 +83,7 @@ object MediaManager {
         )
     }
 
-    private fun getDispatchTakePictureIntent(iMediaItem: IMediaManagerImages) {
+    fun getDispatchTakePictureIntent(iMediaItem: IMediaManagerImages) {
         if (hasCamera(iMediaItem.getMediaActivity())) {
             Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
                 // Ensure that there's a camera activity to handle the intent

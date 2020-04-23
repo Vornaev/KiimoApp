@@ -10,8 +10,11 @@ import org.kiimo.me.models.*
  * The ViewModel for [MapFragment].
  */
 class MapViewModel internal constructor(
-    private val mapRepository: MapRepository
+        private val mapRepository: MapRepository
 ) : ViewModel() {
+
+
+    var pickUpImageUrl = ""
 
     val destinationData: LiveData<DestinationData?> = mapRepository.destinationDataLiveData
 
@@ -52,7 +55,7 @@ class MapViewModel internal constructor(
     }
 
     fun pickUp(token: String) {
-        mapRepository.pickUp(token)
+        mapRepository.pickUp(token, pickUpImageUrl)
     }
 
     fun validateCode(token: String, code: ValidateCodeRequest) {

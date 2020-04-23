@@ -36,6 +36,9 @@ import com.google.android.libraries.places.widget.Autocomplete
 import com.google.android.libraries.places.widget.AutocompleteActivity
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
 import kotlinx.android.synthetic.main.fragment_map.*
+import okhttp3.MediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import org.kiimo.me.R
 import org.kiimo.me.app.BaseMainFragment
 import org.kiimo.me.databinding.FragmentMapBinding
@@ -47,10 +50,8 @@ import org.kiimo.me.main.viewmodels.MapViewModelFactory
 import org.kiimo.me.models.*
 import org.kiimo.me.models.events.ProfilePhotoEvent
 import org.kiimo.me.services.LocationServicesKiimo
-import org.kiimo.me.util.DeliveryTypeID
-import org.kiimo.me.util.PreferenceUtils
-import org.kiimo.me.util.RxBus
-import org.kiimo.me.util.StringUtils
+import org.kiimo.me.util.*
+import java.io.ByteArrayOutputStream
 import java.util.*
 import javax.inject.Inject
 
@@ -115,6 +116,14 @@ class MapFragment : BaseMainFragment(), OnMapReadyCallback, GoogleMap.OnMapClick
                 loadProfileImage(it.imageUrl)
             })
 
+        mapViewModel.pickUpImageUrl = ""
+        mainDeliveryViewModel().photoPackageLiveData.observe(
+            viewLifecycleOwner,
+            androidx.lifecycle.Observer {
+                mapViewModel.pickUpImageUrl = it.imageUrl
+                binding.navigatePackageImage.visibility = View.GONE
+            })
+
         binding.travelModeActiveId = 0
 
         return binding.root
@@ -140,6 +149,18 @@ class MapFragment : BaseMainFragment(), OnMapReadyCallback, GoogleMap.OnMapClick
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+
+        val width = 700
+        val height = 900
+
+        if (requestCode == MediaManager.REQUEST_IMAGE_CAPTURE) {
+            MediaManager.getBitmap(
+                width.toFloat(), height.toFloat()
+            )?.apply {
+                uploadBitmap(this)
+            }
+        }
+
         if (requestCode == AUTOCOMPLETE_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 data?.let {
@@ -161,6 +182,29 @@ class MapFragment : BaseMainFragment(), OnMapReadyCallback, GoogleMap.OnMapClick
                 }
             }
         }
+    }
+
+    fun uploadBitmap(bitmap: Bitmap) {
+
+        val stream = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream)
+        var byteArray = stream.toByteArray()
+
+        val fileRequest = RequestBody.create(
+            MediaType.parse("image/*"),
+            byteArray
+        )
+
+        val body = MultipartBody.Part.createFormData(
+            "media",
+            "${System.currentTimeMillis()}.jpg",
+            fileRequest
+        );
+
+        mainDeliveryViewModel().uploadPhotoForPackage(body)
+
+        stream.flush()
+        stream.close()
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
@@ -226,6 +270,10 @@ class MapFragment : BaseMainFragment(), OnMapReadyCallback, GoogleMap.OnMapClick
                 , deliveryPaid.delivery.destination?.lng!!
                 , travelMode = getTravelModeMaps()
             )
+        }
+
+        binding.navigatePackageImage.setOnClickListener {
+            MediaManager.getDispatchTakePictureIntent(this)
         }
     }
 

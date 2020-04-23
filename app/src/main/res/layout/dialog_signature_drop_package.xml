@@ -11,14 +11,14 @@
         <com.github.gcacace.signaturepad.views.SignaturePad
                 android:id="@+id/signature_pad"
                 android:layout_width="0dp"
-                android:layout_height="150dp"
-
+                android:layout_height="180dp"
                 android:background="@drawable/shape_outline_border_radius"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintWidth_percent="0.85"
-                app:penColor="@android:color/black" />
+                app:layout_constraintWidth_percent="0.9"
+                app:penMinWidth="4dp"
+                app:penColor="@color/quantum_black_100" />
 
         <TextView
                 android:id="@+id/dropOffTextViewPackage"

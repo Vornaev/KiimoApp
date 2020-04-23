@@ -123,9 +123,10 @@ interface KiimoDeliverHttpClient {
             @Path("id") id: String
     ): Observable<Response<Void>>
 
+    @FormUrlEncoded
     @POST("api/deliveries/pick-up")
     fun pickUp(
-            @Header(AuthorizationHeader) token: String
+            @Header(AuthorizationHeader) token: String, @Field("pickUpImage") pickUpImage: String
     ): Observable<Response<Void>>
 
     @POST("api/deliveries/validate-code")

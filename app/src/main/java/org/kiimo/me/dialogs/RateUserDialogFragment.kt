@@ -5,6 +5,7 @@ import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
 import android.view.LayoutInflater
 import android.view.inputmethod.InputMethodManager
 import androidx.databinding.DataBindingUtil
@@ -53,7 +54,7 @@ class RateUserDialogFragment(val data: FcmResponseOnDropOffDelivery) : BaseKiimo
         setListeners()
         setValue(data)
 
-        binding.ratingCount = 0
+        binding.ratingCount = 5
 
         return dialog.create()
     }
@@ -78,13 +79,28 @@ class RateUserDialogFragment(val data: FcmResponseOnDropOffDelivery) : BaseKiimo
         binding.rateStarFour.setOnClickListener { binding.ratingCount = 4 }
         binding.rateStarFive.setOnClickListener { binding.ratingCount = 5 }
 
-        binding.ratingButtonConfirm.setOnClickListener {
-            this.dismiss()
 
-//            (requireActivity() as SenderKiimoActivity).viewModel.rateUserForDelivery(
-//                RateDeliveryRequest(binding.ratingCount!!)
-//            )
-            startActivity(Intent(requireContext(), SenderKiimoActivity::class.java))
+
+        binding.ratingButtonConfirm.setOnClickListener {
+
+
+            (requireActivity() as SenderKiimoActivity).viewModel.rateUserForDelivery(
+                RateDeliveryRequest(binding.ratingCount!!)
+            )
+
+
+            Handler().postDelayed(Runnable {
+
+                this.dismiss()
+
+                startActivity(
+                    Intent(
+                        requireContext(),
+                        SenderKiimoActivity::class.java
+                    )
+                )
+            }, 1500)
+
             //(requireActivity() as SenderKiimoActivity).onDissmissDialogRateUser()
         }
     }
