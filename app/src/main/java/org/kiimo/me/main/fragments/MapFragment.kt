@@ -42,6 +42,7 @@ import okhttp3.RequestBody
 import org.kiimo.me.R
 import org.kiimo.me.app.BaseMainFragment
 import org.kiimo.me.databinding.FragmentMapBinding
+import org.kiimo.me.main.FragmentTags
 import org.kiimo.me.main.MainActivity
 import org.kiimo.me.main.components.DaggerMainComponent
 import org.kiimo.me.main.modules.MapModule
@@ -103,6 +104,7 @@ class MapFragment : BaseMainFragment(), OnMapReadyCallback, GoogleMap.OnMapClick
 
         mapViewModel.getSelf(userToken)
 
+        setEarnings()
 
         mainDeliveryViewModel().userProfileLiveData.observe(
             viewLifecycleOwner,
@@ -127,6 +129,24 @@ class MapFragment : BaseMainFragment(), OnMapReadyCallback, GoogleMap.OnMapClick
         binding.travelModeActiveId = 0
 
         return binding.root
+    }
+
+    private fun setEarnings() {
+        mainDeliveryViewModel().deliveryListLiveData.observe(
+            viewLifecycleOwner,
+            androidx.lifecycle.Observer {
+                val result = it.sumByDouble { la -> la.price }
+                binding.earningsButton.text = String.format("%.1f MKD", result)
+            })
+
+        mainDeliveryViewModel().getDeliveryList()
+
+        binding.earningsButton.setOnClickListener {
+            (requireActivity() as MainActivity).openMenuFragment(
+                MenuMyDeliveriesFragment::class.java,
+                FragmentTags.MENU_PAYMENT_TYPE
+            )
+        }
     }
 
     private fun loadFromPreference() {
@@ -326,6 +346,10 @@ class MapFragment : BaseMainFragment(), OnMapReadyCallback, GoogleMap.OnMapClick
         }
         markers.clear()
         googleMap?.clear()
+    }
+
+    override fun onEarningReady(value: Float) {
+        mainDeliveryViewModel().getDeliveryList()
     }
 
     private fun setListeners() {

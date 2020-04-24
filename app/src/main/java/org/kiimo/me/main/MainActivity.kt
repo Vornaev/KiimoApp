@@ -43,6 +43,7 @@ class MainActivity : KiimoMainNavigationActivity(),
         fun validateCode(code: String)
         fun onDropOff(signature: String)
         fun deliveryFinished()
+        fun onEarningReady(value: Float)
     }
 
     fun setOnOriginDestinationReady(mainActivityInterface: MainActivityInterface) {
@@ -87,6 +88,7 @@ class MainActivity : KiimoMainNavigationActivity(),
 
     override fun onPriceBreakdownDialogEnd() {
         mainActivityInterface.deliveryFinished()
+        mainActivityInterface.onEarningReady(0f)
     }
 
     @SuppressLint("SetTextI18n")
@@ -109,7 +111,8 @@ class MainActivity : KiimoMainNavigationActivity(),
 
         viewModel.signatureLiveData.observe(
             this, Observer {
-                val signatureDefault = "https://img.deliverycoin.net/signatures/2019/11/5508abb2-0756-4827-ace7-95131b2b4986.png"
+                val signatureDefault =
+                    "https://img.deliverycoin.net/signatures/2019/11/5508abb2-0756-4827-ace7-95131b2b4986.png"
                 onDropOff(it.imageUrl)
             }
         )
@@ -176,7 +179,7 @@ class MainActivity : KiimoMainNavigationActivity(),
 
     override fun handlePayload(notIntent: Intent) {
 
-        if(PreferenceUtils.getRemoteCache(this)){
+        if (PreferenceUtils.getRemoteCache(this)) {
             return
         }
 

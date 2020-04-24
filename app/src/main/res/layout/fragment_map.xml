@@ -54,6 +54,8 @@
                 android:id="@+id/pin_layout_constraint_layout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:background="@color/colorWhite"
+                android:elevation="4dp"
                 android:padding="12dp"
                 android:visibility="@{isShowMapRoute ? View.VISIBLE : View.GONE}"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -96,13 +98,13 @@
                     android:layout_marginTop="16dp"
                     android:layout_marginEnd="@dimen/margin_medium"
                     android:layout_marginBottom="@dimen/margin_medium"
-                    android:visibility="@{isConfirmDropOff ? View.GONE : View.VISIBLE}"
                     android:background="@drawable/corner_white_background_black_border"
                     android:paddingStart="@dimen/margin_medium"
                     android:paddingEnd="@dimen/margin_medium"
                     android:text="Package Image"
                     android:textAllCaps="false"
                     android:textColor="@android:color/black"
+                    android:visibility="@{isConfirmDropOff ? View.GONE : View.VISIBLE}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/navigate_button" />
@@ -198,14 +200,36 @@
                 app:srcCompat="@drawable/ic_online" />
 
         <ImageView
+                android:background="@drawable/shape_outlined_curved_white_back"
                 android:id="@+id/my_location_image_view"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
+                android:layout_width="55dp"
+                android:padding="10dp"
+                android:layout_height="55dp"
+                android:src="@drawable/ic_address"
                 android:layout_marginEnd="@dimen/margin_small"
-                android:layout_marginBottom="@dimen/margin_large"
+                android:layout_marginBottom="18dp"
                 android:contentDescription="@string/my_location_content_description"
                 app:layout_constraintBottom_toTopOf="@id/pin_layout_constraint_layout"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+        <Button
+                android:id="@+id/earningsButton"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="18dp"
+                android:background="@drawable/button_cornered_background_orange"
+                android:backgroundTint="@color/colorWhite"
+                android:elevation="2dp"
+                android:fontFamily="@font/roboto_bold"
+                android:paddingBottom="16dp"
+                android:paddingStart="18dp"
+                android:paddingTop="16dp"
+                android:paddingEnd="18dp"
+                android:text="0.0 MKD"
+                android:textColor="@color/colorPrimary"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:srcCompat="@drawable/ic_address" />
+                app:layout_constraintStart_toStartOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
