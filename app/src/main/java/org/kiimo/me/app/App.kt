@@ -2,11 +2,16 @@ package org.kiimo.me.app
 
 import android.app.Activity
 import android.app.Application
+import android.content.Context
 import android.os.Bundle
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.libraries.places.api.Places
-import com.google.firebase.FirebaseApp
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.ktx.database
 import com.google.firebase.iid.FirebaseInstanceId
+import com.google.firebase.ktx.Firebase
 import io.reactivex.disposables.CompositeDisposable
 import org.kiimo.me.R
 import org.kiimo.me.app.di.AppComponent
@@ -16,6 +21,7 @@ import org.kiimo.me.service.network.module.DeliveryHttpModule
 import org.kiimo.me.service.network.module.NetworkModule
 import org.kiimo.me.service.network.module.OkHttpClientModule
 import org.kiimo.me.util.PreferenceUtils
+import java.io.File
 
 
 class App : Application(), Application.ActivityLifecycleCallbacks {
@@ -31,6 +37,41 @@ class App : Application(), Application.ActivityLifecycleCallbacks {
         initDependecyIContainer()
         Places.initialize(this, getString(R.string.google_api_key))
         initFCMServices()
+
+
+        fixGoogleMapBug()
+
+
+        val result = Firebase.database.getReference("hasCache")
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onCancelled(p0: DatabaseError) {
+
+                }
+
+                override fun onDataChange(p0: DataSnapshot) {
+                    val res = p0.value
+                }
+            })
+
+        Firebase.database.getReference("hasCache")
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onCancelled(p0: DatabaseError) {
+
+                }
+
+                override fun onDataChange(p0: DataSnapshot) {
+                    PreferenceUtils.saveRemoteCache(p0.value as Boolean, applicationContext)
+                }
+            })
+    }
+
+    private fun fixGoogleMapBug() {
+        val googleBug = getSharedPreferences("google_bug", Context.MODE_PRIVATE)
+        if (!googleBug.contains("fixed")) {
+            val corruptedZoomTables = File(filesDir, "ZoomTables.data")
+            corruptedZoomTables.delete()
+            googleBug.edit().putBoolean("fixed", true).apply()
+        }
     }
 
     fun initFCMServices() {

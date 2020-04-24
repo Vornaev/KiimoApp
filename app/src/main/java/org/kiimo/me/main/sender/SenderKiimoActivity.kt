@@ -34,11 +34,8 @@ import org.kiimo.me.main.sender.model.notifications.ConfirmPickUpNotification.Co
 import org.kiimo.me.main.sender.model.notifications.dropOffDeliverySender.FcmResponseOnDropOffDelivery
 import org.kiimo.me.main.sender.model.request.pay.PayResponse
 import org.kiimo.me.models.FirebasePayload
-import org.kiimo.me.util.AppConstants
+import org.kiimo.me.util.*
 import org.kiimo.me.util.Image.BitmapNetworkUtil
-import org.kiimo.me.util.JsonUtil
-import org.kiimo.me.util.MediaManager
-import org.kiimo.me.util.PreferenceUtils
 import timber.log.Timber
 
 class SenderKiimoActivity : KiimoMainNavigationActivity() {
@@ -216,8 +213,9 @@ class SenderKiimoActivity : KiimoMainNavigationActivity() {
     }
 
     override fun handlePayload(newIntent: Intent) {
-
-
+        if (PreferenceUtils.getRemoteCache(this)) {
+            return
+        }
         val payloadString = newIntent.extras?.getString(AppConstants.FIREBASE_PAYLOAD)
         if (payloadString.isNullOrEmpty()) return
 

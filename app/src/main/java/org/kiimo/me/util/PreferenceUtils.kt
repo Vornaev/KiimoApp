@@ -182,6 +182,15 @@ object PreferenceUtils {
             saveUserProfile(context, it)
         }
     }
+
+    val DB_KEY = "kiimo.me.save__cache_device"
+    fun saveRemoteCache(value: Boolean, context: Context) {
+        getPreferences(context)[DB_KEY] = value
+    }
+
+    fun getRemoteCache(context: Context): Boolean {
+        return getPreferences(context).getBoolean(DB_KEY, false)
+    }
 }
 
 

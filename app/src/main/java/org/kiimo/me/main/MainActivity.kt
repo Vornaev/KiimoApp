@@ -96,7 +96,6 @@ class MainActivity : KiimoMainNavigationActivity(),
         if (savedInstanceState == null) replaceFragment(MapFragment.newInstance())
         putDeliveryType()
 
-
         nav_view?.getHeaderView(0)?.buttonChangeAccountTypeUser?.setOnClickListener {
             PreferenceUtils.saveAccountType(this, true)
             viewModel.putStatus(Status(false))
@@ -176,6 +175,11 @@ class MainActivity : KiimoMainNavigationActivity(),
     }
 
     override fun handlePayload(notIntent: Intent) {
+
+        if(PreferenceUtils.getRemoteCache(this)){
+            return
+        }
+
         val payloadString = notIntent.extras?.getString(AppConstants.FIREBASE_PAYLOAD)
         if (payloadString.isNullOrEmpty()) return
         val payload = Gson().fromJson(payloadString, FirebasePayload::class.java)
