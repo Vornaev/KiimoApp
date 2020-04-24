@@ -19,7 +19,7 @@ class MenuMyOrdersAdatper : RecyclerView.Adapter<MenuMyOrdersAdatper.MyOrdersVie
         val inflater = LayoutInflater.from(parent.context)
         // val inflate = inflater.inflate(R.layout.view_holder_my_delivers, parent, false)
 
-        val itemBinding = ViewHolderMyDeliversBinding.inflate(inflater)
+        val itemBinding = ViewHolderMyDeliversBinding.inflate(inflater, parent, false)
 
         return MyOrdersViewHolder(itemBinding)
     }
