@@ -12,6 +12,7 @@ import android.widget.Toast
 import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.libraries.places.api.model.Place
@@ -124,6 +125,13 @@ class SenderMapFragment : BaseMainFragment() {
             (activity as SenderKiimoActivity).openCreateDeliveryItemDialog()
         }
 
+        binding.myLocationImageView.setOnClickListener {
+            val myLocation = viewModel.senderProperties.userLocation
+            if (myLocation != null) {
+                senderMapFeatures?.moveCameraToUserPos(myLocation.toGoogleLoc("userLocat"))
+            }
+        }
+
     }
 
     private fun loadMap() {
@@ -144,7 +152,6 @@ class SenderMapFragment : BaseMainFragment() {
     }
 
     private fun onLocationReceived(deviceLoc: Location) {
-
 
         viewModel.senderProperties.userLocation =
             LocationModel(deviceLoc.latitude, deviceLoc.longitude)

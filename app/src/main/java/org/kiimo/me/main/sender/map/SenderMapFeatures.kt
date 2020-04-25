@@ -19,13 +19,16 @@ class SenderMapFeatures(private val map: GoogleMap, private val fragment: Sender
     private var markersKiimo = MarkerKiimoSender()
 
     companion object {
-        const val ZOOM_USER = 14f
+        const val ZOOM_USER = 15f
     }
 
     override fun onMapReady() {
         map.setOnMapClickListener(clickListener)
         map.setOnCameraMoveListener(cameraMoveListener)
         map.setOnCameraIdleListener(onCameraIdleListener)
+        map.isMyLocationEnabled = true
+        map.uiSettings?.isMapToolbarEnabled = false
+        map.uiSettings?.isMyLocationButtonEnabled = false
     }
 
 
@@ -53,10 +56,18 @@ class SenderMapFeatures(private val map: GoogleMap, private val fragment: Sender
 
     override fun animateUserLocation(myLocation: Location) {
         val latLng = LatLng(myLocation.latitude, myLocation.longitude)
-
         addPickUpMarker(latLng)
 
         map.moveCamera(
+            CameraUpdateFactory.newLatLngZoom(
+                latLng, ZOOM_USER
+            )
+        )
+    }
+
+    override fun moveCameraToUserPos(myLocation: Location) {
+        val latLng = LatLng(myLocation.latitude, myLocation.longitude)
+        map.animateCamera(
             CameraUpdateFactory.newLatLngZoom(
                 latLng, ZOOM_USER
             )
@@ -144,7 +155,7 @@ class SenderMapFeatures(private val map: GoogleMap, private val fragment: Sender
         map.animateCamera(
             CameraUpdateFactory.newLatLngZoom(
                 markersKiimo.sendFromMarker!!.position,
-                11.5f
+                11.0f
             )
         )
     }
@@ -218,8 +229,8 @@ class SenderMapFeatures(private val map: GoogleMap, private val fragment: Sender
 }
 
 data class MarkerKiimoSender(
-    var sendFromMarker: Marker? = null,
-    var destinationToMarker: Marker? = null,
-    var polyline: Polyline? = null
+        var sendFromMarker: Marker? = null,
+        var destinationToMarker: Marker? = null,
+        var polyline: Polyline? = null
 )
 

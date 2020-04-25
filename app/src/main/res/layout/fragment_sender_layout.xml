@@ -67,7 +67,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:paddingBottom="4dp"
-                android:visibility="@{notificationPickUPReceived ? View.GONE: View.VISIBLE}"
+                android:visibility="@{notificationPickUPReceived ? View.INVISIBLE: View.VISIBLE}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent">
@@ -199,5 +199,20 @@
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+        <ImageView
+                android:id="@+id/my_location_image_view"
+                android:layout_width="60dp"
+                android:scaleType="centerCrop"
+                android:layout_height="60dp"
+                android:src="@drawable/ic_icon_center"
+                android:layout_marginEnd="@dimen/margin_small"
+                android:layout_marginBottom="32dp"
+                android:contentDescription="@string/my_location_content_description"
+                app:layout_constraintBottom_toTopOf="@id/pin_layout_constraint_layout"
+                app:layout_constraintEnd_toEndOf="parent" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

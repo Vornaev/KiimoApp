@@ -21,4 +21,6 @@ interface ISenderMapFeatures {
     fun clearMarkers()
 
     fun clearMap()
+
+    fun moveCameraToUserPos(myLocation: Location)
 }
