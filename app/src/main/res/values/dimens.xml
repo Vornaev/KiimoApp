@@ -47,5 +47,6 @@
     <dimen name="sizeImageDrawer">65dp</dimen>
     <dimen name="sender_map_delivery_icon">55dp</dimen>
     <dimen name="rate_size_image">35dp</dimen>
+    <dimen name="dimen_width_card_header">70dp</dimen>
 
 </resources>

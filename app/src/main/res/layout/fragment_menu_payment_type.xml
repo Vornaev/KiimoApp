@@ -2,7 +2,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <data >
+    <data>
 
         <variable
                 name="isCashCheked"
@@ -155,6 +155,9 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/margin_small"
+                        android:maxLength="19"
+                        android:textSize="13sp"
+                        android:letterSpacing="0.1"
                         android:hint="xxxx xxxx xxxx xxxx"
                         android:importantForAutofill="no"
                         android:inputType="numberDecimal"
@@ -165,88 +168,128 @@
                         app:layout_constraintTop_toBottomOf="@id/paymentCardNumberTxt" />
 
 
-                <TextView
-                        android:id="@+id/paymentCardDateTxt"
-                        style="@style/TextViewPaymentTypeCardTitle"
-                        android:layout_width="0dp"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/cardValuesLayout"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/margin_medium_large"
-                        android:gravity="center"
-                        android:text="Expiry Date"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/paymentCardholderNumber"
-                        app:layout_constraintWidth_percent="0.4" />
-
-                <EditText
-                        android:id="@+id/paymentCardDateValue"
-                        style="@style/EditTextRoungGraySmall"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/margin_small"
-                        android:hint="MM/YY"
-                        android:importantForAutofill="no"
-                        android:inputType="date"
-                        android:textAlignment="center"
-                        android:textAllCaps="true"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/paymentCardDateTxt"
-                        app:layout_constraintWidth_percent="0.4" />
-
-
-                <TextView
-                        android:id="@+id/paymentCardCCVTxt"
-                        style="@style/TextViewPaymentTypeCardTitle"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/margin_medium_large"
-                        android:gravity="center"
-                        android:text="CCV/2"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="1"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/paymentCardholderNumber"
-                        app:layout_constraintWidth_percent="0.4" />
-
-                <EditText
-                        android:id="@+id/paymentCardCCValue"
-                        style="@style/EditTextRoungGraySmall"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/margin_small"
-                        android:hint="ZZZ"
-                        android:importantForAutofill="no"
-                        android:inputType="date"
-                        android:textAlignment="center"
-                        android:textAllCaps="true"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="1"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/paymentCardDateTxt"
-                        app:layout_constraintWidth_percent="0.4" />
-
-
-                <Button
-                        android:id="@+id/payment_save_button"
-                        android:layout_width="0dp"
-                        android:layout_height="@dimen/big_button_height"
-                        android:layout_marginTop="@dimen/margin_extra_large"
-                        android:layout_marginBottom="@dimen/margin_extra_large"
-                        android:background="@drawable/button_cornered_background_orange"
-                        android:paddingStart="@dimen/margin_medium"
-                        android:paddingEnd="@dimen/margin_medium"
-                        android:text="@string/save_changes"
-                        android:textAllCaps="false"
-                        android:textColor="@android:color/white"
-                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/paymentCardCCValue" />
+                        app:layout_constraintTop_toBottomOf="@id/paymentCardholderNumber">
+
+                    <TextView
+                            android:id="@+id/paymentCardDateTxt"
+                            style="@style/TextViewPaymentTypeCardTitle"
+                            android:layout_width="@dimen/dimen_width_card_header"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/margin_medium_large"
+                            android:gravity="center"
+                            android:text="Exp Month"
+                            app:layout_constraintEnd_toStartOf="@id/paymentCardYearTxt"
+                            app:layout_constraintHorizontal_chainStyle="spread_inside"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                    <EditText
+                            android:id="@+id/paymentCardDateValue"
+                            style="@style/EditTextRoungGraySmall"
+                            android:layout_width="60dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/margin_small"
+                            android:hint="MM"
+                            android:importantForAutofill="no"
+                            android:inputType="numberDecimal"
+                            android:maxLength="2"
+                            android:textAlignment="center"
+                            android:textAllCaps="true"
+                            app:layout_constraintEnd_toEndOf="@id/paymentCardDateTxt"
+                            app:layout_constraintStart_toStartOf="@id/paymentCardDateTxt"
+                            app:layout_constraintTop_toBottomOf="@id/paymentCardDateTxt" />
+
+
+                    <TextView
+                            android:id="@+id/paymentCardYearTxt"
+                            style="@style/TextViewPaymentTypeCardTitle"
+                            android:layout_width="@dimen/dimen_width_card_header"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/margin_medium_large"
+                            android:gravity="center"
+                            android:text="Exp Year"
+                            app:layout_constraintEnd_toStartOf="@id/paymentCardCCVTxt"
+                            app:layout_constraintHorizontal_chainStyle="spread_inside"
+                            app:layout_constraintStart_toEndOf="@id/paymentCardDateTxt"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                    <EditText
+                            android:id="@+id/paymentCardYearValue"
+                            style="@style/EditTextRoungGraySmall"
+                            android:layout_width="60dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/margin_small"
+                            android:hint="YY"
+                            android:importantForAutofill="no"
+                            android:maxLength="2"
+                            android:inputType="numberDecimal"
+                            android:textAlignment="center"
+                            android:textAllCaps="true"
+                            app:layout_constraintEnd_toStartOf="@id/paymentCardYearTxt"
+                            app:layout_constraintStart_toEndOf="@id/paymentCardYearTxt"
+                            app:layout_constraintTop_toBottomOf="@id/paymentCardYearTxt" />
+
+
+                    <TextView
+                            android:id="@+id/paymentCardCCVTxt"
+                            style="@style/TextViewPaymentTypeCardTitle"
+                            android:layout_width="@dimen/dimen_width_card_header"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/margin_medium_large"
+                            android:gravity="center"
+                            android:text="CCV/2"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_chainStyle="spread_inside"
+                            app:layout_constraintStart_toEndOf="@id/paymentCardYearTxt"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                    <EditText
+                            android:id="@+id/paymentCardCCValue"
+                            style="@style/EditTextRoungGraySmall"
+                            android:layout_width="70dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/margin_small"
+                            android:hint="ZZZ"
+                            android:maxLength="3"
+                            android:importantForAutofill="no"
+                            android:inputType="numberDecimal"
+                            android:textAlignment="center"
+                            android:textAllCaps="true"
+                            app:layout_constraintEnd_toEndOf="@id/paymentCardCCVTxt"
+                            app:layout_constraintStart_toStartOf="@id/paymentCardCCVTxt"
+                            app:layout_constraintTop_toBottomOf="@id/paymentCardDateTxt" />
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
 
             </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <Button
+                    android:id="@+id/payment_save_button"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/big_button_height"
+                    android:layout_marginTop="@dimen/margin_extra_large"
+                    android:layout_marginBottom="@dimen/margin_extra_large"
+                    android:background="@drawable/button_cornered_background_orange"
+                    android:paddingStart="@dimen/margin_medium"
+                    android:paddingEnd="@dimen/margin_medium"
+                    android:text="@string/save_changes"
+                    android:textAllCaps="false"
+                    app:layout_constraintWidth_percent="0.8"
+                    android:textColor="@android:color/white"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/paymentCardDetailsLayout" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

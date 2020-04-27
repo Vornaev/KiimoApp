@@ -75,7 +75,8 @@ class SenderMapFragment : BaseMainFragment() {
 
         compositeDisposable.add(
             RxBus.listen(LocationServicesKiimo.LocEvent::class.java)
-                .delay(3000, TimeUnit.MILLISECONDS).subscribeOn(AndroidSchedulers.mainThread())
+                .delay(2000, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(AndroidSchedulers.mainThread())
                 .subscribe {
                     onServiceLocationEnabled()
                 })
@@ -131,8 +132,9 @@ class SenderMapFragment : BaseMainFragment() {
         }
 
         binding.confirmButton.setOnClickListener {
-
-            (activity as SenderKiimoActivity).openCreateDeliveryItemDialog()
+            if (viewModel.senderProperties.hasPickUpAddress() && viewModel.senderProperties.hasDestination()) {
+                (activity as SenderKiimoActivity).openCreateDeliveryItemDialog()
+            }
         }
 
         binding.myLocationImageView.setOnClickListener {

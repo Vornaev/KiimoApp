@@ -6,6 +6,7 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import org.kiimo.me.main.fragments.model.deliveries.DeliveryCarrierItem
 import org.kiimo.me.main.fragments.model.sender.SenderOrderListResponse
+import org.kiimo.me.main.menu.model.CreditCardSaveRequest
 import org.kiimo.me.main.sender.model.request.CreateDeliveryRequest
 import org.kiimo.me.main.sender.model.request.PayRequest
 import org.kiimo.me.main.sender.model.request.pay.PayResponse
@@ -18,6 +19,7 @@ import org.kiimo.me.models.DeliveryType
 import org.kiimo.me.models.DestinationData
 import org.kiimo.me.models.DeviceToken
 import org.kiimo.me.models.*
+import org.kiimo.me.models.delivery.BaseDeliveryResponse
 import org.kiimo.me.models.delivery.CalculateDeliveryRequest
 import org.kiimo.me.models.delivery.CalculateDeliveryResponse
 import org.kiimo.me.models.delivery.UploadSignatureRequest
@@ -126,7 +128,8 @@ interface KiimoDeliverHttpClient {
 
     @POST("api/deliveries/pick-up")
     fun pickUp(
-            @Header(AuthorizationHeader) token: String, @Body pickUpImageRequest: PackageImageRequest
+            @Header(AuthorizationHeader) token: String,
+            @Body pickUpImageRequest: PackageImageRequest
     ): Observable<Response<Void>>
 
     @POST("api/deliveries/validate-code")
@@ -199,4 +202,15 @@ interface KiimoDeliverHttpClient {
     fun rateUser(
             @Header(AuthorizationHeader) token: String,
             @Body rateDeliveryRequest: RateDeliveryRequest): Completable
+
+    @POST("api/card-create")
+    fun saveCreditCard(
+            @Header(AuthorizationHeader) token: String,
+            @Body cardSaveRequest: CreditCardSaveRequest): Observable<BaseDeliveryResponse>
+
+    @POST("api/card-update")
+    fun updateCreditCard(
+            @Header(AuthorizationHeader) token: String,
+            @Body cardSaveRequest: CreditCardSaveRequest): Observable<BaseDeliveryResponse>
+
 }

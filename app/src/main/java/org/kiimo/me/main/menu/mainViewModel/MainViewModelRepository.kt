@@ -14,6 +14,7 @@ import org.kiimo.me.BuildConfig
 import org.kiimo.me.app.IBaseViewFeatures
 import org.kiimo.me.main.fragments.model.deliveries.DeliveryCarrierItem
 import org.kiimo.me.main.fragments.model.sender.SenderOrderListResponse
+import org.kiimo.me.main.menu.model.CreditCardSaveRequest
 import org.kiimo.me.main.menu.model.GetUserRequestModel
 import org.kiimo.me.main.menu.model.UserProfileInformationResponse
 import org.kiimo.me.main.sender.model.request.CreateDeliveryRequest
@@ -32,6 +33,7 @@ import org.kiimo.me.util.AppConstants
 import org.kiimo.me.util.DialogUtils
 import retrofit2.http.Multipart
 import timber.log.Timber
+import java.lang.Exception
 import java.util.*
 
 class MainViewModelRepository(
@@ -452,6 +454,50 @@ class MainViewModelRepository(
                     {
                         viewFeatures.trackRequestSuccess("photo saved")
                     }, {
+                        viewFeatures.handleApiError(it)
+                    }
+                )
+        )
+    }
+
+    fun saveCreditCard(
+            creditCardSaveRequest: CreditCardSaveRequest,
+            cardResponseData: MutableLiveData<BaseDeliveryResponse>,
+            cardException: MutableLiveData<Throwable>) {
+        disposableContainer.add(
+            deliveryClient.saveCreditCard(
+                token = viewFeatures.getUserToken(),
+                cardSaveRequest = creditCardSaveRequest
+            ).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                    {
+                        cardResponseData.postValue(it)
+                        viewFeatures.trackRequestSuccess("card saved")
+                    }, {
+                        viewFeatures.handleApiError(it)
+                        cardException.postValue(it)
+                    }
+                )
+        )
+    }
+
+    fun updateCreditCard(
+            creditCardSaveRequest: CreditCardSaveRequest,
+            cardResponseData: MutableLiveData<BaseDeliveryResponse>,
+            cardException: MutableLiveData<Throwable>) {
+        disposableContainer.add(
+            deliveryClient.updateCreditCard(
+                token = viewFeatures.getUserToken(),
+                cardSaveRequest = creditCardSaveRequest
+            ).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                    {
+                        cardResponseData.postValue(it)
+                        viewFeatures.trackRequestSuccess("card updated")
+                    }, {
+                        cardException.postValue(it)
                         viewFeatures.handleApiError(it)
                     }
                 )

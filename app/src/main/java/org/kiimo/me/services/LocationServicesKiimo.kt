@@ -45,12 +45,13 @@ object LocationServicesKiimo {
                 if (currentLoca?.latitude != null && currentLoca?.longitude != null) {
                     onSuccessLocation(currentLoca)
                 } else {
-                    //if (hasGPSenabled(context)) {
+//                    if (hasGPSenabled(context)) {
                     Toast.makeText(
                         context,
                         "In order to use this feature turn on Location Service",
                         Toast.LENGTH_LONG
                     ).show()
+//                    }
 //                    //}
                 }
             } else {

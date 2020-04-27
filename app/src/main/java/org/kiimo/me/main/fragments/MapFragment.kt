@@ -266,6 +266,7 @@ class MapFragment : BaseMainFragment(), OnMapReadyCallback, GoogleMap.OnMapClick
     }
 
     override fun onProviderEnabled(p0: String?) {
+     //   DialogUtils.showSuccessMessage(requireActivity(), "Provider enabled")
     }
 
     override fun onProviderDisabled(p0: String?) {
@@ -408,7 +409,6 @@ class MapFragment : BaseMainFragment(), OnMapReadyCallback, GoogleMap.OnMapClick
 
         binding.myLocationImageView.setOnClickListener {
             if (myLocation != null) {
-
                 val cameraUpdate = CameraUpdateFactory.newLatLngZoom(myLocation, 15f)
                 googleMap?.animateCamera(cameraUpdate)
             }
@@ -534,7 +534,7 @@ class MapFragment : BaseMainFragment(), OnMapReadyCallback, GoogleMap.OnMapClick
                 val locationManager = activity.getSystemService(LOCATION_SERVICE) as LocationManager
                 locationManager.requestLocationUpdates(
                     LocationManager.GPS_PROVIDER,
-                    1000L,
+                    5000L,
                     10f,
                     this
                 )

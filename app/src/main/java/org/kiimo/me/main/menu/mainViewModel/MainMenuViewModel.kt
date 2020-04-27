@@ -7,6 +7,7 @@ import okhttp3.MultipartBody
 import org.kiimo.me.main.fragments.model.deliveries.DeliveryCarrierItem
 import org.kiimo.me.main.fragments.model.sender.SenderOrderListResponse
 import org.kiimo.me.main.menu.model.CreditCardModel
+import org.kiimo.me.main.menu.model.CreditCardSaveRequest
 import org.kiimo.me.main.menu.model.UserProfileInformationResponse
 import org.kiimo.me.main.sender.model.request.CreateDeliveryRequest
 import org.kiimo.me.main.sender.model.request.Packages
@@ -41,6 +42,8 @@ class MainMenuViewModel(private var repository: MainViewModelRepository) : ViewM
     val photoPackageLiveData = MutableLiveData<UploadImageResponse>()
     val photoProfileLiveData = MutableLiveData<UploadImageResponse>()
     val signatureLiveData = MutableLiveData<UploadImageResponse>()
+    val creditCardLiveData = MutableLiveData<BaseDeliveryResponse>()
+    val cardExceptionLiveData = MutableLiveData<Throwable>()
 
     val userProfileFieldsUpdateLiveData = MutableLiveData<UserRegisterResponse>()
 
@@ -77,7 +80,7 @@ class MainMenuViewModel(private var repository: MainViewModelRepository) : ViewM
         repository.putLocation(locationModel)
     }
 
-    fun rateUserForDelivery(rateDeliveryRequest: RateDeliveryRequest){
+    fun rateUserForDelivery(rateDeliveryRequest: RateDeliveryRequest) {
         repository.rateUserForDelivery(rateDeliveryRequest)
     }
 
@@ -156,6 +159,17 @@ class MainMenuViewModel(private var repository: MainViewModelRepository) : ViewM
         repository.updateUserFragmentFields(updateRequest, userProfileFieldsUpdateLiveData)
     }
 
+    fun saveCreditCard(creditCardSaveRequest: CreditCardSaveRequest) {
+        repository.saveCreditCard(creditCardSaveRequest, creditCardLiveData, cardExceptionLiveData)
+    }
+
+    fun updateCreditCardData(creditCardSaveRequest: CreditCardSaveRequest) {
+        repository.updateCreditCard(
+            creditCardSaveRequest,
+            creditCardLiveData,
+            cardExceptionLiveData
+        )
+    }
 
     fun uploadSignaturePhoto(body: MultipartBody.Part) {
         repository.uploadMultiFormDataImage(Type.Signatures, body, signatureLiveData)
