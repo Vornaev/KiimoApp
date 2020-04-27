@@ -46,6 +46,9 @@ class MainMenuViewModel(private var repository: MainViewModelRepository) : ViewM
 
     val preferredPayLiveData = MutableLiveData<PreferredPayResponse>()
 
+
+    var isLocationSenderFromButton = false
+
     fun setPackageSize(packageID: String) {
         senderProperties.packageDescritpion.packageSizeId = packageID
     }
@@ -166,6 +169,7 @@ class MainMenuViewModel(private var repository: MainViewModelRepository) : ViewM
 
 
     class SenderProperties {
+        var isLocationFromButton = false
         var isPickUpInteraction = true
         var pickUpAddressPoint: AddressPoint = AddressPoint()
         var destinationAddressPoint: AddressPoint = AddressPoint()

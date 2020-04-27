@@ -18,6 +18,8 @@ import org.kiimo.me.BuildConfig
 import org.kiimo.me.R
 import org.kiimo.me.app.di.AppComponent
 import org.kiimo.me.models.DeviceToken
+import org.kiimo.me.services.LocationServicesKiimo
+import org.kiimo.me.services.LocationServicesKiimo.LOCATION_SETTINGS_CODE
 import org.kiimo.me.util.*
 
 abstract class BaseActivity : AppCompatActivity(), IBaseViewFeatures, IMediaManagerImages {
@@ -169,6 +171,13 @@ abstract class BaseActivity : AppCompatActivity(), IBaseViewFeatures, IMediaMana
                     MediaManager.showMediaOptionsDialog(this)
                 }
             }
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == LocationServicesKiimo.LOCATION_SETTINGS_CODE) {
+            RxBus.publish(LocationServicesKiimo.LocEvent(true))
         }
     }
 }

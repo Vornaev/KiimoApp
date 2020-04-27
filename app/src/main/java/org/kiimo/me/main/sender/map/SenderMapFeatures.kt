@@ -26,7 +26,6 @@ class SenderMapFeatures(private val map: GoogleMap, private val fragment: Sender
         map.setOnMapClickListener(clickListener)
         map.setOnCameraMoveListener(cameraMoveListener)
         map.setOnCameraIdleListener(onCameraIdleListener)
-        map.isMyLocationEnabled = true
         map.uiSettings?.isMapToolbarEnabled = false
         map.uiSettings?.isMyLocationButtonEnabled = false
     }
@@ -37,6 +36,10 @@ class SenderMapFeatures(private val map: GoogleMap, private val fragment: Sender
             map.cameraPosition.target.latitude,
             map.cameraPosition.target.longitude
         )
+    }
+
+    override fun onPermissionGranted() {
+        map.isMyLocationEnabled = true
     }
 
     private fun showAddressFromLoca(latLng: LatLng) {
@@ -180,7 +183,11 @@ class SenderMapFeatures(private val map: GoogleMap, private val fragment: Sender
     }
 
     private fun moveSenderMarker(latLng: LatLng) {
-        markersKiimo.sendFromMarker?.position = latLng
+        if (markersKiimo.sendFromMarker == null) {
+            addPickUpMarker(latLng)
+        } else {
+            markersKiimo.sendFromMarker?.position = latLng
+        }
     }
 
 
@@ -212,7 +219,7 @@ class SenderMapFeatures(private val map: GoogleMap, private val fragment: Sender
                 MarkerOptions()
                     .draggable(true)
                     .position(latLng)
-                    .flat(true)
+                    .flat(false)
                     .icon(
                         MarkerBitmapLoader.getSpecificVector(
                             getContext(),

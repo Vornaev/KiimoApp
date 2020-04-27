@@ -23,4 +23,6 @@ interface ISenderMapFeatures {
     fun clearMap()
 
     fun moveCameraToUserPos(myLocation: Location)
+
+    fun onPermissionGranted()
 }

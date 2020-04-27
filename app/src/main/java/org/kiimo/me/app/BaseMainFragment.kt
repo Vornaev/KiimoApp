@@ -3,6 +3,8 @@ package org.kiimo.me.app
 import android.Manifest
 import android.content.pm.PackageManager
 import androidx.core.content.ContextCompat
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.LocationSettingsRequest
 import io.reactivex.disposables.CompositeDisposable
 import org.kiimo.me.main.MainActivity
 import org.kiimo.me.main.fragments.MapFragment
@@ -40,6 +42,13 @@ abstract class BaseMainFragment : BaseFragment() {
                 )
             }
         }
+    }
+
+    protected fun hasLocationPermission(): Boolean {
+        return (ContextCompat.checkSelfPermission(
+            requireContext(),
+            Manifest.permission.ACCESS_FINE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED)
     }
 
     override fun onRequestPermissionsResult(

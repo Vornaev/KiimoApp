@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.location.Location
 import android.os.Bundle
+import android.provider.Settings
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -12,7 +13,6 @@ import android.widget.Toast
 import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.libraries.places.api.model.Place
@@ -20,8 +20,9 @@ import com.google.android.libraries.places.api.model.TypeFilter
 import com.google.android.libraries.places.widget.Autocomplete
 import com.google.android.libraries.places.widget.AutocompleteActivity
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
-import kotlinx.android.synthetic.main.fragment_sender_layout.*
+import io.reactivex.android.schedulers.AndroidSchedulers
 import org.kiimo.me.R
+import org.kiimo.me.app.BaseActivity
 import org.kiimo.me.app.BaseMainFragment
 import org.kiimo.me.databinding.FragmentSenderLayoutBinding
 import org.kiimo.me.main.fragments.MapFragment
@@ -32,11 +33,12 @@ import org.kiimo.me.main.sender.map.SenderMapFeatures
 import org.kiimo.me.main.sender.model.notifications.ConfirmPickUpNotification.ConfirmPickUpFcmData
 import org.kiimo.me.main.sender.model.request.pay.PayResponse
 import org.kiimo.me.models.LocationModel
-import org.kiimo.me.models.events.ProfilePhotoEvent
 import org.kiimo.me.services.LocationServicesKiimo
+import org.kiimo.me.util.DialogUtils
 import org.kiimo.me.util.PreferenceUtils
 import org.kiimo.me.util.RxBus
 import org.kiimo.me.util.StringUtils
+import java.util.concurrent.TimeUnit
 
 class SenderMapFragment : BaseMainFragment() {
 
@@ -71,6 +73,13 @@ class SenderMapFragment : BaseMainFragment() {
 
         // loadImageFromPreference()
 
+        compositeDisposable.add(
+            RxBus.listen(LocationServicesKiimo.LocEvent::class.java)
+                .delay(3000, TimeUnit.MILLISECONDS).subscribeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    onServiceLocationEnabled()
+                })
+
         viewModel.userProfileLiveData.observe(viewLifecycleOwner, Observer {
             loadImageProfile(it.photo)
         })
@@ -80,6 +89,7 @@ class SenderMapFragment : BaseMainFragment() {
             loadImageProfile(it.imageUrl)
         })
     }
+
 
     private fun loadImageFromPreference() {
         val userProfile = PreferenceUtils.getUserParsed(requireContext())
@@ -126,9 +136,15 @@ class SenderMapFragment : BaseMainFragment() {
         }
 
         binding.myLocationImageView.setOnClickListener {
-            val myLocation = viewModel.senderProperties.userLocation
-            if (myLocation != null) {
-                senderMapFeatures?.moveCameraToUserPos(myLocation.toGoogleLoc("userLocat"))
+            viewModel.isLocationSenderFromButton = true
+
+            if (hasLocationPermission()) {
+                LocationServicesKiimo.getUserDeviceLocation(
+                    requireContext(),
+                    ::onLocationUserFocused
+                )
+            } else {
+                requestAccessFineLocationPermission()
             }
         }
 
@@ -148,8 +164,24 @@ class SenderMapFragment : BaseMainFragment() {
     }
 
     override fun onPermissionLocationEnabled() {
-        LocationServicesKiimo.getUserDeviceLocation(requireContext(), ::onLocationReceived)
+
+        senderMapFeatures?.onPermissionGranted()
+
+        LocationServicesKiimo.getUserDeviceLocation(
+            requireContext(),
+            if (!viewModel.isLocationSenderFromButton) ::onLocationReceived else ::onLocationUserFocused
+        )
+        viewModel.isLocationSenderFromButton = false
     }
+
+    private fun onServiceLocationEnabled() {
+        onPermissionLocationEnabled()
+    }
+
+    private fun onLocationUserFocused(deviceLoc: Location) {
+        senderMapFeatures?.moveCameraToUserPos(deviceLoc)
+    }
+
 
     private fun onLocationReceived(deviceLoc: Location) {
 
@@ -182,7 +214,7 @@ class SenderMapFragment : BaseMainFragment() {
                 Place.Field.ID, Place.Field.NAME, Place.Field.ADDRESS,
                 Place.Field.LAT_LNG
             )
-        ).setTypeFilter(TypeFilter.GEOCODE).setCountry(myCountrryCode()).build(activity!!)
+        ).setTypeFilter(TypeFilter.ADDRESS).setCountry(myCountrryCode()).build(activity!!)
 
         startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE)
     }
@@ -350,4 +382,5 @@ class SenderMapFragment : BaseMainFragment() {
         binding.notificationPickUPReceived = false
         viewModel.senderProperties = MainMenuViewModel.SenderProperties()
     }
+
 }

@@ -61,7 +61,7 @@ class ProfileFragment : BaseMainFragment() {
 
         DaggerMainComponent.builder().profileModule(ProfileModule()).build().inject(this)
 
-        setDummyData()
+
         setToolbarTitle()
         setListeners()
         subscribeUi()
@@ -71,13 +71,13 @@ class ProfileFragment : BaseMainFragment() {
         })
 
 
-
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setDummyData()
         binding.profileLayout.deliveryLayout.visibility =   if(isSender) View.GONE else View.VISIBLE
     }
 
