@@ -1,5 +1,6 @@
 package org.kiimo.me.service.network.client
 
+import com.google.gson.JsonElement
 import io.reactivex.Completable
 import io.reactivex.Observable
 import okhttp3.MultipartBody
@@ -110,7 +111,7 @@ interface KiimoDeliverHttpClient {
             @Header(ContentTypeHeader) contentType: String = jsonHeader,
             @Header(AuthorizationHeader) token: String,
             @Body deviceToken: DeviceToken
-    ): Observable<Response<Void>>
+    ): Observable<Response<JsonElement>>
 
     @PUT("api/self/status")
     fun putStatus(
@@ -206,7 +207,7 @@ interface KiimoDeliverHttpClient {
     @POST("api/card-create")
     fun saveCreditCard(
             @Header(AuthorizationHeader) token: String,
-            @Body cardSaveRequest: CreditCardSaveRequest): Observable<BaseDeliveryResponse>
+            @Body cardSaveRequest: CreditCardSaveRequest):  Observable<Response<JsonElement>>
 
     @FormUrlEncoded
     @POST("api/card-create")
@@ -214,15 +215,24 @@ interface KiimoDeliverHttpClient {
             @Header(AuthorizationHeader) token: String,
             @Header("Content-Type") type: String = "application/x-www-form-urlencoded",
             @Field("cardNo") cardNum: String,
-            @Field("cardNo") cardMonth: String,
-            @Field("cardNo") cardYear: String,
-            @Field("cv2") cv2: String
-    ): Observable<BaseDeliveryResponse>
+            @Field("cardNo") cardMonth: Int,
+            @Field("cardNo") cardYear: Int,
+            @Field("cv2") cv2: Int
+    ): Observable<Response<JsonElement>>
+
+
+    @Multipart
+    @POST("api/card-create")
+    fun saveCreditCardRequestBody(
+            @Header(AuthorizationHeader) token: String,
+            @Body requestBody: RequestBody
+    ):  Observable<Response<JsonElement>>
+
 
 
     @POST("api/card-update")
     fun updateCreditCard(
             @Header(AuthorizationHeader) token: String,
-            @Body cardSaveRequest: CreditCardSaveRequest): Observable<BaseDeliveryResponse>
+            @Body cardSaveRequest: CreditCardSaveRequest):  Observable<Response<JsonElement>>
 
 }

@@ -126,6 +126,7 @@ object PreferenceUtils {
         getPreferences(context)[FIREBASE_TOKEN] = ""
         getPreferences(context)[CARD_DETAILS] = ""
         getPreferences(context)[PAYMENT_TYPE] = 0
+        getPreferences(context)[HAS_CARD_IN_BANK] = false
     }
 
     //Firebase TOken
@@ -157,6 +158,15 @@ object PreferenceUtils {
 
     fun getPaymentTypeForUser(context: Context): Int {
         return getPreferences(context).getInt(PAYMENT_TYPE, 0)
+    }
+
+    private const val HAS_CARD_IN_BANK = "org.kiimo.me.payment.payment.bank"
+    fun savePaymentBankForUser(context: Context) {
+        getPreferences(context)[HAS_CARD_IN_BANK] = true
+    }
+
+    fun hasBankCardForUser(context: Context): Boolean {
+        return getPreferences(context).getBoolean(HAS_CARD_IN_BANK, false)
     }
 
     private const val CARD_DETAILS = "org.kiimo.me.payment.type.card.details"

@@ -71,10 +71,10 @@ class MenuPaymentTypeFragment : BaseMainFragment() {
 
         mainDeliveryViewModel().creditCardLiveData.observe(viewLifecycleOwner, Observer {
             if (it.success) {
-                mainDeliveryViewModel().savePreferredPaymentType(PreferredPaymentUser("CARD"))
+                PreferenceUtils.savePaymentBankForUser(requireContext())
                 onCardSaved()
-            } else {
-                DialogUtils.showErrorMessage(requireActivity(), it.message)
+                mainDeliveryViewModel().savePreferredPaymentType(PreferredPaymentUser("CARD"))
+                DialogUtils.showSuccessMessage(requireActivity(),"Успешно картицата е валидна")
             }
         })
 
@@ -175,7 +175,11 @@ class MenuPaymentTypeFragment : BaseMainFragment() {
 
         if (selectedPaymentType == PAYMENT_TYPE.CARD) {
             if (validateInput()) {
-                mainDeliveryViewModel().saveCreditCardFields(getCardForService())
+                if (PreferenceUtils.hasBankCardForUser(requireContext())) {
+                    mainDeliveryViewModel().updateCreditCardData(getCardForService())
+                } else {
+                    mainDeliveryViewModel().saveCreditCard(getCardForService())
+                }
             }
         } else {
             mainDeliveryViewModel().savePreferredPaymentType(PreferredPaymentUser("CASH"))
@@ -184,10 +188,8 @@ class MenuPaymentTypeFragment : BaseMainFragment() {
     }
 
     private fun onCardSaved() {
-        PreferenceUtils.savePaymentTypeForUser(requireContext(), selectedPaymentType)
-        if (selectedPaymentType == 1) {
-            PreferenceUtils.saveCreditCard(requireContext(), getCardFromView())
-        }
+        PreferenceUtils.savePaymentTypeForUser(requireContext(), PAYMENT_TYPE.CARD)
+        PreferenceUtils.saveCreditCard(requireContext(), getCardFromView())
     }
 
     private fun onCashSaved() {
@@ -207,9 +209,9 @@ class MenuPaymentTypeFragment : BaseMainFragment() {
     fun getCardForService(): CreditCardSaveRequest {
         return CreditCardSaveRequest(
             binding.paymentCardholderNumber.text.toString(),
-            binding.paymentCardDateValue.text.toString(),
-            binding.paymentCardYearValue.text.toString(),
-            binding.paymentCardCCValue.text.toString()
+            binding.paymentCardDateValue.text.toString().toInt(),
+            binding.paymentCardYearValue.text.toString().toInt(),
+            binding.paymentCardCCValue.text.toString().toInt()
         )
     }
 

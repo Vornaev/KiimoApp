@@ -167,6 +167,10 @@ class MainMenuViewModel(private var repository: MainViewModelRepository) : ViewM
         repository.saveCreditCardFields(creditCardSaveRequest, creditCardLiveData, cardExceptionLiveData)
     }
 
+    fun saveCreditCardFieldsMutiplart(creditCardSaveRequest: CreditCardSaveRequest){
+        repository.saveCreditCardFieldsMultipart(creditCardSaveRequest, creditCardLiveData, cardExceptionLiveData)
+    }
+
     fun updateCreditCardData(creditCardSaveRequest: CreditCardSaveRequest) {
         repository.updateCreditCard(
             creditCardSaveRequest,

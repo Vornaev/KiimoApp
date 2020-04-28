@@ -472,7 +472,7 @@ class MainViewModelRepository(
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                     {
-                        cardResponseData.postValue(it)
+                        cardResponseData.postValue(BaseDeliveryResponse("", success = true))
                         viewFeatures.trackRequestSuccess("card saved")
                     }, {
                         viewFeatures.handleApiError(it)
@@ -482,30 +482,6 @@ class MainViewModelRepository(
         )
     }
 
-    fun saveCreditCardFields(
-            creditCardSaveRequest: CreditCardSaveRequest,
-            cardResponseData: MutableLiveData<BaseDeliveryResponse>,
-            cardException: MutableLiveData<Throwable>) {
-        disposableContainer.add(
-            deliveryClient.saveCreditCardFields(
-                token = viewFeatures.getUserToken(),
-                cardNum = creditCardSaveRequest.cardNo,
-                cardMonth = creditCardSaveRequest.expMonth,
-                cardYear = creditCardSaveRequest.expYear,
-                cv2 = creditCardSaveRequest.cv2
-            ).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                    {
-                        cardResponseData.postValue(it)
-                        viewFeatures.trackRequestSuccess("card saved")
-                    }, {
-                        viewFeatures.handleApiError(it)
-                        cardException.postValue(it)
-                    }
-                )
-        )
-    }
 
     fun updateCreditCard(
             creditCardSaveRequest: CreditCardSaveRequest,
@@ -519,11 +495,43 @@ class MainViewModelRepository(
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                     {
-                        cardResponseData.postValue(it)
+                        cardResponseData.postValue(BaseDeliveryResponse("", true))
                         viewFeatures.trackRequestSuccess("card updated")
                     }, {
                         cardException.postValue(it)
                         viewFeatures.handleApiError(it)
+                    }
+                )
+        )
+    }
+
+    fun saveCreditCardFieldsMultipart(
+            creditCardSaveRequest: CreditCardSaveRequest,
+            creditCardLiveData: MutableLiveData<BaseDeliveryResponse>,
+            cardExceptionLiveData: MutableLiveData<Throwable>) {
+
+    }
+
+    fun saveCreditCardFields(
+            creditCardSaveRequest: CreditCardSaveRequest,
+            cardResponseData: MutableLiveData<BaseDeliveryResponse>,
+            cardException: MutableLiveData<Throwable>) {
+        disposableContainer.add(
+            deliveryClient.saveCreditCardFields(
+                token = viewFeatures.getUserToken(),
+                cardNum = creditCardSaveRequest.cardNo,
+                cardMonth = creditCardSaveRequest.expMonth.toInt(),
+                cardYear = creditCardSaveRequest.expYear.toInt(),
+                cv2 = creditCardSaveRequest.cv2.toInt()
+            ).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                    {
+                        //cardResponseData.postValue(it)
+                        viewFeatures.trackRequestSuccess("card saved")
+                    }, {
+                        viewFeatures.handleApiError(it)
+                        cardException.postValue(it)
                     }
                 )
         )
