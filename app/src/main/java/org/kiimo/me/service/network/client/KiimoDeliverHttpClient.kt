@@ -208,6 +208,18 @@ interface KiimoDeliverHttpClient {
             @Header(AuthorizationHeader) token: String,
             @Body cardSaveRequest: CreditCardSaveRequest): Observable<BaseDeliveryResponse>
 
+    @FormUrlEncoded
+    @POST("api/card-create")
+    fun saveCreditCardFields(
+            @Header(AuthorizationHeader) token: String,
+            @Header("Content-Type") type: String = "application/x-www-form-urlencoded",
+            @Field("cardNo") cardNum: String,
+            @Field("cardNo") cardMonth: String,
+            @Field("cardNo") cardYear: String,
+            @Field("cv2") cv2: String
+    ): Observable<BaseDeliveryResponse>
+
+
     @POST("api/card-update")
     fun updateCreditCard(
             @Header(AuthorizationHeader) token: String,

@@ -482,6 +482,31 @@ class MainViewModelRepository(
         )
     }
 
+    fun saveCreditCardFields(
+            creditCardSaveRequest: CreditCardSaveRequest,
+            cardResponseData: MutableLiveData<BaseDeliveryResponse>,
+            cardException: MutableLiveData<Throwable>) {
+        disposableContainer.add(
+            deliveryClient.saveCreditCardFields(
+                token = viewFeatures.getUserToken(),
+                cardNum = creditCardSaveRequest.cardNo,
+                cardMonth = creditCardSaveRequest.expMonth,
+                cardYear = creditCardSaveRequest.expYear,
+                cv2 = creditCardSaveRequest.cv2
+            ).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                    {
+                        cardResponseData.postValue(it)
+                        viewFeatures.trackRequestSuccess("card saved")
+                    }, {
+                        viewFeatures.handleApiError(it)
+                        cardException.postValue(it)
+                    }
+                )
+        )
+    }
+
     fun updateCreditCard(
             creditCardSaveRequest: CreditCardSaveRequest,
             cardResponseData: MutableLiveData<BaseDeliveryResponse>,

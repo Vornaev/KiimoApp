@@ -17,9 +17,12 @@ import org.kiimo.me.app.BaseMainFragment
 import org.kiimo.me.databinding.FragmentMenuPaymentTypeBinding
 import org.kiimo.me.main.menu.model.CreditCardModel
 import org.kiimo.me.main.menu.model.CreditCardSaveRequest
+import org.kiimo.me.models.delivery.BaseDeliveryResponse
 import org.kiimo.me.models.payment.PreferredPaymentUser
 import org.kiimo.me.util.DialogUtils
+import org.kiimo.me.util.JsonUtil
 import org.kiimo.me.util.PreferenceUtils
+import retrofit2.HttpException
 
 class MenuPaymentTypeFragment : BaseMainFragment() {
 
@@ -71,10 +74,17 @@ class MenuPaymentTypeFragment : BaseMainFragment() {
         })
 
         mainDeliveryViewModel().cardExceptionLiveData.observe(viewLifecycleOwner, Observer {
-            DialogUtils.showErrorMessage(
-                requireActivity(),
-                "Check your input card cannot save card"
-            )
+
+            val stringError = (it as HttpException).response().errorBody()?.string()
+            if (stringError.isNullOrBlank()) {
+                DialogUtils.showErrorMessage(
+                    requireActivity(), "Грешка",
+                    "Невалидна картичка"
+                )
+            } else {
+                val res = JsonUtil.loadModelFromJson<BaseDeliveryResponse>(stringError)
+                DialogUtils.showErrorMessage(requireActivity(), "Грешка", res.message)
+            }
         })
     }
 
@@ -104,7 +114,8 @@ class MenuPaymentTypeFragment : BaseMainFragment() {
     }
 
     fun isValidName(): Boolean {
-        val valid = binding.paymentCardholderUsername.text.isNotBlank()
+        val valid =
+            binding.paymentCardholderUsername.text.isNotBlank() && binding.paymentCardholderUsername.text.length > 4
         binding.paymentCardholderUsername.displayValidationStatus(valid)
 
         return valid
@@ -159,7 +170,7 @@ class MenuPaymentTypeFragment : BaseMainFragment() {
 
         if (selectedPaymentType == PAYMENT_TYPE.CARD) {
             if (validateInput()) {
-                mainDeliveryViewModel().saveCreditCard(getCardForService())
+                mainDeliveryViewModel().saveCreditCardFields(getCardForService())
             }
         } else {
             mainDeliveryViewModel().savePreferredPaymentType(PreferredPaymentUser("CASH"))
