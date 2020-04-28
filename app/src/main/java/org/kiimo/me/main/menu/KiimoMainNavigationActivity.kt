@@ -61,7 +61,9 @@ open class KiimoMainNavigationActivity : BaseActivity() {
 
         viewModel.getUser()
         viewModel.putDeviceToken()
-        viewModel.savePreferredPaymentType(PreferredPaymentUser())
+
+        val type = PreferenceUtils.getPaymentTypeForUser(this)
+        viewModel.savePreferredPaymentType(PreferredPaymentUser(if(type == 0) "CASH" else "CARD"))
 
     }
 

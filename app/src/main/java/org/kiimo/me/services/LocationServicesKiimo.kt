@@ -45,171 +45,169 @@ object LocationServicesKiimo {
                 if (currentLoca?.latitude != null && currentLoca?.longitude != null) {
                     onSuccessLocation(currentLoca)
                 } else {
-//                    if (hasGPSenabled(context)) {
                     Toast.makeText(
                         context,
                         "In order to use this feature turn on Location Service",
                         Toast.LENGTH_LONG
                     ).show()
-//                    }
-//                    //}
+
                 }
-            } else {
-                Toast.makeText(context, "unable to get current location", Toast.LENGTH_SHORT)
-                    .show()
-            }
+        } else {
+            Toast.makeText(context, "unable to get current location", Toast.LENGTH_SHORT)
+                .show()
         }
-
     }
 
-    fun hasGPSenabled(context: Context): Boolean {
-        val manager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager;
+}
 
-        var hasLocationService = true
+fun hasGPSenabled(context: Context): Boolean {
+    val manager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager;
 
-        if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-            hasLocationService = false
-            buildAlertMessageNoGps(context)
-        }
+    var hasLocationService = true
 
-        return hasLocationService
+    if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+        hasLocationService = false
+        buildAlertMessageNoGps(context)
     }
 
-    fun getPeriodicLocationUpdates(
-            context: Context,
-            locationCallback: LocationCallback,
-            interval: Long
-    ) {
+    return hasLocationService
+}
 
-        val locSer = LocationServices.getFusedLocationProviderClient(context);
-        val locationRequest = LocationRequest.create();
-        locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY;
-        locationRequest.interval = interval * 1000;
+fun getPeriodicLocationUpdates(
+        context: Context,
+        locationCallback: LocationCallback,
+        interval: Long
+) {
 
-        locSer.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper())
-    }
+    val locSer = LocationServices.getFusedLocationProviderClient(context);
+    val locationRequest = LocationRequest.create();
+    locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY;
+    locationRequest.interval = interval * 1000;
+
+    locSer.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper())
+}
 
 
-    fun getAddressForLocation(latitude: Double, longitude: Double, context: Context): Address? {
-        try {
-            val geocoder = Geocoder(context, Locale.getDefault())
-            val addressList = geocoder.getFromLocation(latitude, longitude, 1)
-            if (addressList == null || addressList.size == 0)
-                return null
-            return addressList[0]
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-        return null
-    }
-
-    fun getAddressForLocation(latLng: LatLng?, context: Context): Address? {
-        if (latLng == null) {
+fun getAddressForLocation(latitude: Double, longitude: Double, context: Context): Address? {
+    try {
+        val geocoder = Geocoder(context, Locale.getDefault())
+        val addressList = geocoder.getFromLocation(latitude, longitude, 1)
+        if (addressList == null || addressList.size == 0)
             return null
-        }
+        return addressList[0]
+    } catch (e: Exception) {
+        e.printStackTrace()
+    }
+    return null
+}
 
-        try {
-            val geocoder = Geocoder(context, Locale.getDefault())
-            val addressList = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1)
-            if (addressList == null || addressList.size == 0)
-                return null
-            return addressList[0]
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
+fun getAddressForLocation(latLng: LatLng?, context: Context): Address? {
+    if (latLng == null) {
         return null
     }
 
+    try {
+        val geocoder = Geocoder(context, Locale.getDefault())
+        val addressList = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1)
+        if (addressList == null || addressList.size == 0)
+            return null
+        return addressList[0]
+    } catch (e: Exception) {
+        e.printStackTrace()
+    }
+    return null
+}
 
-    fun getLocationFromAddress(city: String, country: String, context: Context): LatLng? {
-        try {
-            val geocoder = Geocoder(context, Locale.getDefault())
-            val addressList = geocoder.getFromLocationName("$city $country", 1)
-            if (addressList == null || addressList.size == 0)
-                return null
-            return LatLng(addressList[0].latitude, addressList[0].longitude)
-        } catch (e: Exception) {
-            e.printStackTrace()
+
+fun getLocationFromAddress(city: String, country: String, context: Context): LatLng? {
+    try {
+        val geocoder = Geocoder(context, Locale.getDefault())
+        val addressList = geocoder.getFromLocationName("$city $country", 1)
+        if (addressList == null || addressList.size == 0)
+            return null
+        return LatLng(addressList[0].latitude, addressList[0].longitude)
+    } catch (e: Exception) {
+        e.printStackTrace()
+    }
+    return null
+}
+
+
+public fun buildAlertMessageNoGps(context: Context) {
+    val builder = androidx.appcompat.app.AlertDialog.Builder(context)
+
+    builder.setMessage("Your GPS seems to be disabled, do you want to enable it?")
+        .setCancelable(false)
+        .setPositiveButton("Yes") { dialog, id ->
+            (context as Activity).startActivityForResult(
+                Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS),
+                LOCATION_SETTINGS_CODE
+            )
         }
-        return null
+        .setNegativeButton("No", object : DialogInterface.OnClickListener {
+            override fun onClick(dialog: DialogInterface, id: Int) {
+                dialog.cancel()
+            }
+        })
+    val alert: androidx.appcompat.app.AlertDialog = builder.create()
+    alert.show()
+}
+
+
+//lastest API
+fun checkForLocationServiceEnabled(context: BaseActivity) {
+    val locBuilder = LocationSettingsRequest.Builder()
+    val locClient = LocationServices.getSettingsClient(context)
+    val task: Task<LocationSettingsResponse> =
+        locClient.checkLocationSettings(locBuilder.build())
+
+    task.addOnSuccessListener { locationSettingsResponse ->
+        // All location settings are satisfied. The client can initialize
+        // location requests here.
+        // ...
     }
 
-
-    public fun buildAlertMessageNoGps(context: Context) {
-        val builder = androidx.appcompat.app.AlertDialog.Builder(context)
-
-        builder.setMessage("Your GPS seems to be disabled, do you want to enable it?")
-            .setCancelable(false)
-            .setPositiveButton("Yes") { dialog, id ->
-                (context as Activity).startActivityForResult(
-                    Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS),
-                    LOCATION_SETTINGS_CODE
+    task.addOnFailureListener { exception ->
+        if (exception is ResolvableApiException) {
+            // Location settings are not satisfied, but this can be fixed
+            // by showing the user a dialog.
+            try {
+                // Show the dialog by calling startResolutionForResult(),
+                // and check the result in onActivityResult().
+                val REQUEST_CHECK_SETTINGS = 1930
+                exception.startResolutionForResult(
+                    context,
+                    REQUEST_CHECK_SETTINGS
                 )
-            }
-            .setNegativeButton("No", object : DialogInterface.OnClickListener {
-                override fun onClick(dialog: DialogInterface, id: Int) {
-                    dialog.cancel()
-                }
-            })
-        val alert: androidx.appcompat.app.AlertDialog = builder.create()
-        alert.show()
-    }
-
-
-    //lastest API
-    fun checkForLocationServiceEnabled(context: BaseActivity) {
-        val locBuilder = LocationSettingsRequest.Builder()
-        val locClient = LocationServices.getSettingsClient(context)
-        val task: Task<LocationSettingsResponse> =
-            locClient.checkLocationSettings(locBuilder.build())
-
-        task.addOnSuccessListener { locationSettingsResponse ->
-            // All location settings are satisfied. The client can initialize
-            // location requests here.
-            // ...
-        }
-
-        task.addOnFailureListener { exception ->
-            if (exception is ResolvableApiException) {
-                // Location settings are not satisfied, but this can be fixed
-                // by showing the user a dialog.
-                try {
-                    // Show the dialog by calling startResolutionForResult(),
-                    // and check the result in onActivityResult().
-                    val REQUEST_CHECK_SETTINGS = 1930
-                    exception.startResolutionForResult(
-                        context,
-                        REQUEST_CHECK_SETTINGS
-                    )
-                } catch (sendEx: IntentSender.SendIntentException) {
-                    // Ignore the error.
-                }
+            } catch (sendEx: IntentSender.SendIntentException) {
+                // Ignore the error.
             }
         }
     }
+}
 
 
-    fun openMapsDirectionsActivity(
-            context: Context,
-            latitude: Double,
-            longitude: Double,
-            travelMode: String) {
-        val uri: String = String.format(
-            Locale.ENGLISH,
-            "google.navigation:q=%f,%f&mode=$travelMode)",
-            latitude,
-            longitude
-        )
+fun openMapsDirectionsActivity(
+        context: Context,
+        latitude: Double,
+        longitude: Double,
+        travelMode: String) {
+    val uri: String = String.format(
+        Locale.ENGLISH,
+        "google.navigation:q=%f,%f&mode=$travelMode)",
+        latitude,
+        longitude
+    )
 
-        val mapIntent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
-        mapIntent.setPackage("com.google.android.apps.maps")
-        context.startActivity(mapIntent)
-    }
+    val mapIntent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
+    mapIntent.setPackage("com.google.android.apps.maps")
+    context.startActivity(mapIntent)
+}
 
-    object TravelModes {
-        val drive = "d"
-        val bicycle = "b"
-        val walking = "w"
-        val scooter = "l"
-    }
+object TravelModes {
+    val drive = "d"
+    val bicycle = "b"
+    val walking = "w"
+    val scooter = "l"
+}
 }

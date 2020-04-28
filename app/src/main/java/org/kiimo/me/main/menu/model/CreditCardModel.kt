@@ -5,5 +5,6 @@ data class CreditCardModel(
         var cardNumber: String,
         var expMonth: String,
         var expYear: String,
-        var ccvCode: String
+        var ccvCode: String,
+        var expiryDate: String = ""
 )

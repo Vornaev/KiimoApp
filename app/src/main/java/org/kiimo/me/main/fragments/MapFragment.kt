@@ -266,7 +266,7 @@ class MapFragment : BaseMainFragment(), OnMapReadyCallback, GoogleMap.OnMapClick
     }
 
     override fun onProviderEnabled(p0: String?) {
-     //   DialogUtils.showSuccessMessage(requireActivity(), "Provider enabled")
+        //   DialogUtils.showSuccessMessage(requireActivity(), "Provider enabled")
     }
 
     override fun onProviderDisabled(p0: String?) {
@@ -408,12 +408,20 @@ class MapFragment : BaseMainFragment(), OnMapReadyCallback, GoogleMap.OnMapClick
         }
 
         binding.myLocationImageView.setOnClickListener {
-            if (myLocation != null) {
-                val cameraUpdate = CameraUpdateFactory.newLatLngZoom(myLocation, 15f)
-                googleMap?.animateCamera(cameraUpdate)
+            if (hasLocationPermission()) {
+                LocationServicesKiimo.getUserDeviceLocation(
+                    requireContext(),
+                    ::onSucesssGetLocation
+                )
+            } else {
+                requestAccessFineLocationPermission()
             }
         }
         (activity as MainActivity).setOnOriginDestinationReady(this)
+    }
+
+   private fun onSucesssGetLocation(location: Location) {
+        onLocationChanged(location)
     }
 
     private fun sendRequest() {

@@ -208,7 +208,7 @@ class MainMenuViewModel(private var repository: MainViewModelRepository) : ViewM
         }
 
         fun hasPickUpAddress(): Boolean {
-            return this.pickUpAddressPoint.locationModel != null
+            return this.pickUpAddressPoint.locationModel != null && this.pickUpAddressPoint.address.isNotBlank()
         }
 
         fun distanceToRoute(): Float {

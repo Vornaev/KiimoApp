@@ -64,6 +64,11 @@ class MenuPaymentTypeFragment : BaseMainFragment() {
             }
         }
 
+//        mainDeliveryViewModel().preferredPayLiveData.observe(viewLifecycleOwner, Observer {
+//            DialogUtils.showSuccessMessage(requireActivity(), "OK")
+//        })
+
+
         mainDeliveryViewModel().creditCardLiveData.observe(viewLifecycleOwner, Observer {
             if (it.success) {
                 mainDeliveryViewModel().savePreferredPaymentType(PreferredPaymentUser("CARD"))
@@ -139,7 +144,7 @@ class MenuPaymentTypeFragment : BaseMainFragment() {
 
     fun isValidYear(): Boolean {
         val valid = binding.paymentCardYearValue.text.isNotBlank() &&
-                binding.paymentCardYearValue.text.toString().toInt() > 20 &&
+                binding.paymentCardYearValue.text.toString().toInt() >= 20 &&
                 binding.paymentCardYearValue.text.toString().toInt() < 30
 
         binding.paymentCardYearValue.displayValidationStatus(valid)
