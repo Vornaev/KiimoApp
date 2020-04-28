@@ -9,6 +9,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import kotlinx.android.synthetic.main.fragment_menu_payment_type.view.*
 import kotlinx.android.synthetic.main.toolbar_back_button_title.view.*
@@ -27,6 +29,11 @@ import retrofit2.HttpException
 class MenuPaymentTypeFragment : BaseMainFragment() {
 
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+    }
+
     lateinit var binding: FragmentMenuPaymentTypeBinding
 
     private val paymentType: Int by lazy { PreferenceUtils.getPaymentTypeForUser(requireContext()) }
@@ -43,6 +50,7 @@ class MenuPaymentTypeFragment : BaseMainFragment() {
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
+
 
         binding = FragmentMenuPaymentTypeBinding.inflate(inflater, container, false)
         return binding.root
@@ -67,17 +75,18 @@ class MenuPaymentTypeFragment : BaseMainFragment() {
 //        mainDeliveryViewModel().preferredPayLiveData.observe(viewLifecycleOwner, Observer {
 //            DialogUtils.showSuccessMessage(requireActivity(), "OK")
 //        })
+        observeChanges()
+    }
 
+    val cardHandler = Observer<BaseDeliveryResponse> {
+        PreferenceUtils.savePaymentBankForUser(requireContext())
+        onCardSaved()
+        mainDeliveryViewModel().savePreferredPaymentType(PreferredPaymentUser("CARD"))
+    }
 
-        mainDeliveryViewModel().creditCardLiveData.observe(viewLifecycleOwner, Observer {
-            if (it.success) {
-                PreferenceUtils.savePaymentBankForUser(requireContext())
-                onCardSaved()
-                mainDeliveryViewModel().savePreferredPaymentType(PreferredPaymentUser("CARD"))
-                DialogUtils.showSuccessMessage(requireActivity(),"Успешно картицата е валидна")
-            }
-        })
+    private fun observeChanges(){
 
+        mainDeliveryViewModel().creditCardLiveData.reObserve(this, cardHandler)
         mainDeliveryViewModel().cardExceptionLiveData.observe(viewLifecycleOwner, Observer {
 
             val stringError = (it as HttpException).response().errorBody()?.string()
@@ -91,6 +100,16 @@ class MenuPaymentTypeFragment : BaseMainFragment() {
                 DialogUtils.showErrorMessage(requireActivity(), "Грешка", res.message)
             }
         })
+    }
+
+    fun <T> LiveData<T>.reObserve(owner: LifecycleOwner, observer: Observer<T>) {
+        removeObserver(observer)
+        observe(owner, observer)
+    }
+
+    override fun onDestroyView() {
+        mainDeliveryViewModel().creditCardLiveData.removeObserver(cardHandler)
+        super.onDestroyView()
     }
 
     private fun attahListeners() {

@@ -46,11 +46,11 @@ object DialogUtils {
         createMessageDialog(activity, title, message, null)
     }
 
-    fun showSuccessMessage(activity: Activity?, message: String?) {
+    fun showSuccessMessage(activity: Activity?, title: String = "Success", message: String?) {
         if (activity == null || activity.isFinishing)
             return
 
-        createMessageDialog(activity, activity.getString(R.string.general_success_title), message, null)
+        createMessageDialog(activity, title, message, null)
     }
 
     fun ShowInfoDialog(activity: Activity?, message: String?) {
