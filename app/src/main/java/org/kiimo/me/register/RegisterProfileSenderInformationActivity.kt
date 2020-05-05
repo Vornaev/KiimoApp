@@ -9,6 +9,7 @@ import android.widget.EditText
 import androidx.lifecycle.Observer
 import kotlinx.android.synthetic.main.activity_register_profile_information.*
 import kotlinx.android.synthetic.main.layout_edit_field_with_validation.view.*
+import kotlinx.android.synthetic.main.layout_pin.*
 import org.kiimo.me.R
 import org.kiimo.me.main.menu.KiimoMainNavigationActivity
 import org.kiimo.me.main.sender.SenderKiimoActivity
@@ -90,7 +91,8 @@ open class RegisterProfileSenderInformationActivity : BaseRegistrationServicesAc
     }
 
     fun validateEmail(): Boolean {
-        val validEmail = StringUtils.isEmailValid(layoutRegisterUserEmail.EditTextFieldValidation.textValue())
+        val validEmail =
+            StringUtils.isEmailValid(layoutRegisterUserEmail.EditTextFieldValidation.textValue())
         displayValidationStatus(layoutRegisterUserEmail, validEmail)
 
         return validEmail
@@ -126,10 +128,14 @@ open class RegisterProfileSenderInformationActivity : BaseRegistrationServicesAc
             Observer {
                 if (it.status == RetrofitConsts.SUCCESS_CODE) {
                     viewModel.ativateUser()
-                    startActivity(Intent(this, SenderKiimoActivity::class.java))
                 }
             }
         )
+
+        viewModel.activateUserLiveData.observe(this,
+            Observer {
+                startActivity(Intent(this, SenderKiimoActivity::class.java))
+            })
     }
 
     private fun loadPhoneNumber() {
@@ -146,7 +152,7 @@ open class RegisterProfileSenderInformationActivity : BaseRegistrationServicesAc
                 }
 
                 override fun beforeTextChanged(
-                    s: CharSequence?, start: Int, count: Int, after: Int
+                        s: CharSequence?, start: Int, count: Int, after: Int
                 ) {
                 }
 

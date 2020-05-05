@@ -164,6 +164,7 @@ class RegisterAccountRepository(
                 .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                     {
+                        activateUserLiveData.postValue(it)
                         Log.i("activateUser", it.message)
                     },
                     {

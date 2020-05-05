@@ -47,9 +47,12 @@ class RegisterProfileDeliverInformationActivity : RegisterProfileSenderInformati
             this,
             Observer {
                 activateUser()
-                navigateToMain()
             }
         )
+
+        viewModel.activateUserLiveData.observe(this, Observer {
+            navigateToMain()
+        })
     }
 
     private fun activateUser() {
