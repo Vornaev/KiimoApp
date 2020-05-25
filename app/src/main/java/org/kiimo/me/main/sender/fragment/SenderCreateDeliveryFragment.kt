@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
+import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.fragment_sender_create_item_details.*
 import okhttp3.MediaType
 import okhttp3.MultipartBody
@@ -33,7 +34,7 @@ class SenderCreateDeliveryFragment : BaseMainFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-
+        viewModel.senderProperties.packageDescritpion.images.clear()
 
         viewModel.photoPackageLiveData.observe(viewLifecycleOwner, Observer {
             viewModel.senderProperties.packageDescritpion.images.clear()
@@ -42,9 +43,9 @@ class SenderCreateDeliveryFragment : BaseMainFragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
 
         binding = FragmentSenderCreateItemDetailsBinding.inflate(inflater, container, false)
@@ -93,7 +94,9 @@ class SenderCreateDeliveryFragment : BaseMainFragment() {
 
     private fun onSuccessGetImage(bitmap: Bitmap) {
         binding.havePhoto = true
-        binding.imageViewDeliveryPackage.setImageBitmap(bitmap)
+        Glide.with(requireContext()).load(bitmap).override(300, 0).centerCrop()
+            .into(binding.imageViewDeliveryPackage)
+        //binding.imageViewDeliveryPackage.setImageBitmap(bitmap)
         uploadBitmap(bitmap)
     }
 
@@ -101,10 +104,8 @@ class SenderCreateDeliveryFragment : BaseMainFragment() {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK) {
 
-            val width =
-                requireContext().resources.getDimensionPixelSize(R.dimen.createDeliveryImageWidth)
-            val height =
-                requireContext().resources.getDimensionPixelSize(R.dimen.createDeliveryImageHeight)
+            val width = 480
+            val height = 640
 
             if (width != null && height != null && width > 0 && height > 0) {
                 if (requestCode == MediaManager.REQUEST_IMAGE_CAPTURE) {

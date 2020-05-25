@@ -14,11 +14,13 @@ import org.kiimo.me.BuildConfig
 import org.kiimo.me.app.IBaseViewFeatures
 import org.kiimo.me.main.fragments.model.deliveries.DeliveryCarrierItem
 import org.kiimo.me.main.fragments.model.sender.SenderOrderListResponse
+import org.kiimo.me.main.menu.model.CreditCardSaveRequest
 import org.kiimo.me.main.menu.model.GetUserRequestModel
 import org.kiimo.me.main.menu.model.UserProfileInformationResponse
 import org.kiimo.me.main.sender.model.request.CreateDeliveryRequest
 import org.kiimo.me.main.sender.model.request.PayRequest
 import org.kiimo.me.main.sender.model.request.pay.PayResponse
+import org.kiimo.me.main.sender.model.request.rate.RateDeliveryRequest
 import org.kiimo.me.main.sender.model.response.SenderCreateDeliveryResponse
 import org.kiimo.me.models.*
 import org.kiimo.me.models.delivery.*
@@ -31,12 +33,13 @@ import org.kiimo.me.util.AppConstants
 import org.kiimo.me.util.DialogUtils
 import retrofit2.http.Multipart
 import timber.log.Timber
+import java.lang.Exception
 import java.util.*
 
 class MainViewModelRepository(
-    private val userClient: KiimoAppClient,
-    private val deliveryClient: KiimoDeliverHttpClient,
-    private val viewFeatures: IBaseViewFeatures
+        private val userClient: KiimoAppClient,
+        private val deliveryClient: KiimoDeliverHttpClient,
+        private val viewFeatures: IBaseViewFeatures
 ) {
 
     private val disposableContainer: CompositeDisposable = CompositeDisposable()
@@ -58,8 +61,8 @@ class MainViewModelRepository(
     }
 
     fun calculateDelivery(
-        deliveryCalculateRequest: CalculateDeliveryRequest,
-        calculateDeliveryData: MutableLiveData<CalculateDeliveryResponse>
+            deliveryCalculateRequest: CalculateDeliveryRequest,
+            calculateDeliveryData: MutableLiveData<CalculateDeliveryResponse>
     ) {
         disposableContainer.add(
             deliveryClient.deliveryCalculate(
@@ -148,10 +151,10 @@ class MainViewModelRepository(
 
 
     fun <D, F> reactiveSubsribe(
-        serviceMethod: (token: String, body: F) -> Observable<D>,
-        data: MutableLiveData<D>,
-        token: String,
-        body: F
+            serviceMethod: (token: String, body: F) -> Observable<D>,
+            data: MutableLiveData<D>,
+            token: String,
+            body: F
     ) {
 
         disposableContainer.add(
@@ -215,8 +218,8 @@ class MainViewModelRepository(
     }
 
     fun createPackageForDelivery(
-        request: CreateDeliveryRequest,
-        data: MutableLiveData<SenderCreateDeliveryResponse>
+            request: CreateDeliveryRequest,
+            data: MutableLiveData<SenderCreateDeliveryResponse>
     ) {
         disposableContainer.add(
             deliveryClient.createPackageForDelivery(
@@ -239,8 +242,8 @@ class MainViewModelRepository(
     }
 
     fun saveUserData(
-        userProfileInformationRequest: UserProfileInformationRequest,
-        updateUserProfileLiveData: MutableLiveData<UserRegisterResponse>
+            userProfileInformationRequest: UserProfileInformationRequest,
+            updateUserProfileLiveData: MutableLiveData<UserRegisterResponse>
     ) {
         disposableContainer.add(
             userClient.updateUserInformation(
@@ -313,8 +316,8 @@ class MainViewModelRepository(
 
 
     fun savePreferredPaymentUser(
-        preferredPaymentUser: PreferredPaymentUser,
-        prefferedLiveData: MutableLiveData<PreferredPayResponse>
+            preferredPaymentUser: PreferredPaymentUser,
+            prefferedLiveData: MutableLiveData<PreferredPayResponse>
     ) {
         disposableContainer.add(
             deliveryClient.savePreferredPayment(
@@ -338,9 +341,9 @@ class MainViewModelRepository(
 
 
     fun uploadMultiFormDataImage(
-        type: String,
-        data: MultipartBody.Part,
-        photoLiveData: MutableLiveData<UploadImageResponse>
+            type: String,
+            data: MultipartBody.Part,
+            photoLiveData: MutableLiveData<UploadImageResponse>
     ) {
 
         val type = RequestBody.create(
@@ -398,7 +401,7 @@ class MainViewModelRepository(
         )
     }
 
-    fun updateUserPhoto(photoUrl: String) {
+    fun updateUserPhoto(photoUrl: String, updateData: MutableLiveData<UserRegisterResponse>) {
         disposableContainer.add(
             userClient.updateUserInformation(
                 UserProfileUpdatePhotoRequest(
@@ -411,9 +414,124 @@ class MainViewModelRepository(
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                     {
+                        //updateData.postValue(it)
+                    }, {
+                        viewFeatures.handleApiError(it)
+                    }
+                )
+        )
+    }
+
+    fun updateUserFragmentFields(
+            updateRequest: UserProfileFragmentUpdateRequest,
+            updateData: MutableLiveData<UserRegisterResponse>) {
+        disposableContainer.add(
+            userClient.updateUserInformation(
+                updateRequest
+            )
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                    {
+                        updateData.postValue(it)
                         viewFeatures.trackRequestSuccess("photo saved")
                     }, {
                         viewFeatures.handleApiError(it)
+                    }
+                )
+        )
+    }
+
+    fun rateUserForDelivery(rateDeliveryRequest: RateDeliveryRequest) {
+        disposableContainer.add(
+            deliveryClient.rateUser(
+                token = viewFeatures.getUserToken(),
+                rateDeliveryRequest = rateDeliveryRequest
+            )
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                    {
+                        viewFeatures.trackRequestSuccess("photo saved")
+                    }, {
+                        viewFeatures.handleApiError(it)
+                    }
+                )
+        )
+    }
+
+    fun saveCreditCard(
+            creditCardSaveRequest: CreditCardSaveRequest,
+            cardResponseData: MutableLiveData<BaseDeliveryResponse>,
+            cardException: MutableLiveData<Throwable>) {
+        disposableContainer.add(
+            deliveryClient.saveCreditCard(
+                token = viewFeatures.getUserToken(),
+                cardSaveRequest = creditCardSaveRequest
+            ).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                    {
+                        cardResponseData.postValue(BaseDeliveryResponse("", success = true))
+                        viewFeatures.trackRequestSuccess("card saved")
+                    }, {
+                        viewFeatures.handleApiError(it)
+                        cardException.postValue(it)
+                    }
+                )
+        )
+    }
+
+
+    fun updateCreditCard(
+            creditCardSaveRequest: CreditCardSaveRequest,
+            cardResponseData: MutableLiveData<BaseDeliveryResponse>,
+            cardException: MutableLiveData<Throwable>) {
+        disposableContainer.add(
+            deliveryClient.updateCreditCard(
+                token = viewFeatures.getUserToken(),
+                cardSaveRequest = creditCardSaveRequest
+            ).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                    {
+                        cardResponseData.postValue(BaseDeliveryResponse("", true))
+                        viewFeatures.trackRequestSuccess("card updated")
+                    }, {
+                        cardException.postValue(it)
+                        viewFeatures.handleApiError(it)
+                    }
+                )
+        )
+    }
+
+    fun saveCreditCardFieldsMultipart(
+            creditCardSaveRequest: CreditCardSaveRequest,
+            creditCardLiveData: MutableLiveData<BaseDeliveryResponse>,
+            cardExceptionLiveData: MutableLiveData<Throwable>) {
+
+    }
+
+    fun saveCreditCardFields(
+            creditCardSaveRequest: CreditCardSaveRequest,
+            cardResponseData: MutableLiveData<BaseDeliveryResponse>,
+            cardException: MutableLiveData<Throwable>) {
+        disposableContainer.add(
+            deliveryClient.saveCreditCardFields(
+                token = viewFeatures.getUserToken(),
+                cardNum = creditCardSaveRequest.cardNo,
+                cardMonth = creditCardSaveRequest.expMonth.toInt(),
+                cardYear = creditCardSaveRequest.expYear.toInt(),
+                cv2 = creditCardSaveRequest.cv2.toInt()
+            ).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                    {
+                        //cardResponseData.postValue(it)
+                        viewFeatures.trackRequestSuccess("card saved")
+                    }, {
+                        viewFeatures.handleApiError(it)
+                        cardException.postValue(it)
                     }
                 )
         )

@@ -4,19 +4,25 @@ import android.app.Activity
 import android.content.Intent
 import android.location.Location
 import android.os.Bundle
+import android.provider.Settings
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.Observer
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.libraries.places.api.model.Place
+import com.google.android.libraries.places.api.model.TypeFilter
 import com.google.android.libraries.places.widget.Autocomplete
 import com.google.android.libraries.places.widget.AutocompleteActivity
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
+import io.reactivex.android.schedulers.AndroidSchedulers
 import org.kiimo.me.R
+import org.kiimo.me.app.BaseActivity
 import org.kiimo.me.app.BaseMainFragment
 import org.kiimo.me.databinding.FragmentSenderLayoutBinding
 import org.kiimo.me.main.fragments.MapFragment
@@ -28,7 +34,11 @@ import org.kiimo.me.main.sender.model.notifications.ConfirmPickUpNotification.Co
 import org.kiimo.me.main.sender.model.request.pay.PayResponse
 import org.kiimo.me.models.LocationModel
 import org.kiimo.me.services.LocationServicesKiimo
+import org.kiimo.me.util.DialogUtils
+import org.kiimo.me.util.PreferenceUtils
+import org.kiimo.me.util.RxBus
 import org.kiimo.me.util.StringUtils
+import java.util.concurrent.TimeUnit
 
 class SenderMapFragment : BaseMainFragment() {
 
@@ -38,9 +48,9 @@ class SenderMapFragment : BaseMainFragment() {
     val viewModel: MainMenuViewModel by lazy { getNavigationActivity().viewModel }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
 
         binding = FragmentSenderLayoutBinding.inflate(inflater, container, false)
@@ -61,6 +71,45 @@ class SenderMapFragment : BaseMainFragment() {
             senderMapFeatures?.onRouteReady(it)
         })
 
+        // loadImageFromPreference()
+
+        compositeDisposable.add(
+            RxBus.listen(LocationServicesKiimo.LocEvent::class.java)
+                .delay(2000, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    onServiceLocationEnabled()
+                })
+
+        viewModel.userProfileLiveData.observe(viewLifecycleOwner, Observer {
+            loadImageProfile(it.photo)
+        })
+
+
+        viewModel.photoProfileLiveData.observe(requireActivity(), Observer {
+            loadImageProfile(it.imageUrl)
+        })
+    }
+
+
+    private fun loadImageFromPreference() {
+        val userProfile = PreferenceUtils.getUserParsed(requireContext())
+        userProfile?.let {
+            loadImageProfile(it.photo)
+        }
+    }
+
+    private fun loadImageProfile(url: String) {
+        if (url.isBlank()) return
+        Glide.with(this).load(url).placeholder(R.drawable.ic_user_profile)
+            .apply(RequestOptions.circleCropTransform().override(0, 350))
+            .into(binding.imageViewProfileDrawer)
+    }
+
+    private fun setNavigation() {
+        binding.imageViewProfileDrawer.setOnClickListener {
+            getNavigationActivity().onOpenDrawerClicked()
+        }
     }
 
 
@@ -83,16 +132,24 @@ class SenderMapFragment : BaseMainFragment() {
         }
 
         binding.confirmButton.setOnClickListener {
-
-            (activity as SenderKiimoActivity).openCreateDeliveryItemDialog()
+            if (viewModel.senderProperties.hasPickUpAddress() && viewModel.senderProperties.hasDestination()) {
+                (activity as SenderKiimoActivity).openCreateDeliveryItemDialog()
+            }
         }
 
-    }
+        binding.myLocationImageView.setOnClickListener {
+            viewModel.isLocationSenderFromButton = true
 
-    private fun setNavigation() {
-        binding.imageViewProfileDrawer.setOnClickListener {
-            getNavigationActivity().onOpenDrawerClicked()
+            if (hasLocationPermission()) {
+                LocationServicesKiimo.getUserDeviceLocation(
+                    requireContext(),
+                    ::onLocationUserFocused
+                )
+            } else {
+                requestAccessFineLocationPermission()
+            }
         }
+
     }
 
     private fun loadMap() {
@@ -109,11 +166,26 @@ class SenderMapFragment : BaseMainFragment() {
     }
 
     override fun onPermissionLocationEnabled() {
-        LocationServicesKiimo.getUserDeviceLocation(requireContext(), ::onLocationReceived)
+
+        senderMapFeatures?.onPermissionGranted()
+
+        LocationServicesKiimo.getUserDeviceLocation(
+            requireContext(),
+            if (!viewModel.isLocationSenderFromButton) ::onLocationReceived else ::onLocationUserFocused
+        )
+        viewModel.isLocationSenderFromButton = false
     }
 
-    private fun onLocationReceived(deviceLoc: Location) {
+    private fun onServiceLocationEnabled() {
+        onPermissionLocationEnabled()
+    }
 
+    private fun onLocationUserFocused(deviceLoc: Location) {
+        senderMapFeatures?.moveCameraToUserPos(deviceLoc)
+    }
+
+
+    private fun onLocationReceived(deviceLoc: Location) {
 
         viewModel.senderProperties.userLocation =
             LocationModel(deviceLoc.latitude, deviceLoc.longitude)
@@ -130,6 +202,13 @@ class SenderMapFragment : BaseMainFragment() {
         senderMapFeatures?.animateUserLocation(deviceLoc)
     }
 
+    val myCountrryCode = {
+        LocationServicesKiimo.getAddressForLocation(
+            viewModel.senderProperties.userLocation?.toLatLng(),
+            requireContext()
+        )?.countryCode
+    }
+
     private fun openLocationSearchRequest() {
         // Start the autocomplete intent.
         val intent = Autocomplete.IntentBuilder(
@@ -137,7 +216,7 @@ class SenderMapFragment : BaseMainFragment() {
                 Place.Field.ID, Place.Field.NAME, Place.Field.ADDRESS,
                 Place.Field.LAT_LNG
             )
-        ).build(activity!!)
+        ).setTypeFilter(TypeFilter.ADDRESS).setCountry(myCountrryCode()).build(activity!!)
 
         startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE)
     }
@@ -257,6 +336,13 @@ class SenderMapFragment : BaseMainFragment() {
         val carrierName =
             "${deliveryPayedResponse.carrier.firstName} ${deliveryPayedResponse.carrier.lastName}"
 
+        if (!deliveryPayedResponse.carrier.photo.isNullOrBlank()) {
+            Glide.with(this).load(deliveryPayedResponse.carrier.photo).override(0, 350).centerCrop()
+                .placeholder(R.drawable.ic_user_profile)
+                .into(binding.imageViewCarrier)
+        }
+
+
         binding.carrierName.text = carrierName
         binding.pinLayoutDropOffPacakgeCarrier.pickUpText =
             deliveryPayedResponse.delivery.originAddress
@@ -266,6 +352,12 @@ class SenderMapFragment : BaseMainFragment() {
     }
 
     fun receviedCodePickUP(deliveryAccepted: ConfirmPickUpFcmData) {
+
+        if (!deliveryAccepted.carrier.photo.isNullOrBlank()) {
+            Glide.with(this).load(deliveryAccepted.carrier.photo).override(0, 350).centerCrop()
+                .placeholder(R.drawable.ic_user_profile)
+                .into(binding.imageViewCarrier)
+        }
         binding.notificationPickUPReceived = true
         binding.notificationCodeReceived = true
         binding.carrierNameDescription.text = "Its on his way to the destination"

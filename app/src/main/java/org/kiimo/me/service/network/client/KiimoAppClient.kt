@@ -32,6 +32,9 @@ interface KiimoAppClient {
     fun updateUserInformation(@Body data: UserProfileUpdatePhotoRequest): Observable<UserRegisterResponse>
 
 
+    @POST("api/v1.0/kiimoUmWs.php?request=updateuser/string/C06E72A1-787E-4DFC-BF46-411D7B7A7F51")
+    fun updateUserInformation(@Body data: UserProfileFragmentUpdateRequest): Observable<UserRegisterResponse>
+
     @POST("api/v1.0/kiimoUmWs.php?request=getUserByID/string/C06E72A1-787E-4DFC-BF46-411D7B7A7F51")
     fun getUserByID(@Body data: GetUserRequestModel): Observable<UserProfileInformationResponse>
 
@@ -42,7 +45,7 @@ interface KiimoAppClient {
     fun activateUser(@Body activateUserRequest: ActivateUserRequest): Observable<StatusMessageDataResponse>
 
     @POST("api/v1.0/kiimoUmWs.php?request=isValidDeliverer/string/C06E72A1-787E-4DFC-BF46-411D7B7A7F51")
-    fun isValidDeliverer(@Body activateUserRequest: ActivateUserRequest) : Observable<IsValidDelivererResponse>
+    fun isValidDeliverer(@Body activateUserRequest: ActivateUserRequest): Observable<IsValidDelivererResponse>
 
 
 }

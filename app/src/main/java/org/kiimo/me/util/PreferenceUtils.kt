@@ -6,6 +6,7 @@ import android.preference.PreferenceManager
 import org.kiimo.me.main.menu.model.CreditCardModel
 import org.kiimo.me.main.menu.model.UserProfileInformationResponse
 import org.kiimo.me.models.Profile
+import org.kiimo.me.register.model.UserAddressDataRequest
 import org.kiimo.me.register.model.UserProfileInformationRequest
 
 object PreferenceUtils {
@@ -43,8 +44,8 @@ object PreferenceUtils {
      * @param defaultValue  Optional default value - will take null for strings, false for bool and -1 for numeric values if [defaultValue] is not specified
      */
     private inline fun <reified T : Any> SharedPreferences.get(
-        key: String,
-        defaultValue: T? = null
+            key: String,
+            defaultValue: T? = null
     ): T? =
         when (T::class) {
             String::class -> getString(key, defaultValue as? String) as T?
@@ -85,14 +86,25 @@ object PreferenceUtils {
         getPreferences(context)[USER_PROFILE_KEY] = string
     }
 
+    fun saveUserProfile(context: Context, user: UserProfileInformationRequest) {
+        val string = JsonUtil.getJsonStringFromModel(user)
+        getPreferences(context)[USER_PROFILE_KEY] = string
+    }
+
     fun getUserProfile(context: Context): String {
         return getPreferences(context).getString(USER_PROFILE_KEY, "") ?: ""
     }
 
-    fun getUserParsed(context: Context): UserProfileInformationRequest {
-        return JsonUtil.loadModelFromJson(
-            getPreferences(context).getString(USER_PROFILE_KEY, "") ?: ""
-        )
+    fun getUserParsed(context: Context): UserProfileInformationRequest? {
+
+        val stringRes = getPreferences(context).getString(USER_PROFILE_KEY, "")
+
+        return if (stringRes.isNullOrBlank()) {
+            null
+        } else
+            JsonUtil.loadModelFromJson(
+                stringRes
+            )
     }
 
     //Password
@@ -114,6 +126,7 @@ object PreferenceUtils {
         getPreferences(context)[FIREBASE_TOKEN] = ""
         getPreferences(context)[CARD_DETAILS] = ""
         getPreferences(context)[PAYMENT_TYPE] = 0
+        getPreferences(context)[HAS_CARD_IN_BANK] = false
     }
 
     //Firebase TOken
@@ -147,6 +160,15 @@ object PreferenceUtils {
         return getPreferences(context).getInt(PAYMENT_TYPE, 0)
     }
 
+    private const val HAS_CARD_IN_BANK = "org.kiimo.me.payment.payment.bank"
+    fun savePaymentBankForUser(context: Context) {
+        getPreferences(context)[HAS_CARD_IN_BANK] = true
+    }
+
+    fun hasBankCardForUser(context: Context): Boolean {
+        return getPreferences(context).getBoolean(HAS_CARD_IN_BANK, false)
+    }
+
     private const val CARD_DETAILS = "org.kiimo.me.payment.type.card.details"
     fun saveCreditCard(context: Context, creditCard: CreditCardModel?) {
         if (creditCard != null) {
@@ -161,6 +183,23 @@ object PreferenceUtils {
             return JsonUtil.loadModelFromJson(card)
         }
         return null
+    }
+
+    fun saveUserNewPhoto(context: Context, imageUrl: String) {
+        val user = getUserParsed(context)
+        user?.let {
+            it.photo = imageUrl
+            saveUserProfile(context, it)
+        }
+    }
+
+    val DB_KEY = "kiimo.me.save__cache_device"
+    fun saveRemoteCache(value: Boolean, context: Context) {
+        getPreferences(context)[DB_KEY] = value
+    }
+
+    fun getRemoteCache(context: Context): Boolean {
+        return getPreferences(context).getBoolean(DB_KEY, false)
     }
 }
 

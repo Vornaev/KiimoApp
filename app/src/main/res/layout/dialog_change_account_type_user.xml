@@ -1,37 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout
+        xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-        <include
-                android:id="@+id/registerDeliverLayout"
-                layout="@layout/layout_register_deliver_account"
-                android:layout_width="0dp"
-                android:layout_height="380dp"
-                android:layout_marginTop="@dimen/vertical_spacing_register_fields"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHeight_percent="0.7"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintWidth_percent="0.9" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-        <Button
-                android:id="@+id/changeAccountTypeSaveButton"
-                android:layout_width="0dp"
-                app:layout_constraintWidth_percent="0.8"
-                android:layout_height="@dimen/big_button_height"
-                android:background="@drawable/button_cornered_background_orange"
-                android:text="@string/activity_initial_continue"
-                android:textColor="@color/colorWhite"
-                android:layout_marginBottom="@dimen/margin_large"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/registerDeliverLayout" />
+            <include
+                    android:id="@+id/registerDeliverLayout"
+                    layout="@layout/layout_register_deliver_account"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/vertical_spacing_register_fields"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintWidth_percent="0.9" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <Button
+                    android:id="@+id/changeAccountTypeSaveButton"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/big_button_height"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="@dimen/margin_large"
+                    android:background="@drawable/button_cornered_background_orange"
+                    android:text="@string/activity_initial_continue"
+                    android:textColor="@color/colorWhite"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/registerDeliverLayout"
+                    app:layout_constraintWidth_percent="0.8" />
 
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
 </layout>

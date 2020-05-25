@@ -12,7 +12,7 @@ import org.kiimo.me.databinding.DialogPriceBreakdownBinding
 import org.kiimo.me.models.DeliveryPrice
 import java.util.*
 
-class PriceBreakdownDialog : DialogFragment() {
+class PriceBreakdownDialog : BaseKiimoDialog() {
 
     private lateinit var binding: DialogPriceBreakdownBinding
 

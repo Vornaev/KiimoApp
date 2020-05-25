@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+                name="ratingCount"
+                type="Integer" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/topDialogRateLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <TextView
+                android:id="@+id/titleRateUser"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_medium"
+                android:layout_marginTop="8dp"
+                android:fontFamily="@font/roboto_medium"
+                android:text="@string/rate_user"
+                android:textAlignment="center"
+                android:textColor="@color/colorPrimary"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintWidth_percent="0.8" />
+
+        <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/rateUserAvatarImage"
+                android:layout_width="@dimen/sizeImageDrawer"
+                android:layout_height="@dimen/sizeImageDrawer"
+                android:layout_marginTop="@dimen/margin_medium"
+                android:src="@drawable/ic_user_profile"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/titleRateUser" />
+
+        <TextView
+                android:id="@+id/titleRateUserName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="0dp"
+                android:layout_marginTop="@dimen/margin_medium_large"
+                android:fontFamily="@font/roboto_regular"
+                android:textAlignment="center"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="15sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/rateUserAvatarImage" />
+
+        <ImageView
+                android:id="@+id/rateStarOne"
+                android:layout_width="@dimen/rate_size_image"
+                android:layout_height="@dimen/rate_size_image"
+                android:layout_marginStart="@dimen/margin_medium"
+                android:layout_marginTop="@dimen/margin_small"
+                android:src="@{ratingCount > 0 ? @drawable/icon_star_red: @drawable/icon__star_gray}"
+                app:layout_constraintEnd_toStartOf="@id/rateStarTwo"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/titleRateUserName" />
+
+        <ImageView
+                android:id="@+id/rateStarTwo"
+                android:layout_width="@dimen/rate_size_image"
+                android:layout_height="@dimen/rate_size_image"
+                android:layout_marginStart="@dimen/margin_medium"
+                android:layout_marginTop="@dimen/margin_small"
+                android:src="@{ratingCount > 1 ? @drawable/icon_star_red: @drawable/icon__star_gray}"
+                app:layout_constraintEnd_toStartOf="@id/rateStarThree"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toEndOf="@id/rateStarOne"
+                app:layout_constraintTop_toBottomOf="@+id/titleRateUserName" />
+
+        <ImageView
+                android:id="@+id/rateStarThree"
+                android:layout_width="@dimen/rate_size_image"
+                android:layout_height="@dimen/rate_size_image"
+                android:layout_marginStart="@dimen/margin_medium"
+                android:layout_marginTop="@dimen/margin_small"
+                android:src="@{ratingCount > 2 ? @drawable/icon_star_red: @drawable/icon__star_gray}"
+                app:layout_constraintEnd_toStartOf="@id/rateStarFour"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toEndOf="@id/rateStarTwo"
+                app:layout_constraintTop_toBottomOf="@+id/titleRateUserName" />
+
+        <ImageView
+                android:id="@+id/rateStarFour"
+                android:layout_width="@dimen/rate_size_image"
+                android:layout_height="@dimen/rate_size_image"
+                android:layout_marginStart="@dimen/margin_medium"
+                android:layout_marginTop="@dimen/margin_small"
+                android:src="@{ratingCount > 3 ? @drawable/icon_star_red: @drawable/icon__star_gray}"
+                app:layout_constraintEnd_toStartOf="@id/rateStarFive"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toEndOf="@id/rateStarThree"
+                app:layout_constraintTop_toBottomOf="@+id/titleRateUserName" />
+
+        <ImageView
+                android:id="@+id/rateStarFive"
+                android:layout_width="@dimen/rate_size_image"
+                android:layout_height="@dimen/rate_size_image"
+                android:layout_marginStart="@dimen/margin_medium"
+                android:layout_marginTop="@dimen/margin_small"
+                android:layout_marginEnd="16dp"
+                android:src="@{ratingCount > 4 ? @drawable/icon_star_red: @drawable/icon__star_gray}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toEndOf="@id/rateStarFour"
+                app:layout_constraintTop_toBottomOf="@+id/titleRateUserName" />
+
+        <EditText
+                android:id="@+id/rateUserComment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_medium"
+                android:layout_marginTop="@dimen/margin_medium"
+                android:layout_marginEnd="@dimen/margin_medium"
+                android:background="@drawable/edit_text_cornered_background_gray"
+                android:gravity="top"
+                android:hint="@string/insert_comment"
+                android:importantForAutofill="no"
+                android:inputType="textMultiLine|textImeMultiLine"
+                android:minHeight="120dp"
+                android:padding="12dp"
+                android:paddingTop="18dp"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="12sp"
+                app:layout_constraintTop_toBottomOf="@id/rateStarFive" />
+
+
+        <Button
+                android:id="@+id/ratingButtonConfirm"
+                style="@style/ButtonStyleDefaultOrange"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/big_button_height"
+                android:layout_marginTop="@dimen/margin_extra_large"
+                android:layout_marginBottom="@dimen/margin_extra_large"
+                android:text="@string/dialog_confirm"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/rateUserComment"
+                app:layout_constraintWidth_percent="0.8" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

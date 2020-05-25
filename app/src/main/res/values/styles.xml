@@ -37,7 +37,11 @@
         <item name="android:lines">1</item>
         <item name="android:textColor">@color/colorPrimaryDark</item>
         <item name="android:textColorHint">@color/colorPrimaryDark</item>
-        <item name="android:textSize">14sp</item>
+        <item name="android:textSize">13sp</item>
+    </style>
+
+    <style name="TextView.PersonalIDStyle" parent="EditTextRegisterInputStyles">
+        <item name="android:padding">8dp</item>
     </style>
 
     <style name="MenuGrayEditFieldsStyle" parent="EditTextRegisterInputStyles">
@@ -45,7 +49,7 @@
     </style>
 
     <style name="AppCompatAlertDialogStyle" parent="Theme.MaterialComponents.Light.Dialog.Alert">
-        <item name="android:background">#FFFFFF</item>
+        <item name="android:background">@drawable/cornered_dialog_bacground</item>
     </style>
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>

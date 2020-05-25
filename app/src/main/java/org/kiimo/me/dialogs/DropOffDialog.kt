@@ -22,7 +22,7 @@ import org.kiimo.me.models.DeliveryPrice
 import org.kiimo.me.util.DialogUtils
 import java.io.ByteArrayOutputStream
 
-class DropOffDialog : DialogFragment() {
+class DropOffDialog : BaseKiimoDialog() {
 
 
     lateinit var binding: DialogSignatureDropPackageBinding

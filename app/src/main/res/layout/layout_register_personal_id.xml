@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <TextView
+            android:id="@+id/TextFieldPersonalID"
+            style="@style/TextView.PersonalIDStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="13sp"
+            android:fontFamily="@font/roboto_medium"
+            android:textAllCaps="true"
+            android:textAlignment="center"
+            android:text="@string/verification_id_field"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+            android:id="@+id/imageViewValidation"
+            android:layout_width="23dp"
+            android:layout_height="23dp"
+            android:layout_marginEnd="5dp"
+            android:src="@drawable/ic_field_validation_red"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="@id/TextFieldPersonalID"
+            app:layout_constraintEnd_toEndOf="@id/TextFieldPersonalID"
+            app:layout_constraintTop_toTopOf="@id/TextFieldPersonalID"
+            tools:ignore="ContentDescription" />
+
+    <TextView
+            android:id="@+id/textViewFieldRequired"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_small"
+            android:layout_marginTop="6dp"
+            android:text="@string/field_is_required"
+            android:textSize="11sp"
+            android:visibility="invisible"
+            app:layout_constraintTop_toBottomOf="@id/TextFieldPersonalID" />
+
+    <ImageView
+            android:id="@+id/activityRegisterProfileVerificationImgLogo"
+            android:layout_width="23dp"
+            android:layout_height="23dp"
+            android:src="@drawable/ic_verifiction_upload"
+            app:layout_constraintBottom_toBottomOf="@id/TextFieldPersonalID"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/TextFieldPersonalID"
+            app:layout_constraintVertical_bias="0.5" />
+
+    <ImageView
+            android:id="@+id/registerValidationImageVerificationPreview"
+            android:layout_width="0dp"
+            android:layout_height="200dp"
+            android:layout_marginTop="24dp"
+            android:adjustViewBounds="true"
+            android:scaleType="centerCrop"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/TextFieldPersonalID"
+            app:layout_constraintWidth_percent="0.9" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -55,7 +55,7 @@ class SenderDeliveryPackageSummaryFragment : BaseMainFragment() {
         binding.summaryCreatePackagePaymentDateCreated.text = date
         val paymentType = PreferenceUtils.getPaymentTypeForUser(requireContext())
 
-        val append = if (paymentType == 0) "CASH" else "BANK"
+        val append = if (paymentType == 0) "CASH" else "CARD"
         binding.summaryCreatePackageTextViewPaymentType.text = "PAYMENT TYPE: ${append}"
 
 

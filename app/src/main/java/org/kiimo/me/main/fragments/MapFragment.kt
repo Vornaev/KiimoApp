@@ -21,6 +21,10 @@ import androidx.annotation.DrawableRes
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
+import androidx.transition.ChangeImageTransform
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
+import com.crashlytics.android.Crashlytics
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -31,19 +35,24 @@ import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.widget.Autocomplete
 import com.google.android.libraries.places.widget.AutocompleteActivity
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
+import kotlinx.android.synthetic.main.fragment_map.*
+import okhttp3.MediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import org.kiimo.me.R
 import org.kiimo.me.app.BaseMainFragment
 import org.kiimo.me.databinding.FragmentMapBinding
+import org.kiimo.me.main.FragmentTags
 import org.kiimo.me.main.MainActivity
 import org.kiimo.me.main.components.DaggerMainComponent
 import org.kiimo.me.main.modules.MapModule
 import org.kiimo.me.main.viewmodels.MapViewModel
 import org.kiimo.me.main.viewmodels.MapViewModelFactory
 import org.kiimo.me.models.*
+import org.kiimo.me.models.events.ProfilePhotoEvent
 import org.kiimo.me.services.LocationServicesKiimo
-import org.kiimo.me.util.DeliveryTypeID
-import org.kiimo.me.util.PreferenceUtils
-import org.kiimo.me.util.StringUtils
+import org.kiimo.me.util.*
+import java.io.ByteArrayOutputStream
 import java.util.*
 import javax.inject.Inject
 
@@ -77,9 +86,9 @@ class MapFragment : BaseMainFragment(), OnMapReadyCallback, GoogleMap.OnMapClick
     private var markers = arrayListOf<Marker>()
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         binding = FragmentMapBinding.inflate(inflater, container, false)
 
@@ -95,13 +104,83 @@ class MapFragment : BaseMainFragment(), OnMapReadyCallback, GoogleMap.OnMapClick
 
         mapViewModel.getSelf(userToken)
 
+        setEarnings()
+
+        mainDeliveryViewModel().userProfileLiveData.observe(
+            viewLifecycleOwner,
+            androidx.lifecycle.Observer {
+                loadProfileImage(it.photo)
+            })
+
+        mainDeliveryViewModel().photoProfileLiveData.observe(
+            viewLifecycleOwner,
+            androidx.lifecycle.Observer {
+                loadProfileImage(it.imageUrl)
+            })
+
+        mapViewModel.pickUpImageUrl = ""
+        mainDeliveryViewModel().photoPackageLiveData.observe(
+            viewLifecycleOwner,
+            androidx.lifecycle.Observer {
+                mapViewModel.pickUpImageUrl = it.imageUrl
+                binding.navigatePackageImage.visibility = View.GONE
+            })
+
         binding.travelModeActiveId = 0
 
         return binding.root
     }
 
+    private fun setEarnings() {
+        mainDeliveryViewModel().deliveryListLiveData.observe(
+            viewLifecycleOwner,
+            androidx.lifecycle.Observer {
+                val result = it.sumByDouble { la -> la.price }
+                binding.earningsButton.text = String.format("%.1f MKD", result)
+            })
+
+        mainDeliveryViewModel().getDeliveryList()
+
+        binding.earningsButton.setOnClickListener {
+            (requireActivity() as MainActivity).openMenuFragment(
+                MenuMyDeliveriesFragment::class.java,
+                FragmentTags.MENU_PAYMENT_TYPE
+            )
+        }
+    }
+
+    private fun loadFromPreference() {
+        val userProf = PreferenceUtils.getUserParsed(requireContext())
+        userProf?.let {
+
+            if (it.photo.isNotBlank()) {
+                loadProfileImage(it.photo)
+            }
+        }
+    }
+
+    private fun loadProfileImage(imageUrl: String) {
+        if (imageUrl.isBlank()) return
+
+        Glide.with(this).load(imageUrl).placeholder(R.drawable.ic_user_profile)
+            .apply(RequestOptions.circleCropTransform().override(0, 350))
+            .into(binding.imageViewProfileDrawer)
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+
+        val width = 700
+        val height = 900
+
+        if (requestCode == MediaManager.REQUEST_IMAGE_CAPTURE) {
+            MediaManager.getBitmap(
+                width.toFloat(), height.toFloat()
+            )?.apply {
+                uploadBitmap(this)
+            }
+        }
+
         if (requestCode == AUTOCOMPLETE_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 data?.let {
@@ -123,6 +202,29 @@ class MapFragment : BaseMainFragment(), OnMapReadyCallback, GoogleMap.OnMapClick
                 }
             }
         }
+    }
+
+    fun uploadBitmap(bitmap: Bitmap) {
+
+        val stream = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream)
+        var byteArray = stream.toByteArray()
+
+        val fileRequest = RequestBody.create(
+            MediaType.parse("image/*"),
+            byteArray
+        )
+
+        val body = MultipartBody.Part.createFormData(
+            "media",
+            "${System.currentTimeMillis()}.jpg",
+            fileRequest
+        );
+
+        mainDeliveryViewModel().uploadPhotoForPackage(body)
+
+        stream.flush()
+        stream.close()
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
@@ -164,17 +266,46 @@ class MapFragment : BaseMainFragment(), OnMapReadyCallback, GoogleMap.OnMapClick
     }
 
     override fun onProviderEnabled(p0: String?) {
+        //   DialogUtils.showSuccessMessage(requireActivity(), "Provider enabled")
     }
 
     override fun onProviderDisabled(p0: String?) {
     }
 
-    override fun onOriginDestinationReady(origin: LatLng, destination: LatLng) {
+    override fun onOriginDestinationReady(deliveryPaid: DeliveryPaid) {
         binding.isShowMapRoute = true
         binding.isConfirmDropOff = false
+        setPinText(
+            deliveryPaid.delivery.originAddress ?: "",
+            deliveryPaid.delivery.destinationAddress ?: ""
+        )
         markerPoints.clear()
-        addMarker(origin)
-        addMarker(destination)
+        addMarker(getOrigin(deliveryPaid.delivery))
+        addMarker(getDestination(deliveryPaid.delivery))
+        this.delivery = deliveryPaid.delivery
+
+        binding.navigateButton.setOnClickListener {
+            LocationServicesKiimo.openMapsDirectionsActivity(
+                requireContext()
+                , deliveryPaid.delivery.destination?.lat!!
+                , deliveryPaid.delivery.destination?.lng!!
+                , travelMode = getTravelModeMaps()
+            )
+        }
+
+        binding.navigatePackageImage.setOnClickListener {
+            MediaManager.getDispatchTakePictureIntent(this)
+        }
+    }
+
+    fun getTravelModeMaps(): String {
+        return when (binding.travelModeActiveId) {
+            0 -> LocationServicesKiimo.TravelModes.walking
+            1 -> LocationServicesKiimo.TravelModes.bicycle
+            2 -> LocationServicesKiimo.TravelModes.scooter
+            3 -> LocationServicesKiimo.TravelModes.drive
+            else -> LocationServicesKiimo.TravelModes.drive
+        }
     }
 
     override fun acceptDelivery(deliveryId: String) {
@@ -182,9 +313,9 @@ class MapFragment : BaseMainFragment(), OnMapReadyCallback, GoogleMap.OnMapClick
     }
 
     override fun onOriginReady(
-        origin: LatLng,
-        originAddress: String,
-        destinationAddress: String
+            origin: LatLng,
+            originAddress: String,
+            destinationAddress: String
     ) {
         addMarker(origin)
         setPinText(originAddress, destinationAddress)
@@ -216,6 +347,10 @@ class MapFragment : BaseMainFragment(), OnMapReadyCallback, GoogleMap.OnMapClick
         }
         markers.clear()
         googleMap?.clear()
+    }
+
+    override fun onEarningReady(value: Float) {
+        mainDeliveryViewModel().getDeliveryList()
     }
 
     private fun setListeners() {
@@ -273,13 +408,20 @@ class MapFragment : BaseMainFragment(), OnMapReadyCallback, GoogleMap.OnMapClick
         }
 
         binding.myLocationImageView.setOnClickListener {
-            if (myLocation != null) {
-
-                val cameraUpdate = CameraUpdateFactory.newLatLngZoom(myLocation, 15f)
-                googleMap?.animateCamera(cameraUpdate)
+            if (hasLocationPermission()) {
+                LocationServicesKiimo.getUserDeviceLocation(
+                    requireContext(),
+                    ::onSucesssGetLocation
+                )
+            } else {
+                requestAccessFineLocationPermission()
             }
         }
         (activity as MainActivity).setOnOriginDestinationReady(this)
+    }
+
+   private fun onSucesssGetLocation(location: Location) {
+        onLocationChanged(location)
     }
 
     private fun sendRequest() {
@@ -336,7 +478,9 @@ class MapFragment : BaseMainFragment(), OnMapReadyCallback, GoogleMap.OnMapClick
         }
     }
 
-    private fun bitmapDescriptorFromVector(context: Context, @DrawableRes vectorDrawableResourceId: Int): BitmapDescriptor? {
+    private fun bitmapDescriptorFromVector(
+            context: Context,
+            @DrawableRes vectorDrawableResourceId: Int): BitmapDescriptor? {
         val vectorDrawable = ContextCompat.getDrawable(context, vectorDrawableResourceId)
         vectorDrawable?.setBounds(
             0,
@@ -398,8 +542,8 @@ class MapFragment : BaseMainFragment(), OnMapReadyCallback, GoogleMap.OnMapClick
                 val locationManager = activity.getSystemService(LOCATION_SERVICE) as LocationManager
                 locationManager.requestLocationUpdates(
                     LocationManager.GPS_PROVIDER,
-                    3000L,
-                    5f,
+                    5000L,
+                    10f,
                     this
                 )
 
@@ -431,17 +575,25 @@ class MapFragment : BaseMainFragment(), OnMapReadyCallback, GoogleMap.OnMapClick
 
             parseData(it)
         }
-        mapViewModel.exception.observe(viewLifecycleOwner) {
-            it?.apply {
-                Toast.makeText(activity, this.localizedMessage, Toast.LENGTH_SHORT).show()
+        mapViewModel.exception.observe(viewLifecycleOwner) { throwable ->
+            throwable?.apply {
+                Crashlytics.logException(this)
+                // Toast.makeText(activity, this.localizedMessage, Toast.LENGTH_SHORT).show()
             }
         }
-        mapViewModel.selfLiveData.observe(viewLifecycleOwner) {
-            binding.isOnline = it?.userStatus?.online == true
-//            it?.userStatus?.deliveryTypeId?.let {
-//                onDeliveryTypeLoaded(it)
-//            }
-            getMainActivity()!!.viewModel.isValidDeliverer()
+        mapViewModel.selfLiveData.observe(viewLifecycleOwner) { self ->
+            binding.isOnline = self?.userStatus?.online == true
+
+            if (self?.userStatus?.deliveryTypeId == null) {
+                mainDeliveryViewModel().putDeliveryType()
+                onDeliveryTypeLoaded(DeliveryTypeID.FOOT)
+            }
+
+            self?.userStatus?.deliveryTypeId?.let {
+                onDeliveryTypeLoaded(it)
+            }
+
+            mainDeliveryViewModel().isValidDeliverer()
         }
 
 
@@ -581,6 +733,20 @@ class MapFragment : BaseMainFragment(), OnMapReadyCallback, GoogleMap.OnMapClick
                 binding.layoutPin.dropOffText = leg.endAddress ?: ""
             }
         }
+    }
+
+    private fun getOrigin(delivery: Delivery?): LatLng {
+        val lat = delivery?.origin?.lat
+        val lng = delivery?.origin?.lng
+
+        return LatLng(lat!!, lng!!)
+    }
+
+    private fun getDestination(delivery: Delivery?): LatLng {
+        val lat = delivery?.destination?.lat
+        val lng = delivery?.destination?.lng
+
+        return LatLng(lat!!, lng!!)
     }
 
     private fun setPinText(originAddress: String, destinationAddress: String) {

@@ -38,11 +38,12 @@ class MainActivity : KiimoMainNavigationActivity(),
     interface MainActivityInterface {
         fun acceptDelivery(deliveryId: String)
         fun onOriginReady(origin: LatLng, originAddress: String, destinationAddress: String)
-        fun onOriginDestinationReady(origin: LatLng, destination: LatLng)
+        fun onOriginDestinationReady(deliveryPaid: DeliveryPaid)
         fun onDeliveryReady(delivery: Delivery?)
         fun validateCode(code: String)
         fun onDropOff(signature: String)
         fun deliveryFinished()
+        fun onEarningReady(value: Float)
     }
 
     fun setOnOriginDestinationReady(mainActivityInterface: MainActivityInterface) {
@@ -87,6 +88,7 @@ class MainActivity : KiimoMainNavigationActivity(),
 
     override fun onPriceBreakdownDialogEnd() {
         mainActivityInterface.deliveryFinished()
+        mainActivityInterface.onEarningReady(0f)
     }
 
     @SuppressLint("SetTextI18n")
@@ -95,7 +97,6 @@ class MainActivity : KiimoMainNavigationActivity(),
 
         if (savedInstanceState == null) replaceFragment(MapFragment.newInstance())
         putDeliveryType()
-
 
         nav_view?.getHeaderView(0)?.buttonChangeAccountTypeUser?.setOnClickListener {
             PreferenceUtils.saveAccountType(this, true)
@@ -107,6 +108,14 @@ class MainActivity : KiimoMainNavigationActivity(),
             getString(R.string.i_want_to_send_button)
 
         Handler().postDelayed(Runnable { handlePayload(intent) }, 1000)
+
+        viewModel.signatureLiveData.observe(
+            this, Observer {
+                val signatureDefault =
+                    "https://img.deliverycoin.net/signatures/2019/11/5508abb2-0756-4827-ace7-95131b2b4986.png"
+                onDropOff(it.imageUrl)
+            }
+        )
     }
 
     override fun onStart() {
@@ -114,14 +123,6 @@ class MainActivity : KiimoMainNavigationActivity(),
         LocalBroadcastManager.getInstance(this).registerReceiver(
             (messageReceiver),
             IntentFilter(AppConstants.FIREBASE_BROADCAST)
-        )
-
-
-        viewModel.signatureLiveData.observe(
-            this, Observer {
-                val signatureDefault = "https://img.deliverycoin.net/signatures/2019/11/5508abb2-0756-4827-ace7-95131b2b4986.png"
-                onDropOff(it.imageUrl)
-            }
         )
     }
 
@@ -177,6 +178,11 @@ class MainActivity : KiimoMainNavigationActivity(),
     }
 
     override fun handlePayload(notIntent: Intent) {
+
+        if (PreferenceUtils.getRemoteCache(this)) {
+            return
+        }
+
         val payloadString = notIntent.extras?.getString(AppConstants.FIREBASE_PAYLOAD)
         if (payloadString.isNullOrEmpty()) return
         val payload = Gson().fromJson(payloadString, FirebasePayload::class.java)
@@ -185,8 +191,7 @@ class MainActivity : KiimoMainNavigationActivity(),
             val deliveryPaid = Gson().fromJson(payload.delivery, DeliveryPaid::class.java)
             if (isDeliveryValidData(deliveryPaid.delivery)) {
                 mainActivityInterface.onOriginDestinationReady(
-                    getOrigin(deliveryPaid.delivery),
-                    getDestination(deliveryPaid.delivery)
+                    deliveryPaid
                 )
             }
         } else if ("DELIVERY_REQUEST" == payload.type) {

@@ -12,8 +12,8 @@
     <de.hdodenhof.circleimageview.CircleImageView
             android:layout_marginTop="@dimen/margin_medium"
             android:id="@+id/imageView"
-            android:layout_width="55dp"
-            android:layout_height="55dp"
+            android:layout_width="@dimen/sizeImageDrawer"
+            android:layout_height="@dimen/sizeImageDrawer"
             android:layout_gravity="center_horizontal"
             android:contentDescription="@string/nav_header_desc"
             android:scaleType="centerCrop"

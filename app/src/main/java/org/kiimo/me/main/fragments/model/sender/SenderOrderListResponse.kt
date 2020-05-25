@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 
 data class SenderOrderListResponse(
     @SerializedName("carrierDelivery")
-    val carrierDelivery: CarrierDelivery = CarrierDelivery(),
+    val carrierDelivery: CarrierDelivery? = CarrierDelivery(),
     @SerializedName("createdAt")
     val createdAt: String = "",
     @SerializedName("deliveryId")

@@ -27,7 +27,7 @@ class WelcomeActivity : BaseRegistrationServicesActivity() {
         viewModel.userLoginLiveData.observe(this, Observer {
 
             if (it.status == 200) {
-                if (it.existUser) {
+                if (it.existUser && !it.userID.isNullOrBlank()) {
 
                     val isSender = PreferenceUtils.getAccountTypeIsSender(this)
 
@@ -58,7 +58,7 @@ class WelcomeActivity : BaseRegistrationServicesActivity() {
     }
 
     fun startInital() {
-        startActivity(Intent(this, RegisterProfileDeliverInformationActivity::class.java).apply {
+        startActivity(Intent(this, InitialActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK and Intent.FLAG_ACTIVITY_CLEAR_TASK
         })
     }

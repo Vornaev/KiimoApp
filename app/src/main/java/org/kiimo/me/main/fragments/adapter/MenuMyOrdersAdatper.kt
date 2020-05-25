@@ -19,7 +19,7 @@ class MenuMyOrdersAdatper : RecyclerView.Adapter<MenuMyOrdersAdatper.MyOrdersVie
         val inflater = LayoutInflater.from(parent.context)
         // val inflate = inflater.inflate(R.layout.view_holder_my_delivers, parent, false)
 
-        val itemBinding = ViewHolderMyDeliversBinding.inflate(inflater)
+        val itemBinding = ViewHolderMyDeliversBinding.inflate(inflater, parent, false)
 
         return MyOrdersViewHolder(itemBinding)
     }
@@ -59,7 +59,7 @@ class MenuMyOrdersAdatper : RecyclerView.Adapter<MenuMyOrdersAdatper.MyOrdersVie
                 )
 
                 viewHolderTranTypeImg.setImageResource(
-                    when (item.carrierDelivery.deliveryTypeId) {
+                    when (item.carrierDelivery?.deliveryTypeId) {
                         DeliveryTypeID.FOOT -> R.drawable.ic_foot
                         DeliveryTypeID.CAR -> R.drawable.ic_car
                         DeliveryTypeID.BIKE -> R.drawable.ic_bicycle

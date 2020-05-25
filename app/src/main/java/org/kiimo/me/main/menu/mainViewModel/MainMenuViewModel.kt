@@ -7,17 +7,20 @@ import okhttp3.MultipartBody
 import org.kiimo.me.main.fragments.model.deliveries.DeliveryCarrierItem
 import org.kiimo.me.main.fragments.model.sender.SenderOrderListResponse
 import org.kiimo.me.main.menu.model.CreditCardModel
+import org.kiimo.me.main.menu.model.CreditCardSaveRequest
 import org.kiimo.me.main.menu.model.UserProfileInformationResponse
 import org.kiimo.me.main.sender.model.request.CreateDeliveryRequest
 import org.kiimo.me.main.sender.model.request.Packages
 import org.kiimo.me.main.sender.model.request.PayRequest
 import org.kiimo.me.main.sender.model.request.pay.PayResponse
+import org.kiimo.me.main.sender.model.request.rate.RateDeliveryRequest
 import org.kiimo.me.main.sender.model.response.SenderCreateDeliveryResponse
 import org.kiimo.me.models.*
 import org.kiimo.me.models.delivery.*
 import org.kiimo.me.models.payment.PreferredPayResponse
 import org.kiimo.me.models.payment.PreferredPaymentUser
 import org.kiimo.me.register.model.IsValidDelivererResponse
+import org.kiimo.me.register.model.UserProfileFragmentUpdateRequest
 import org.kiimo.me.register.model.UserProfileInformationRequest
 import org.kiimo.me.register.model.UserRegisterResponse
 import kotlin.math.roundToInt
@@ -39,8 +42,15 @@ class MainMenuViewModel(private var repository: MainViewModelRepository) : ViewM
     val photoPackageLiveData = MutableLiveData<UploadImageResponse>()
     val photoProfileLiveData = MutableLiveData<UploadImageResponse>()
     val signatureLiveData = MutableLiveData<UploadImageResponse>()
+    val creditCardLiveData = MutableLiveData<BaseDeliveryResponse>()
+    val cardExceptionLiveData = MutableLiveData<Throwable>()
+
+    val userProfileFieldsUpdateLiveData = MutableLiveData<UserRegisterResponse>()
 
     val preferredPayLiveData = MutableLiveData<PreferredPayResponse>()
+
+
+    var isLocationSenderFromButton = false
 
     fun setPackageSize(packageID: String) {
         senderProperties.packageDescritpion.packageSizeId = packageID
@@ -68,6 +78,10 @@ class MainMenuViewModel(private var repository: MainViewModelRepository) : ViewM
 
     fun putLocation(locationModel: LocationModel) {
         repository.putLocation(locationModel)
+    }
+
+    fun rateUserForDelivery(rateDeliveryRequest: RateDeliveryRequest) {
+        repository.rateUserForDelivery(rateDeliveryRequest)
     }
 
 
@@ -137,17 +151,47 @@ class MainMenuViewModel(private var repository: MainViewModelRepository) : ViewM
         repository.uploadMultiFormDataImage(Type.Users, body, photoProfileLiveData)
     }
 
-    fun updateUserProfilePhoto(photoUrl :String){
-        repository.updateUserPhoto(photoUrl)
+    fun updateUserProfilePhoto(photoUrl: String) {
+        repository.updateUserPhoto(photoUrl, userProfileFieldsUpdateLiveData)
     }
 
+    fun updateUserNameProfile(updateRequest: UserProfileFragmentUpdateRequest) {
+        repository.updateUserFragmentFields(updateRequest, userProfileFieldsUpdateLiveData)
+    }
 
-    fun uploadSignaturePhoto(body: MultipartBody.Part){
+    fun saveCreditCard(creditCardSaveRequest: CreditCardSaveRequest) {
+        repository.saveCreditCard(creditCardSaveRequest, creditCardLiveData, cardExceptionLiveData)
+    }
+
+    fun saveCreditCardFields(creditCardSaveRequest: CreditCardSaveRequest){
+        repository.saveCreditCardFields(creditCardSaveRequest, creditCardLiveData, cardExceptionLiveData)
+    }
+
+    fun saveCreditCardFieldsMutiplart(creditCardSaveRequest: CreditCardSaveRequest){
+        repository.saveCreditCardFieldsMultipart(creditCardSaveRequest, creditCardLiveData, cardExceptionLiveData)
+    }
+
+    fun updateCreditCardData(creditCardSaveRequest: CreditCardSaveRequest) {
+        repository.updateCreditCard(
+            creditCardSaveRequest,
+            creditCardLiveData,
+            cardExceptionLiveData
+        )
+    }
+
+    fun uploadSignaturePhoto(body: MultipartBody.Part) {
         repository.uploadMultiFormDataImage(Type.Signatures, body, signatureLiveData)
     }
 
 
+    val personalIDLveData = MutableLiveData<UploadImageResponse>()
+    fun uploadPersonalIDPhoto(body: MultipartBody.Part) {
+        repository.uploadMultiFormDataImage(Type.PersionalID, body, personalIDLveData)
+    }
+
+
     class SenderProperties {
+        var isLocationFromButton = false
         var isPickUpInteraction = true
         var pickUpAddressPoint: AddressPoint = AddressPoint()
         var destinationAddressPoint: AddressPoint = AddressPoint()
@@ -168,7 +212,7 @@ class MainMenuViewModel(private var repository: MainViewModelRepository) : ViewM
         }
 
         fun hasPickUpAddress(): Boolean {
-            return this.pickUpAddressPoint.locationModel != null
+            return this.pickUpAddressPoint.locationModel != null && this.pickUpAddressPoint.address.isNotBlank()
         }
 
         fun distanceToRoute(): Float {
@@ -213,8 +257,8 @@ class MainMenuViewModel(private var repository: MainViewModelRepository) : ViewM
     }
 
     data class AddressPoint(
-        var address: String = "",
-        var locationModel: LocationModel? = null
+            var address: String = "",
+            var locationModel: LocationModel? = null
     )
 }
 

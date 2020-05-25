@@ -9,5 +9,5 @@ data class Carrier(
     @SerializedName("lastName")
     val lastName: String = "",
     @SerializedName("photo")
-    val photo: String = ""
+    var photo: String = ""
 )

@@ -37,7 +37,7 @@ class RegisterValidationCodeActivity : BaseRegistrationServicesActivity() {
         )
 
         viewModel.userLoginLiveData.observe(this, Observer {
-            if (it.existUser) {
+            if (it.existUser && !it.userID.isNullOrBlank()) {
                 if (PreferenceUtils.getAccountTypeIsSender(this)) {
                     startActivity(Intent(this, SenderKiimoActivity::class.java))
                 } else {

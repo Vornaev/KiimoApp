@@ -13,6 +13,7 @@
             android:required="false" />
 
     <application
+            android:usesCleartextTraffic="true"
             android:name=".app.App"
             android:allowBackup="false"
             android:icon="@drawable/kiimo_logo"
@@ -21,7 +22,9 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme"
             tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".main.sender.SenderKiimoActivity"></activity>
+        <activity
+                android:name=".main.sender.SenderKiimoActivity" android:launchMode="standard"
+                android:windowSoftInputMode="adjustResize"></activity>
 
         <meta-data
                 android:name="com.google.firebase.messaging.default_notification_icon"

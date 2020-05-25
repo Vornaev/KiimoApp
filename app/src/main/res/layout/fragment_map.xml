@@ -28,10 +28,10 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-        <ImageView
+        <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/imageViewProfileDrawer"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
+                android:layout_width="@dimen/sizeImageDrawer"
+                android:layout_height="@dimen/sizeImageDrawer"
                 android:layout_marginStart="@dimen/margin_medium_large"
                 android:layout_marginTop="@dimen/margin_medium_large"
                 android:elevation="10dp"
@@ -54,6 +54,9 @@
                 android:id="@+id/pin_layout_constraint_layout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:background="@color/colorWhite"
+                android:elevation="4dp"
+                android:padding="12dp"
                 android:visibility="@{isShowMapRoute ? View.VISIBLE : View.GONE}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -64,17 +67,54 @@
                     layout="@layout/layout_pin"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/margin_medium"
-                    app:layout_constraintBottom_toTopOf="@id/confirm_button"
+                    android:layout_marginTop="@dimen/margin_medium"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
+
+            <Button
+                    android:id="@+id/navigate_button"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_medium"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="@dimen/margin_medium"
+                    android:layout_marginBottom="@dimen/margin_medium"
+                    android:background="@drawable/corner_white_background_black_border"
+                    android:paddingStart="@dimen/margin_medium"
+                    android:paddingEnd="@dimen/margin_medium"
+                    android:text="Navigate"
+                    android:textAllCaps="false"
+                    android:textColor="@android:color/black"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/layout_pin" />
+
+            <Button
+                    android:id="@+id/navigate_package_image"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_medium"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="@dimen/margin_medium"
+                    android:layout_marginBottom="@dimen/margin_medium"
+                    android:background="@drawable/corner_white_background_black_border"
+                    android:paddingStart="@dimen/margin_medium"
+                    android:paddingEnd="@dimen/margin_medium"
+                    android:text="Package Image"
+                    android:textAllCaps="false"
+                    android:textColor="@android:color/black"
+                    android:visibility="@{isConfirmDropOff ? View.GONE : View.VISIBLE}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/navigate_button" />
 
             <Button
                     android:id="@+id/confirm_button"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin_medium"
+                    android:layout_marginTop="16dp"
                     android:layout_marginEnd="@dimen/margin_medium"
                     android:layout_marginBottom="@dimen/margin_medium"
                     android:background="@drawable/button_cornered_background_orange"
@@ -86,6 +126,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/navigate_package_image"
                     tools:text="Confirm pick-up" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -160,13 +201,34 @@
 
         <ImageView
                 android:id="@+id/my_location_image_view"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
+                android:layout_width="60dp"
+                android:scaleType="centerCrop"
+                android:layout_height="60dp"
+                android:src="@drawable/ic_icon_center"
                 android:layout_marginEnd="@dimen/margin_small"
-                android:layout_marginBottom="@dimen/margin_large"
+                android:layout_marginBottom="14dp"
                 android:contentDescription="@string/my_location_content_description"
                 app:layout_constraintBottom_toTopOf="@id/pin_layout_constraint_layout"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+        <Button
+                android:id="@+id/earningsButton"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/button_cornered_background_orange"
+                android:backgroundTint="@color/colorWhite"
+                android:elevation="2dp"
+                android:fontFamily="@font/roboto_bold"
+                android:paddingBottom="12dp"
+                android:paddingStart="16dp"
+                android:paddingTop="12dp"
+                android:paddingEnd="16dp"
+                android:text="0.0 MKD"
+                android:textColor="@color/colorPrimary"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:srcCompat="@drawable/ic_address" />
+                app:layout_constraintStart_toStartOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

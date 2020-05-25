@@ -1,12 +1,15 @@
 package org.kiimo.me.main.menu
 
 import android.content.Intent
+import android.graphics.Bitmap
 import android.os.Bundle
+import androidx.core.graphics.BitmapCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.bumptech.glide.request.RequestOptions
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -28,6 +31,7 @@ import org.kiimo.me.main.menu.di.DaggerMainMenuComponent
 import org.kiimo.me.main.menu.di.MainManiActivityModule
 import org.kiimo.me.main.menu.mainViewModel.MainMenuViewModel
 import org.kiimo.me.main.sender.fragment.SenderMapFragment
+import org.kiimo.me.models.Status
 import org.kiimo.me.models.payment.PreferredPaymentUser
 import org.kiimo.me.register.WelcomeActivity
 import org.kiimo.me.services.MessageEvent
@@ -57,7 +61,9 @@ open class KiimoMainNavigationActivity : BaseActivity() {
 
         viewModel.getUser()
         viewModel.putDeviceToken()
-        viewModel.savePreferredPaymentType(PreferredPaymentUser())
+
+        val type = PreferenceUtils.getPaymentTypeForUser(this)
+        viewModel.savePreferredPaymentType(PreferredPaymentUser(if(type == 0) "CASH" else "CARD"))
 
     }
 
@@ -65,7 +71,7 @@ open class KiimoMainNavigationActivity : BaseActivity() {
 
 
     protected fun putDeliveryType() {
-        viewModel.putDeliveryType()
+       // viewModel.putDeliveryType()
     }
 
     fun observeLiveData() {
@@ -80,22 +86,39 @@ open class KiimoMainNavigationActivity : BaseActivity() {
                     if (it.photo.isNotEmpty()) {
 
                         Glide.with(this).load(it.photo)
-                            .apply(
-                                RequestOptions().override(
-                                    300,
-                                    0
-                                ).skipMemoryCache(true).diskCacheStrategy(
-                                    DiskCacheStrategy.NONE
-                                )
-                            )
+                            .apply(RequestOptions.bitmapTransform(CircleCrop()).override(0, 400))
                             .into(nav_view?.getHeaderView(0)?.imageView!!)
+
+                        Glide.with(this).load(it.photo)
+                            .apply(RequestOptions.bitmapTransform(CircleCrop()).override(0, 400))
+                            .into(imageViewProfileDrawer)
 
                     }
                 }
             }
         )
+
+        viewModel.photoProfileLiveData.observe(this, Observer {
+            loadImage(it.imageUrl)
+            PreferenceUtils.saveUserNewPhoto(this, it.imageUrl)
+        })
+
+        viewModel.userProfileFieldsUpdateLiveData.observe(this,
+            Observer {
+                viewModel.getUser()
+            })
     }
 
+    private fun loadImage(photoUrl: String) {
+
+        Glide.with(this).load(photoUrl)
+            .apply(RequestOptions.bitmapTransform(CircleCrop()).override(0, 400))
+            .into(nav_view?.getHeaderView(0)?.imageView!!)
+
+        Glide.with(this).load(photoUrl)
+            .apply(RequestOptions.bitmapTransform(CircleCrop()).override(0, 400))
+            .into(imageViewProfileDrawer)
+    }
 
     protected fun injectComponent() {
         val component = DaggerMainMenuComponent.builder().appComponent(getAppComponent())
@@ -193,6 +216,7 @@ open class KiimoMainNavigationActivity : BaseActivity() {
 
     fun logout() {
         PreferenceUtils.logout(this)
+        viewModel.putStatus(Status(false))
         val intent = Intent(this, WelcomeActivity::class.java)
         startActivity(intent)
         finish()

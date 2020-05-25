@@ -14,7 +14,7 @@ import org.kiimo.me.databinding.DialogDeliveryDetailsBinding
 import org.kiimo.me.models.Delivery
 import org.kiimo.me.util.StringUtils
 
-class DeliveryDetailsDialog : DialogFragment() {
+class DeliveryDetailsDialog : BaseKiimoDialog() {
 
     private lateinit var binding: DialogDeliveryDetailsBinding
 
@@ -59,9 +59,10 @@ class DeliveryDetailsDialog : DialogFragment() {
     private fun setDeliveryImage() {
         val image = getDeliveryImage()
         if (image.isEmpty()) {
-            binding.deliveryImageView.visibility = View.GONE
+//            binding.deliveryImageView.visibility = View.GONE
         } else {
-            Glide.with(this).load(getDeliveryImage()).into(binding.deliveryImageView)
+            Glide.with(this).load(image).placeholder(R.drawable.no_image_placeholder).override(500, 0).centerCrop()
+                .into(binding.deliveryImageView)
         }
     }
 
@@ -85,7 +86,9 @@ class DeliveryDetailsDialog : DialogFragment() {
         delivery?.packages?.let {
             for (pack in it) {
                 pack?.description?.let { description ->
-                    return description
+
+                    if (description.isBlank()) return "No description available"
+                    else return description
                 }
             }
         }
