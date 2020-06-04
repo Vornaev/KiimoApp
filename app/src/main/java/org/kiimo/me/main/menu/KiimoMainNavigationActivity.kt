@@ -3,6 +3,7 @@ package org.kiimo.me.main.menu
 import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
+import android.os.Handler
 import androidx.core.graphics.BitmapCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
@@ -60,7 +61,12 @@ open class KiimoMainNavigationActivity : BaseActivity() {
         observeLiveData()
 
         viewModel.getUser()
-        viewModel.putDeviceToken()
+        Handler().postDelayed(
+            Runnable {
+                viewModel.putDeviceToken()
+            },4000
+        )
+
 
         val type = PreferenceUtils.getPaymentTypeForUser(this)
         viewModel.savePreferredPaymentType(PreferredPaymentUser(if(type == 0) "CASH" else "CARD"))

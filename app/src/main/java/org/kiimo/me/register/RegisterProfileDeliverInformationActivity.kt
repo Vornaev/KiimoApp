@@ -51,6 +51,10 @@ class RegisterProfileDeliverInformationActivity : RegisterProfileSenderInformati
         )
 
         viewModel.activateUserLiveData.observe(this, Observer {
+            viewModel.userLogin()
+        })
+
+        viewModel.userLoginLiveData.observe(this, Observer {
             navigateToMain()
         })
     }

@@ -134,8 +134,12 @@ open class RegisterProfileSenderInformationActivity : BaseRegistrationServicesAc
 
         viewModel.activateUserLiveData.observe(this,
             Observer {
-                startActivity(Intent(this, SenderKiimoActivity::class.java))
+               viewModel.userLogin()
             })
+
+        viewModel.userLoginLiveData.observe(this, Observer {
+            startActivity(Intent(this, SenderKiimoActivity::class.java))
+        })
     }
 
     private fun loadPhoneNumber() {
