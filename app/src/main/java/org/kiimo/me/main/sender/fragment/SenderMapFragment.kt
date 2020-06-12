@@ -209,14 +209,14 @@ class SenderMapFragment : BaseMainFragment() {
         )?.countryCode
     }
 
-    private fun openLocationSearchRequest() {
+    private fun openLocationSearchRequest(query:String= "") {
         // Start the autocomplete intent.
         val intent = Autocomplete.IntentBuilder(
             AutocompleteActivityMode.FULLSCREEN, listOf(
                 Place.Field.ID, Place.Field.NAME, Place.Field.ADDRESS,
                 Place.Field.LAT_LNG
             )
-        ).setTypeFilter(TypeFilter.ADDRESS).setCountry(myCountrryCode()).build(activity!!)
+        ).setInitialQuery(query).setCountry(myCountrryCode()).build(activity!!)
 
         startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE)
     }

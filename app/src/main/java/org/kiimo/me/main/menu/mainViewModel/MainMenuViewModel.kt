@@ -3,6 +3,7 @@ package org.kiimo.me.main.menu.mainViewModel
 import android.location.Location
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.google.gson.JsonElement
 import okhttp3.MultipartBody
 import org.kiimo.me.main.fragments.model.deliveries.DeliveryCarrierItem
 import org.kiimo.me.main.fragments.model.sender.SenderOrderListResponse
@@ -44,6 +45,7 @@ class MainMenuViewModel(private var repository: MainViewModelRepository) : ViewM
     val signatureLiveData = MutableLiveData<UploadImageResponse>()
     val creditCardLiveData = MutableLiveData<BaseDeliveryResponse>()
     val cardExceptionLiveData = MutableLiveData<Throwable>()
+    val removeDevToken  = MutableLiveData<JsonElement>()
 
     val userProfileFieldsUpdateLiveData = MutableLiveData<UserRegisterResponse>()
 
@@ -62,6 +64,10 @@ class MainMenuViewModel(private var repository: MainViewModelRepository) : ViewM
 
     fun putDeviceToken() {
         repository.saveUserDeviceToken()
+    }
+
+    fun removeDeviceToken(){
+        repository.removeDeviceToken(removeDevToken)
     }
 
     fun getDirectionsRoute(url: String) {

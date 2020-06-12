@@ -3,6 +3,8 @@ package org.kiimo.me.main.menu.mainViewModel
 import android.app.Activity
 import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
+import com.google.gson.JsonElement
+import com.google.gson.JsonObject
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -180,6 +182,24 @@ class MainViewModelRepository(
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io()).subscribe(
                     {
+                        Timber.log(1, "success")
+                    },
+                    {
+                        viewFeatures.handleApiError(it)
+                    })
+        )
+    }
+
+    fun removeDeviceToken(removeDevToken: MutableLiveData<JsonElement>) {
+        disposableContainer.add(
+            deliveryClient.removeDeviceToken(
+                token = viewFeatures.getUserToken(),
+                deviceToken = viewFeatures.getFcmToken()
+            )
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io()).subscribe(
+                    {
+                        removeDevToken.postValue(it.body())
                         Timber.log(1, "success")
                     },
                     {
@@ -536,4 +556,5 @@ class MainViewModelRepository(
                 )
         )
     }
+
 }

@@ -45,16 +45,7 @@ class KiimoFirebaseMessagingService : FirebaseMessagingService() {
      */
     override fun onNewToken(token: String) {
         Timber.d("Refreshed token: $token")
-//        compositeDisposable.add(
-//            kiimoAppClient.putDeviceToken(
-//                "application/json",
-//                PreferenceUtils.getUserToken(applicationContext),
-//                DeviceToken(token)
-//            )
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe()
-//        )
+       // PreferenceUtils.saveUseToken(applicationContext, token)
 
         // If you want to send messages to this application instance or
         // manage this apps subscriptions on the server side, send the
@@ -66,8 +57,7 @@ class KiimoFirebaseMessagingService : FirebaseMessagingService() {
         val intent = Intent(AppConstants.FIREBASE_BROADCAST)
         intent.putExtra(AppConstants.FIREBASE_PAYLOAD, remoteMessage.data["payload"])
 
-        Log.i("notification", remoteMessage.data["payload"])
-        Timber.i("notification data", remoteMessage.data["payload"])
+        Timber.tag("notification").i(remoteMessage.data["payload"])
         if (::localBroadcastManager.isInitialized) {
             localBroadcastManager.sendBroadcast(intent)
         }

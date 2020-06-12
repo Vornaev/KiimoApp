@@ -113,6 +113,13 @@ interface KiimoDeliverHttpClient {
             @Body deviceToken: DeviceToken
     ): Observable<Response<JsonElement>>
 
+
+    @PUT("api/self/remove-device-token")
+    fun removeDeviceToken(
+            @Header(AuthorizationHeader) token: String,
+            @Body deviceToken: DeviceToken
+    ): Observable<Response<JsonElement>>
+
     @PUT("api/self/status")
     fun putStatus(
             @Header(ContentTypeHeader) contentType: String,
@@ -207,7 +214,7 @@ interface KiimoDeliverHttpClient {
     @POST("api/card-create")
     fun saveCreditCard(
             @Header(AuthorizationHeader) token: String,
-            @Body cardSaveRequest: CreditCardSaveRequest):  Observable<Response<JsonElement>>
+            @Body cardSaveRequest: CreditCardSaveRequest): Observable<Response<JsonElement>>
 
     @FormUrlEncoded
     @POST("api/card-create")
@@ -226,13 +233,12 @@ interface KiimoDeliverHttpClient {
     fun saveCreditCardRequestBody(
             @Header(AuthorizationHeader) token: String,
             @Body requestBody: RequestBody
-    ):  Observable<Response<JsonElement>>
-
+    ): Observable<Response<JsonElement>>
 
 
     @POST("api/card-update")
     fun updateCreditCard(
             @Header(AuthorizationHeader) token: String,
-            @Body cardSaveRequest: CreditCardSaveRequest):  Observable<Response<JsonElement>>
+            @Body cardSaveRequest: CreditCardSaveRequest): Observable<Response<JsonElement>>
 
 }

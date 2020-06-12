@@ -51,7 +51,6 @@ class MenuPaymentTypeFragment : BaseMainFragment() {
             savedInstanceState: Bundle?
     ): View? {
 
-
         binding = FragmentMenuPaymentTypeBinding.inflate(inflater, container, false)
         return binding.root
     }

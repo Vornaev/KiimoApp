@@ -12,14 +12,22 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.bumptech.glide.request.RequestOptions
+import com.google.android.gms.tasks.Task
+import com.google.firebase.iid.FirebaseInstanceId
+import com.google.firebase.iid.InstanceIdResult
+import com.google.firebase.ktx.Firebase
+import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
+import io.reactivex.schedulers.Schedulers.io
 import kotlinx.android.synthetic.main.activity_kiimo_main_navigation.*
 import kotlinx.android.synthetic.main.activity_kiimo_main_navigation.view.*
 import kotlinx.android.synthetic.main.app_bar_kiimo_main_navigation.*
 import kotlinx.android.synthetic.main.layout_menu_item.view.*
 import kotlinx.android.synthetic.main.nav_header_kiimo_main_navigation.*
 import kotlinx.android.synthetic.main.nav_header_kiimo_main_navigation.view.*
+import kotlinx.coroutines.*
 import org.kiimo.me.R
 import org.kiimo.me.app.BaseActivity
 import org.kiimo.me.app.di.BaseViewFeatureModule
@@ -39,7 +47,10 @@ import org.kiimo.me.services.MessageEvent
 import org.kiimo.me.util.NetworkResponseStatus
 import org.kiimo.me.util.PreferenceUtils
 import org.kiimo.me.util.RxBus
+import java.lang.Runnable
+import java.util.*
 import javax.inject.Inject
+import kotlin.concurrent.thread
 
 open class KiimoMainNavigationActivity : BaseActivity() {
 
@@ -64,12 +75,12 @@ open class KiimoMainNavigationActivity : BaseActivity() {
         Handler().postDelayed(
             Runnable {
                 viewModel.putDeviceToken()
-            },4000
+            }, 4000
         )
 
 
         val type = PreferenceUtils.getPaymentTypeForUser(this)
-        viewModel.savePreferredPaymentType(PreferredPaymentUser(if(type == 0) "CASH" else "CARD"))
+        viewModel.savePreferredPaymentType(PreferredPaymentUser(if (type == 0) "CASH" else "CARD"))
 
     }
 
@@ -77,7 +88,7 @@ open class KiimoMainNavigationActivity : BaseActivity() {
 
 
     protected fun putDeliveryType() {
-       // viewModel.putDeliveryType()
+        // viewModel.putDeliveryType()
     }
 
     fun observeLiveData() {
@@ -219,13 +230,32 @@ open class KiimoMainNavigationActivity : BaseActivity() {
         }
     }
 
-
     fun logout() {
         PreferenceUtils.logout(this)
         viewModel.putStatus(Status(false))
+        MainScope().launch {
+            delay(1000)
+            navigateToStart()
+        }
+    }
+
+    private fun navigateToStart() {
         val intent = Intent(this, WelcomeActivity::class.java)
         startActivity(intent)
         finish()
+    }
+
+
+    private fun deleteDeviceToken() {
+        FirebaseInstanceId.getInstance().deleteInstanceId()
+        FirebaseInstanceId.getInstance().instanceId.addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                val token = task.result!!.token
+                MainScope().launch {
+                    PreferenceUtils.saveFirebaseToken(getViewContext(), token)
+                }
+            }
+        }
     }
 
     override fun onDestroy() {

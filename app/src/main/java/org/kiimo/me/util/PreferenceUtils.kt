@@ -123,7 +123,7 @@ object PreferenceUtils {
         getPreferences(context)[USER_PROFILE_KEY] = ""
         getPreferences(context)[USER_TOKEN] = ""
         getPreferences(context)[PASSWORD_KEY] = ""
-        getPreferences(context)[FIREBASE_TOKEN] = ""
+//        getPreferences(context)[FIREBASE_TOKEN] = ""
         getPreferences(context)[CARD_DETAILS] = ""
         getPreferences(context)[PAYMENT_TYPE] = 0
         getPreferences(context)[HAS_CARD_IN_BANK] = false
