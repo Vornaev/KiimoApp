@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Intent
 import android.location.Location
 import android.os.Bundle
-import android.provider.Settings
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -16,13 +15,11 @@ import com.bumptech.glide.request.RequestOptions
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.libraries.places.api.model.Place
-import com.google.android.libraries.places.api.model.TypeFilter
 import com.google.android.libraries.places.widget.Autocomplete
 import com.google.android.libraries.places.widget.AutocompleteActivity
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
 import io.reactivex.android.schedulers.AndroidSchedulers
 import org.kiimo.me.R
-import org.kiimo.me.app.BaseActivity
 import org.kiimo.me.app.BaseMainFragment
 import org.kiimo.me.databinding.FragmentSenderLayoutBinding
 import org.kiimo.me.main.fragments.MapFragment
@@ -34,7 +31,6 @@ import org.kiimo.me.main.sender.model.notifications.ConfirmPickUpNotification.Co
 import org.kiimo.me.main.sender.model.request.pay.PayResponse
 import org.kiimo.me.models.LocationModel
 import org.kiimo.me.services.LocationServicesKiimo
-import org.kiimo.me.util.DialogUtils
 import org.kiimo.me.util.PreferenceUtils
 import org.kiimo.me.util.RxBus
 import org.kiimo.me.util.StringUtils
@@ -116,7 +112,7 @@ class SenderMapFragment : BaseMainFragment() {
     private fun setListeners() {
 
         binding.layoutPin.pinPickUpConstraintLayout.setOnClickListener {
-            openLocationSearchRequest()
+            openLocationSearchRequest(viewModel.senderProperties.pickUpAddressPoint.address)
             isPickUpClicked = true
         }
 
@@ -127,7 +123,7 @@ class SenderMapFragment : BaseMainFragment() {
         }
 
         binding.layoutPin.pinDropOffConstraintLayout.setOnClickListener {
-            openLocationSearchRequest()
+            openLocationSearchRequest(viewModel.senderProperties.destinationAddressPoint.address)
             isPickUpClicked = false
         }
 
@@ -209,7 +205,7 @@ class SenderMapFragment : BaseMainFragment() {
         )?.countryCode
     }
 
-    private fun openLocationSearchRequest(query:String= "") {
+    private fun openLocationSearchRequest(query: String = "") {
         // Start the autocomplete intent.
         val intent = Autocomplete.IntentBuilder(
             AutocompleteActivityMode.FULLSCREEN, listOf(

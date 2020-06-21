@@ -234,7 +234,7 @@ open class KiimoMainNavigationActivity : BaseActivity() {
         PreferenceUtils.logout(this)
         viewModel.putStatus(Status(false))
         MainScope().launch {
-            delay(1000)
+            delay(2000)
             navigateToStart()
         }
     }
