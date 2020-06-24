@@ -15,7 +15,6 @@ import kotlinx.android.synthetic.main.fragment_sender_create_item_details.*
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
-import org.kiimo.me.R
 import org.kiimo.me.app.BaseMainFragment
 import org.kiimo.me.databinding.FragmentSenderCreateItemDetailsBinding
 import org.kiimo.me.main.menu.mainViewModel.MainMenuViewModel
@@ -43,9 +42,9 @@ class SenderCreateDeliveryFragment : BaseMainFragment() {
     }
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
 
         binding = FragmentSenderCreateItemDetailsBinding.inflate(inflater, container, false)
@@ -65,9 +64,28 @@ class SenderCreateDeliveryFragment : BaseMainFragment() {
 
     private fun onDeliveryPackageReady() {
         binding.sendItemCreateDeliveryButton.setOnClickListener {
-            viewModel.senderProperties.packageDescritpion.description =
-                binding.sendItemDescriptionEditField.text.toString()
-            (activity as SenderKiimoActivity).openPackageDetailsFragment()
+
+            if (binding.sendItemDescriptionEditField.text.toString().isBlank()) {
+
+            } else {
+
+                viewModel.senderProperties.packageDescritpion.description =
+                    binding.sendItemDescriptionEditField.text.toString()
+                (activity as SenderKiimoActivity).openPackageDetailsFragment()
+            }
+        }
+    }
+
+    private fun validateFields(){
+        var  i = 0
+        if(binding.sendItemDescriptionEditField.text.toString().isBlank()){
+            //validate edit text
+            i++
+        }
+
+        if(binding.havePhoto){
+            i++
+            //validate photo
         }
 
     }

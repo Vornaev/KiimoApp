@@ -142,4 +142,6 @@
     <string name="palce_header">Place</string>
     <string name="country_header">Country</string>
     <string name="error_missing_image">You need to take picture of the package</string>
+    <string name="enter_full_phone_number">Enter full phone number</string>
+    <string name="receiver_phone_number">Receiver Phone number</string>
 </resources>

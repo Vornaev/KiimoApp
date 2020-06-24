@@ -1,180 +1,210 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
         <import type="android.view.View" />
 
         <variable
-                name="havePhoto"
-                type="boolean" />
+            name="havePhoto"
+            type="boolean" />
     </data>
 
     <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fillViewport="true">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
-        <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorWhite"
+            android:fitsSystemWindows="true"
+            android:orientation="vertical">
+
+            <TextView
+
+                android:id="@+id/sendItemDescriptionTitleDialog"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/colorWhite"
-                android:fitsSystemWindows="true"
-                android:orientation="vertical">
-
-            <TextView
-
-                    android:id="@+id/sendItemDescriptionTitleDialog"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="80dp"
-                    android:gravity="center"
-                    android:text="Describe your package"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                android:layout_marginTop="40dp"
+                android:gravity="center"
+                android:text="Describe your package"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <EditText
-                    android:id="@+id/sendItemDescriptionEditField"
-                    android:layout_width="0dp"
-                    android:layout_height="120dp"
-                    android:layout_marginTop="@dimen/margin_medium_large"
-                    android:background="@drawable/edit_text_cornered_background_gray"
-                    android:hint="Enter description here..."
-                    android:inputType="textMultiLine"
-                    android:lines="3"
-                    android:maxLines="3"
-                    android:padding="10dp"
-                    android:textSize="13sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/sendItemDescriptionTitleDialog"
-                    app:layout_constraintWidth_percent="0.85" />
+                android:id="@+id/sendItemDescriptionEditField"
+                android:layout_width="0dp"
+                android:layout_height="70dp"
+                android:layout_marginTop="@dimen/margin_medium_large"
+                android:background="@drawable/edit_text_cornered_background_gray"
+                android:hint="Enter description here..."
+                android:inputType="textMultiLine"
+                android:lines="3"
+                android:maxLines="3"
+                android:padding="10dp"
+                android:textSize="13sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/sendItemDescriptionTitleDialog"
+                app:layout_constraintWidth_percent="0.85" />
 
 
             <TextView
+                android:id="@+id/sendItemDescriptionPhoneText"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="24dp"
+                android:gravity="start"
+                android:text="@string/receiver_phone_number"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/sendItemDescriptionPhoneField"
+                app:layout_constraintTop_toBottomOf="@id/sendItemDescriptionEditField"
+                app:layout_constraintVertical_bias="0.1" />
 
-                    android:id="@+id/senderCreateDialogSizeTitle"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_large"
-                    android:gravity="center"
-                    android:text="Select package size"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/sendItemDescriptionEditField"
-                    app:layout_constraintVertical_bias="0.1" />
+            <EditText
+                android:id="@+id/sendItemDescriptionPhoneField"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_small"
+                android:background="@drawable/edit_text_cornered_background_gray"
+                android:hint="@string/enter_full_phone_number"
+                android:inputType="phone"
+                android:lines="1"
+                android:padding="10dp"
+                android:textSize="?android:textAppearanceSmall"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/sendItemDescriptionPhoneText"
+                app:layout_constraintWidth_percent="0.85" />
+
+
+            <TextView
+                android:id="@+id/senderCreateDialogSizeTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_medium"
+                android:gravity="center"
+                android:text="Select package size"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/sendItemDescriptionPhoneField"
+                app:layout_constraintVertical_bias="0.1" />
 
 
             <RadioGroup
-                    android:id="@+id/radioGroupCreateDeliverySize"
-                    android:layout_width="0dp"
+                android:id="@+id/radioGroupCreateDeliverySize"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_medium_large"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/senderCreateDialogSizeTitle"
+                app:layout_constraintWidth_percent="0.85">
+
+                <RadioButton
+                    android:id="@+id/radioButtonSmallDelivery"
+                    style="@style/radioButtonsCreateDelivery"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_medium_large"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/senderCreateDialogSizeTitle"
-                    app:layout_constraintWidth_percent="0.85">
+                    android:checked="true"
+                    android:padding="5dp"
+                    android:text="small package 3kg" />
 
                 <RadioButton
-                        android:id="@+id/radioButtonSmallDelivery"
-                        style="@style/radioButtonsCreateDelivery"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:checked="true"
-                        android:padding="5dp"
-                        android:text="small package 3kg" />
+                    android:id="@+id/radioButtonMediumDelivery"
+                    style="@style/radioButtonsCreateDelivery"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="medium package 6kg" />
 
                 <RadioButton
-                        android:id="@+id/radioButtonMediumDelivery"
-                        style="@style/radioButtonsCreateDelivery"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="medium package 6kg" />
-
-                <RadioButton
-                        android:id="@+id/radioButtonLargeDelivery"
-                        style="@style/radioButtonsCreateDelivery"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="large package 9kg" />
+                    android:id="@+id/radioButtonLargeDelivery"
+                    style="@style/radioButtonsCreateDelivery"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="large package 9kg" />
 
             </RadioGroup>
 
             <ImageView
-                    android:id="@+id/imageViewDeliveryPackage"
-                    android:layout_width="300dp"
-                    android:layout_height="220dp"
-                    android:layout_margin="@dimen/margin_small"
-                    android:layout_marginTop="50dp"
-                    android:layout_marginBottom="@dimen/margin_medium"
-                    android:adjustViewBounds="true"
-                    android:scaleType="centerCrop"
-                    android:visibility="@{havePhoto ? View.VISIBLE : View.GONE}"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/radioGroupCreateDeliverySize" />
+                android:id="@+id/imageViewDeliveryPackage"
+                android:layout_width="300dp"
+                android:layout_height="220dp"
+                android:layout_margin="@dimen/margin_small"
+                android:layout_marginTop="50dp"
+                android:layout_marginBottom="@dimen/margin_medium"
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop"
+                android:visibility="@{havePhoto ? View.VISIBLE : View.GONE}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/radioGroupCreateDeliverySize" />
 
             <ImageView
-                    android:id="@+id/closeUploadPhotoView"
-                    android:layout_width="38dp"
-                    android:layout_height="38dp"
-                    android:background="@drawable/transparent_outlined_curved_background"
-                    android:padding="5dp"
-                    android:src="@drawable/ic_close_black_xis"
-                    android:visibility="@{havePhoto ? View.VISIBLE : View.GONE}"
-                    app:layout_constraintBottom_toBottomOf="@id/imageViewDeliveryPackage"
-                    app:layout_constraintEnd_toEndOf="@id/imageViewDeliveryPackage"
-                    app:layout_constraintStart_toStartOf="@id/imageViewDeliveryPackage"
-                    app:layout_constraintTop_toTopOf="@id/imageViewDeliveryPackage" />
+                android:id="@+id/closeUploadPhotoView"
+                android:layout_width="38dp"
+                android:layout_height="38dp"
+                android:background="@drawable/transparent_outlined_curved_background"
+                android:padding="5dp"
+                android:src="@drawable/ic_close_black_xis"
+                android:visibility="@{havePhoto ? View.VISIBLE : View.GONE}"
+                app:layout_constraintBottom_toBottomOf="@id/imageViewDeliveryPackage"
+                app:layout_constraintEnd_toEndOf="@id/imageViewDeliveryPackage"
+                app:layout_constraintStart_toStartOf="@id/imageViewDeliveryPackage"
+                app:layout_constraintTop_toTopOf="@id/imageViewDeliveryPackage" />
 
             <Button
-                    android:id="@+id/sendItemCreateUploadPhoto"
-                    android:layout_width="200dp"
-                    android:layout_height="@dimen/big_button_height"
-                    android:layout_margin="@dimen/margin_small"
-                    android:layout_marginTop="@dimen/margin_extra_large"
-                    android:background="@drawable/bakground_black_cornered_button"
-                    android:paddingStart="@dimen/margin_medium"
-                    android:paddingEnd="@dimen/margin_medium"
-                    android:text="Upload photo"
-                    android:textAlignment="center"
-                    android:textAllCaps="false"
-                    android:textColor="@android:color/white"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/imageViewDeliveryPackage" />
+                android:id="@+id/sendItemCreateUploadPhoto"
+                android:layout_width="200dp"
+                android:layout_height="@dimen/big_button_height"
+                android:layout_margin="@dimen/margin_small"
+                android:layout_marginTop="@dimen/margin_extra_large"
+                android:background="@drawable/bakground_black_cornered_button"
+                android:paddingStart="@dimen/margin_medium"
+                android:paddingEnd="@dimen/margin_medium"
+                android:text="Upload photo"
+                android:textAlignment="center"
+                android:textAllCaps="false"
+                android:textColor="@android:color/white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/imageViewDeliveryPackage" />
 
 
             <Button
-                    android:id="@+id/sendItemCreateDeliveryButton"
-                    android:layout_width="0dp"
-                    android:layout_height="@dimen/big_button_height"
-                    android:layout_gravity="bottom"
-                    android:layout_marginTop="@dimen/margin_extra_large"
-                    android:layout_marginBottom="@dimen/margin_medium_large"
-                    android:background="@drawable/button_cornered_background_orange"
-                    android:paddingStart="@dimen/margin_medium"
-                    android:paddingEnd="@dimen/margin_medium"
-                    android:text="@string/confirm_sender_route"
-                    android:textAllCaps="false"
-                    android:textColor="@android:color/white"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/sendItemCreateUploadPhoto"
-                    app:layout_constraintWidth_percent="0.85" />
+                android:id="@+id/sendItemCreateDeliveryButton"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/big_button_height"
+                android:layout_gravity="bottom"
+                android:layout_marginTop="@dimen/margin_extra_large"
+                android:layout_marginBottom="@dimen/margin_medium_large"
+                android:background="@drawable/button_cornered_background_orange"
+                android:paddingStart="@dimen/margin_medium"
+                android:paddingEnd="@dimen/margin_medium"
+                android:text="@string/confirm_sender_route"
+                android:textAllCaps="false"
+                android:textColor="@android:color/white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/sendItemCreateUploadPhoto"
+                app:layout_constraintWidth_percent="0.85" />
 
             <include
-                    layout="@layout/view_generic_scroling_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="100dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/sendItemCreateDeliveryButton" />
+                layout="@layout/view_generic_scroling_layout"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="@id/sendItemCreateDeliveryButton" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
