@@ -3,11 +3,9 @@ package org.kiimo.me.app
 import android.Manifest
 import android.content.pm.PackageManager
 import androidx.core.content.ContextCompat
-import com.google.android.gms.location.LocationServices
-import com.google.android.gms.location.LocationSettingsRequest
 import io.reactivex.disposables.CompositeDisposable
 import org.kiimo.me.main.MainActivity
-import org.kiimo.me.main.fragments.MapFragment
+import org.kiimo.me.main.fragments.DeliveryMapFragment
 import org.kiimo.me.main.menu.KiimoMainNavigationActivity
 
 abstract class BaseMainFragment : BaseFragment() {
@@ -38,7 +36,7 @@ abstract class BaseMainFragment : BaseFragment() {
                 // Permission is not granted
                 requestPermissions(
                     arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                    MapFragment.MY_LOCATION_REQUEST_CODE
+                    DeliveryMapFragment.MY_LOCATION_REQUEST_CODE
                 )
             }
         }
@@ -56,7 +54,7 @@ abstract class BaseMainFragment : BaseFragment() {
             permissions: Array<out String>,
             grantResults: IntArray
     ) {
-        if (requestCode == MapFragment.MY_LOCATION_REQUEST_CODE) {
+        if (requestCode == DeliveryMapFragment.MY_LOCATION_REQUEST_CODE) {
             if (permissions.size == 1 &&
                 permissions[0] == Manifest.permission.ACCESS_FINE_LOCATION &&
                 grantResults[0] == PackageManager.PERMISSION_GRANTED

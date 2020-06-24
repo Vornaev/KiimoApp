@@ -53,7 +53,7 @@ import java.io.ByteArrayOutputStream
 import java.util.*
 import javax.inject.Inject
 
-class MapFragment : BaseMainFragment(), OnMapReadyCallback, GoogleMap.OnMapClickListener,
+class DeliveryMapFragment : BaseMainFragment(), OnMapReadyCallback, GoogleMap.OnMapClickListener,
     LocationListener, MainActivity.MainActivityInterface {
 
 
@@ -788,7 +788,7 @@ class MapFragment : BaseMainFragment(), OnMapReadyCallback, GoogleMap.OnMapClick
 
     companion object {
         @JvmStatic
-        fun newInstance(): MapFragment = MapFragment()
+        fun newInstance(): DeliveryMapFragment = DeliveryMapFragment()
 
         const val MY_LOCATION_REQUEST_CODE = 987
         const val AUTOCOMPLETE_REQUEST_CODE = 988

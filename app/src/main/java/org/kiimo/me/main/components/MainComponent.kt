@@ -1,7 +1,7 @@
 package org.kiimo.me.main.components
 
 import dagger.Component
-import org.kiimo.me.main.fragments.MapFragment
+import org.kiimo.me.main.fragments.DeliveryMapFragment
 import org.kiimo.me.main.fragments.ProfileFragment
 import org.kiimo.me.main.modules.MapModule
 import org.kiimo.me.main.modules.ProfileModule
@@ -19,5 +19,5 @@ interface MainComponent {
 
     fun inject(fragment: ProfileFragment)
 
-    fun inject(fragment: MapFragment)
+    fun inject(fragmentDelivery: DeliveryMapFragment)
 }

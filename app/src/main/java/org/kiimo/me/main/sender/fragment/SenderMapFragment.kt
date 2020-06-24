@@ -22,7 +22,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import org.kiimo.me.R
 import org.kiimo.me.app.BaseMainFragment
 import org.kiimo.me.databinding.FragmentSenderLayoutBinding
-import org.kiimo.me.main.fragments.MapFragment
+import org.kiimo.me.main.fragments.DeliveryMapFragment
 import org.kiimo.me.main.menu.mainViewModel.MainMenuViewModel
 import org.kiimo.me.main.sender.SenderKiimoActivity
 import org.kiimo.me.main.sender.map.ISenderMapFeatures
@@ -228,7 +228,7 @@ class SenderMapFragment : BaseMainFragment() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == MapFragment.AUTOCOMPLETE_REQUEST_CODE) {
+        if (requestCode == DeliveryMapFragment.AUTOCOMPLETE_REQUEST_CODE) {
             if (resultCode == Activity.RESULT_OK) {
                 data?.let {
                     val place = Autocomplete.getPlaceFromIntent(it)

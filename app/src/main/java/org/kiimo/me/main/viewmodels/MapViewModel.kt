@@ -2,12 +2,12 @@ package org.kiimo.me.main.viewmodels
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import org.kiimo.me.main.fragments.MapFragment
+import org.kiimo.me.main.fragments.DeliveryMapFragment
 import org.kiimo.me.main.repositories.MapRepository
 import org.kiimo.me.models.*
 
 /**
- * The ViewModel for [MapFragment].
+ * The ViewModel for [DeliveryMapFragment].
  */
 class MapViewModel internal constructor(
         private val mapRepository: MapRepository

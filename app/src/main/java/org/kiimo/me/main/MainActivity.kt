@@ -15,12 +15,11 @@ import kotlinx.android.synthetic.main.activity_kiimo_main_navigation.*
 import kotlinx.android.synthetic.main.nav_header_kiimo_main_navigation.view.*
 import org.kiimo.me.R
 import org.kiimo.me.dialogs.*
-import org.kiimo.me.main.fragments.MapFragment
+import org.kiimo.me.main.fragments.DeliveryMapFragment
 import org.kiimo.me.main.menu.KiimoMainNavigationActivity
 import org.kiimo.me.main.sender.SenderKiimoActivity
 import org.kiimo.me.models.*
 import org.kiimo.me.util.AppConstants
-import org.kiimo.me.util.DialogUtils
 import org.kiimo.me.util.PreferenceUtils
 
 class MainActivity : KiimoMainNavigationActivity(),
@@ -95,7 +94,7 @@ class MainActivity : KiimoMainNavigationActivity(),
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        if (savedInstanceState == null) replaceFragment(MapFragment.newInstance())
+        if (savedInstanceState == null) replaceFragment(DeliveryMapFragment.newInstance())
         putDeliveryType()
 
         nav_view?.getHeaderView(0)?.buttonChangeAccountTypeUser?.setOnClickListener {
