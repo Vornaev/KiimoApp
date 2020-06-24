@@ -98,7 +98,7 @@ class DeliveryMapFragment : BaseMainFragment(), OnMapReadyCallback, GoogleMap.On
 
         setListeners()
         setObservers()
-
+        mapViewModel.pickUpImageUrl = ""
         mapViewModel.getSelf(userToken)
 
         setEarnings()
