@@ -78,6 +78,8 @@ open class KiimoMainNavigationActivity : BaseActivity() {
             }, 4000
         )
 
+        viewModel.statusLiveData
+
 
         val type = PreferenceUtils.getPaymentTypeForUser(this)
         viewModel.savePreferredPaymentType(PreferredPaymentUser(if (type == 0) "CASH" else "CARD"))
@@ -231,8 +233,8 @@ open class KiimoMainNavigationActivity : BaseActivity() {
     }
 
     fun logout() {
-        PreferenceUtils.logout(this)
         viewModel.putStatus(Status(false))
+        PreferenceUtils.logout(this)
         MainScope().launch {
             delay(2000)
             navigateToStart()
@@ -243,19 +245,6 @@ open class KiimoMainNavigationActivity : BaseActivity() {
         val intent = Intent(this, WelcomeActivity::class.java)
         startActivity(intent)
         finish()
-    }
-
-
-    private fun deleteDeviceToken() {
-        FirebaseInstanceId.getInstance().deleteInstanceId()
-        FirebaseInstanceId.getInstance().instanceId.addOnCompleteListener { task ->
-            if (task.isSuccessful) {
-                val token = task.result!!.token
-                MainScope().launch {
-                    PreferenceUtils.saveFirebaseToken(getViewContext(), token)
-                }
-            }
-        }
     }
 
     override fun onDestroy() {
