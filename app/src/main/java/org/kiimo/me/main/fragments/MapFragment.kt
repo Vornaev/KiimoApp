@@ -21,7 +21,6 @@ import androidx.annotation.DrawableRes
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
-import androidx.transition.ChangeImageTransform
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.crashlytics.android.Crashlytics
@@ -35,7 +34,6 @@ import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.widget.Autocomplete
 import com.google.android.libraries.places.widget.AutocompleteActivity
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
-import kotlinx.android.synthetic.main.fragment_map.*
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -49,7 +47,6 @@ import org.kiimo.me.main.modules.MapModule
 import org.kiimo.me.main.viewmodels.MapViewModel
 import org.kiimo.me.main.viewmodels.MapViewModelFactory
 import org.kiimo.me.models.*
-import org.kiimo.me.models.events.ProfilePhotoEvent
 import org.kiimo.me.services.LocationServicesKiimo
 import org.kiimo.me.util.*
 import java.io.ByteArrayOutputStream
@@ -86,9 +83,9 @@ class MapFragment : BaseMainFragment(), OnMapReadyCallback, GoogleMap.OnMapClick
     private var markers = arrayListOf<Marker>()
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         binding = FragmentMapBinding.inflate(inflater, container, false)
 
@@ -285,12 +282,21 @@ class MapFragment : BaseMainFragment(), OnMapReadyCallback, GoogleMap.OnMapClick
         this.delivery = deliveryPaid.delivery
 
         binding.navigateButton.setOnClickListener {
-            LocationServicesKiimo.openMapsDirectionsActivity(
-                requireContext()
-                , deliveryPaid.delivery.destination?.lat!!
-                , deliveryPaid.delivery.destination?.lng!!
-                , travelMode = getTravelModeMaps()
-            )
+
+            if (mapViewModel.pickUpImageUrl.isBlank()) {
+                DialogUtils.showErrorMessage(
+                    requireActivity(),
+                    getString(R.string.error_missing_image)
+                )
+            } else {
+                LocationServicesKiimo.openMapsDirectionsActivity(
+                    requireContext()
+                    , deliveryPaid.delivery.destination?.lat!!
+                    , deliveryPaid.delivery.destination?.lng!!
+                    , travelMode = getTravelModeMaps()
+                )
+            }
+            validatePickUPButton()
         }
 
         binding.navigatePackageImage.setOnClickListener {
@@ -313,9 +319,9 @@ class MapFragment : BaseMainFragment(), OnMapReadyCallback, GoogleMap.OnMapClick
     }
 
     override fun onOriginReady(
-            origin: LatLng,
-            originAddress: String,
-            destinationAddress: String
+        origin: LatLng,
+        originAddress: String,
+        destinationAddress: String
     ) {
         addMarker(origin)
         setPinText(originAddress, destinationAddress)
@@ -345,6 +351,7 @@ class MapFragment : BaseMainFragment(), OnMapReadyCallback, GoogleMap.OnMapClick
         for (marker in markers) {
             marker.remove()
         }
+        mapViewModel.pickUpImageUrl = ""
         markers.clear()
         googleMap?.clear()
     }
@@ -388,10 +395,24 @@ class MapFragment : BaseMainFragment(), OnMapReadyCallback, GoogleMap.OnMapClick
         }
 
         binding.confirmButton.setOnClickListener {
-            if (binding.isConfirmDropOff) {
-                (activity as MainActivity).showDigitCodeDialog()
-            } else {
-                mapViewModel.pickUp(userToken)
+            when {
+                binding.isConfirmDropOff -> {
+                    (activity as MainActivity).showDigitCodeDialog()
+                }
+                else -> {
+                    when {
+                        mapViewModel.pickUpImageUrl.isBlank() -> {
+                            DialogUtils.showErrorMessage(
+                                requireActivity(),
+                                getString(R.string.error_missing_image)
+                            )
+                        }
+                        else -> {
+                            mapViewModel.pickUp(userToken)
+                        }
+                    }
+                    validatePickUPButton()
+                }
             }
         }
         binding.goOnlineImageView.setOnClickListener {
@@ -420,7 +441,17 @@ class MapFragment : BaseMainFragment(), OnMapReadyCallback, GoogleMap.OnMapClick
         (activity as MainActivity).setOnOriginDestinationReady(this)
     }
 
-   private fun onSucesssGetLocation(location: Location) {
+    private fun validatePickUPButton() {
+        binding.navigatePackageImage.setTextColor(
+            ContextCompat.getColor(
+                requireContext(),
+                if (mapViewModel.pickUpImageUrl.isBlank()) R.color.colorAccent else R.color.quantum_black_100
+            )
+        )
+    }
+
+
+    private fun onSucesssGetLocation(location: Location) {
         onLocationChanged(location)
     }
 
@@ -479,8 +510,9 @@ class MapFragment : BaseMainFragment(), OnMapReadyCallback, GoogleMap.OnMapClick
     }
 
     private fun bitmapDescriptorFromVector(
-            context: Context,
-            @DrawableRes vectorDrawableResourceId: Int): BitmapDescriptor? {
+        context: Context,
+        @DrawableRes vectorDrawableResourceId: Int
+    ): BitmapDescriptor? {
         val vectorDrawable = ContextCompat.getDrawable(context, vectorDrawableResourceId)
         vectorDrawable?.setBounds(
             0,

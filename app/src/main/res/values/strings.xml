@@ -141,4 +141,5 @@
     <string name="number_header">Number</string>
     <string name="palce_header">Place</string>
     <string name="country_header">Country</string>
+    <string name="error_missing_image">You need to take picture of the package</string>
 </resources>
