@@ -103,26 +103,6 @@ class DeliveryMapFragment : BaseMainFragment(), OnMapReadyCallback, GoogleMap.On
 
         setEarnings()
 
-        mainDeliveryViewModel().userProfileLiveData.observe(
-            viewLifecycleOwner,
-            androidx.lifecycle.Observer {
-                loadProfileImage(it.photo)
-            })
-
-        mainDeliveryViewModel().photoProfileLiveData.observe(
-            viewLifecycleOwner,
-            androidx.lifecycle.Observer {
-                loadProfileImage(it.imageUrl)
-            })
-
-        mapViewModel.pickUpImageUrl = ""
-        mainDeliveryViewModel().photoPackageLiveData.observe(
-            viewLifecycleOwner,
-            androidx.lifecycle.Observer {
-                mapViewModel.pickUpImageUrl = it.imageUrl
-                binding.navigatePackageImage.visibility = View.GONE
-            })
-
         binding.travelModeActiveId = 0
 
         return binding.root
@@ -361,15 +341,14 @@ class DeliveryMapFragment : BaseMainFragment(), OnMapReadyCallback, GoogleMap.On
     }
 
     private fun setListeners() {
-        // todo only for sender
-        binding.layoutPin.pinPickUpConstraintLayout.setOnClickListener {
-            isPickUp = true
-            sendRequest()
-        }
-        binding.layoutPin.pinDropOffConstraintLayout.setOnClickListener {
-            isPickUp = false
-            sendRequest()
-        }
+//        binding.layoutPin.pinPickUpConstraintLayout.setOnClickListener {
+//            isPickUp = true
+//            sendRequest()
+//        }
+//        binding.layoutPin.pinDropOffConstraintLayout.setOnClickListener {
+//            isPickUp = false
+//            sendRequest()
+//        }
         binding.footImageView.setOnClickListener {
             binding.travelModeActiveId = 0
             mainDeliveryViewModel().putDeliveryType(deliveryType = DeliveryType(DeliveryTypeID.FOOT))
@@ -445,7 +424,7 @@ class DeliveryMapFragment : BaseMainFragment(), OnMapReadyCallback, GoogleMap.On
         binding.navigatePackageImage.setTextColor(
             ContextCompat.getColor(
                 requireContext(),
-                if (mapViewModel.pickUpImageUrl.isBlank()) R.color.colorAccent else R.color.quantum_black_100
+                if (mapViewModel.pickUpImageUrl.isBlank()) R.color.colorValidation else R.color.quantum_black_100
             )
         )
     }
@@ -672,6 +651,26 @@ class DeliveryMapFragment : BaseMainFragment(), OnMapReadyCallback, GoogleMap.On
                 }
             }
         )
+
+        mainDeliveryViewModel().userProfileLiveData.observe(
+            viewLifecycleOwner,
+            androidx.lifecycle.Observer {
+                loadProfileImage(it.photo)
+            })
+
+        mainDeliveryViewModel().photoProfileLiveData.observe(
+            viewLifecycleOwner,
+            androidx.lifecycle.Observer {
+                loadProfileImage(it.imageUrl)
+            })
+
+
+        mainDeliveryViewModel().photoPackageLiveData.observe(
+            viewLifecycleOwner,
+            androidx.lifecycle.Observer {
+                mapViewModel.pickUpImageUrl = it.imageUrl
+                binding.navigatePackageImage.visibility = View.GONE
+            })
     }
 
     private fun errorHandle() {
