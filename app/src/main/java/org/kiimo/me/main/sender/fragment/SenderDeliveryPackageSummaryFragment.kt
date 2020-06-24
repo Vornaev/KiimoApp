@@ -65,8 +65,8 @@ class SenderDeliveryPackageSummaryFragment : BaseMainFragment() {
 
         viewModel.calculateDeliveryLiveData.observe(viewLifecycleOwner,
             androidx.lifecycle.Observer {
-                binding.priceDeliveryPackage.text = it.bruttoAmount
-                viewModel.senderProperties.caluclatedPrice = it.bruttoAmount
+                binding.priceDeliveryPackage.text = it.getBruttoPrice()
+                viewModel.senderProperties.caluclatedPrice = it.getBruttoPrice()
             })
 
 

@@ -22,4 +22,5 @@ data class DeliveryAcceptedNotificaiton(
     val status: String = "",
     @SerializedName("userStatus")
     val userStatus: UserStatus = UserStatus()
-)
+){
+}

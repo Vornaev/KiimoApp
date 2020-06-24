@@ -557,4 +557,8 @@ class MainViewModelRepository(
         )
     }
 
+    fun getSelfData(){
+
+    }
+
 }

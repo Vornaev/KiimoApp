@@ -64,32 +64,16 @@ interface KiimoDeliverHttpClient {
     @POST("api/upload")
     fun uploadPhotoApi(): Observable<String>
 
-    //<<<<<<< HEAD
-//    fun getSelf(@Header(AuthorizationHeader) token: String): Observable<Response<Void>>
-//
-//    @PUT("api/self/location")
-//    fun putLocation(@Header(AuthorizationHeader) token: String, @Body location: Location): Observable<Response<Void>>
-//
-//    @PUT("api/self/delivery-type")
-//    fun putDeliveryType(@Header(AuthorizationHeader) token: String, @Body deliveryType: DeliveryType): Observable<Response<Void>>
-//
-//    @PUT("api/self/deviceToken")
-//    fun putDeviceToken(@Header(AuthorizationHeader) token: String, @Body deviceToken: DeviceToken): Observable<Response<Void>>
-//
+    @GET("api/self")
+    fun getSelfData(
+        @Header("Authorization") token: String
+    ): Self
+
+
     @POST("api/deliveries/calculate")
     fun deliveryCalculate(
             @Header(AuthorizationHeader) token: String,
             @Body delivryCalculateRequest: CalculateDeliveryRequest): Observable<CalculateDeliveryResponse>
-//
-//    @POST("api/deliveries/{id}/accept")
-//    fun acceptDelivery(token: String, @Path("id") deliveryID: String): Observable<AcceptDeliveryResponse>
-//
-//    @POST("api/deliveries/pickup")
-//    fun pickUpDelivery(token: String): Observable<PickUpDeliveryResponse>
-//
-//    @POST("api/deliveries/drop-off")
-//    fun dropOffDelivery(token: String): Observable<DropOffDeliveryResponse>
-//=======
 
 
     @PUT("api/self/location")
