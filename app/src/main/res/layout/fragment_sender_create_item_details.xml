@@ -109,34 +109,51 @@
                 android:id="@+id/radioGroupCreateDeliverySize"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:orientation="horizontal"
                 android:layout_marginTop="@dimen/margin_medium_large"
+                android:gravity="center"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/senderCreateDialogSizeTitle"
-                app:layout_constraintWidth_percent="0.85">
+                app:layout_constraintWidth_percent="0.9">
 
                 <RadioButton
                     android:id="@+id/radioButtonSmallDelivery"
                     style="@style/radioButtonsCreateDelivery"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
                     android:layout_height="wrap_content"
+                    android:textAlignment="center"
+                    android:background="@drawable/selector_radio_buton_custom"
+                    android:button="@android:color/transparent"
                     android:checked="true"
                     android:padding="5dp"
-                    android:text="small package 3kg" />
+                    android:layout_margin="5dp"
+                    android:text="Small \n 3kg" />
 
                 <RadioButton
+                    android:background="@drawable/selector_radio_buton_custom"
+                    android:button="@android:color/transparent"
                     android:id="@+id/radioButtonMediumDelivery"
                     style="@style/radioButtonsCreateDelivery"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:textAlignment="center"
+                    android:layout_margin="5dp"
                     android:layout_height="wrap_content"
-                    android:text="medium package 6kg" />
+                    android:text="Medium \n 6kg" />
 
                 <RadioButton
                     android:id="@+id/radioButtonLargeDelivery"
                     style="@style/radioButtonsCreateDelivery"
-                    android:layout_width="match_parent"
+                    android:background="@drawable/selector_radio_buton_custom"
+                    android:button="@android:color/transparent"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_margin="5dp"
+                    android:textAlignment="center"
                     android:layout_height="wrap_content"
-                    android:text="large package 9kg" />
+                    android:text="Large \n 9kg" />
 
             </RadioGroup>
 

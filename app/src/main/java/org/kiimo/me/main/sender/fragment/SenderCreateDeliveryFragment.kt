@@ -10,12 +10,14 @@ import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.fragment_sender_create_item_details.*
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import org.kiimo.me.R
 import org.kiimo.me.app.BaseMainFragment
 import org.kiimo.me.databinding.FragmentSenderCreateItemDetailsBinding
 import org.kiimo.me.main.menu.mainViewModel.MainMenuViewModel
@@ -112,7 +114,9 @@ class SenderCreateDeliveryFragment : BaseMainFragment() {
     private fun onRadioButtonChanged() {
         binding.radioGroupCreateDeliverySize.setOnCheckedChangeListener { radioGroup, i ->
             when (i) {
-                radioButtonSmallDelivery.id -> viewModel.setPackageSize(PACKAGE_SIZE_ID.SMALL)
+                radioButtonSmallDelivery.id -> {
+                    viewModel.setPackageSize(PACKAGE_SIZE_ID.SMALL)
+                }
                 radioButtonMediumDelivery.id -> viewModel.setPackageSize(PACKAGE_SIZE_ID.MEDIUM)
                 radioButtonLargeDelivery.id -> viewModel.setPackageSize(PACKAGE_SIZE_ID.LARGE)
             }
