@@ -6,6 +6,7 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,6 +22,7 @@ import org.kiimo.me.main.menu.mainViewModel.MainMenuViewModel
 import org.kiimo.me.main.sender.SenderKiimoActivity
 import org.kiimo.me.util.MediaManager
 import org.kiimo.me.util.PACKAGE_SIZE_ID
+import org.w3c.dom.Text
 import java.io.ByteArrayOutputStream
 import java.io.File
 
@@ -54,6 +56,8 @@ class SenderCreateDeliveryFragment : BaseMainFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        attachListenerToField(binding.sendItemDescriptionEditField, ::validateDescription)
+        attachListenerToField(binding.sendItemDescriptionPhoneField, ::validatePhoneNumber)
         binding.havePhoto = false
 
         atachPhotoListeners()
@@ -65,29 +69,34 @@ class SenderCreateDeliveryFragment : BaseMainFragment() {
     private fun onDeliveryPackageReady() {
         binding.sendItemCreateDeliveryButton.setOnClickListener {
 
-            if (binding.sendItemDescriptionEditField.text.toString().isBlank()) {
-
-            } else {
-
+            if (validateFields()) {
                 viewModel.senderProperties.packageDescritpion.description =
                     binding.sendItemDescriptionEditField.text.toString()
                 (activity as SenderKiimoActivity).openPackageDetailsFragment()
+
+            } else {
+                return@setOnClickListener
             }
         }
     }
 
-    private fun validateFields(){
-        var  i = 0
-        if(binding.sendItemDescriptionEditField.text.toString().isBlank()){
-            //validate edit text
-            i++
-        }
+    private fun validateFields(): Boolean {
+        var i = 0
 
-        if(binding.havePhoto){
-            i++
-            //validate photo
-        }
+        if (!validateDescription()) ++i
+        if (!validatePhoneNumber()) ++i
+        return i == 0
+    }
 
+    private fun validateDescription(): Boolean {
+        binding.hasDescription = binding.sendItemDescriptionEditField.text.length >= 3
+        return binding.hasDescription
+    }
+
+    private fun validatePhoneNumber(): Boolean {
+        val patternText = binding.sendItemDescriptionPhoneField.text.toString()
+        binding.havePhoneNumber =patternText.length > 9 && TextUtils.isDigitsOnly(patternText.substring(1))
+        return binding.havePhoneNumber
     }
 
     private fun atachPhotoListeners() {

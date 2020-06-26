@@ -9,6 +9,14 @@
         <variable
             name="havePhoto"
             type="boolean" />
+
+        <variable
+            name="havePhoneNumber"
+            type="boolean" />
+
+        <variable
+            name="hasDescription"
+            type="boolean" />
     </data>
 
     <ScrollView
@@ -24,31 +32,28 @@
             android:orientation="vertical">
 
             <TextView
-
                 android:id="@+id/sendItemDescriptionTitleDialog"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="40dp"
-                android:gravity="center"
+                android:gravity="start"
                 android:text="Describe your package"
-                android:textSize="16sp"
+                android:textSize="14sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toStartOf="@id/sendItemDescriptionEditField"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <EditText
                 android:id="@+id/sendItemDescriptionEditField"
                 android:layout_width="0dp"
-                android:layout_height="70dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_medium_large"
-                android:background="@drawable/edit_text_cornered_background_gray"
-                android:hint="Enter description here..."
-                android:inputType="textMultiLine"
-                android:lines="3"
-                android:maxLines="3"
-                android:padding="10dp"
-                android:textSize="13sp"
+                android:background="@{hasDescription ? @drawable/edit_text_cornered_background_gray : @drawable/shape_validation_error }"
+                android:hint="@string/enter_description_here_hint"
+                android:inputType="text"
+                android:padding="15dp"
+                android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/sendItemDescriptionTitleDialog"
@@ -57,12 +62,12 @@
 
             <TextView
                 android:id="@+id/sendItemDescriptionPhoneText"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
                 android:gravity="start"
                 android:text="@string/receiver_phone_number"
-                android:textSize="13sp"
+                android:textSize="14sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@id/sendItemDescriptionPhoneField"
@@ -74,10 +79,10 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_small"
-                android:background="@drawable/edit_text_cornered_background_gray"
+                android:background="@{havePhoneNumber ? @drawable/edit_text_cornered_background_gray : @drawable/shape_validation_error }"
                 android:hint="@string/enter_full_phone_number"
                 android:inputType="phone"
-                android:padding="10dp"
+                android:padding="15dp"
                 android:textAppearance="?android:textAppearanceSmall"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

@@ -276,7 +276,6 @@ class DeliveryMapFragment : BaseMainFragment(), OnMapReadyCallback, GoogleMap.On
                     , travelMode = getTravelModeMaps()
                 )
             }
-            validatePickUPButton()
         }
 
         binding.navigatePackageImage.setOnClickListener {
@@ -390,7 +389,6 @@ class DeliveryMapFragment : BaseMainFragment(), OnMapReadyCallback, GoogleMap.On
                             mapViewModel.pickUp(userToken)
                         }
                     }
-                    validatePickUPButton()
                 }
             }
         }
@@ -419,16 +417,6 @@ class DeliveryMapFragment : BaseMainFragment(), OnMapReadyCallback, GoogleMap.On
         }
         (activity as MainActivity).setOnOriginDestinationReady(this)
     }
-
-    private fun validatePickUPButton() {
-        binding.navigatePackageImage.setTextColor(
-            ContextCompat.getColor(
-                requireContext(),
-                if (mapViewModel.pickUpImageUrl.isBlank()) R.color.colorValidation else R.color.quantum_black_100
-            )
-        )
-    }
-
 
     private fun onSucesssGetLocation(location: Location) {
         onLocationChanged(location)

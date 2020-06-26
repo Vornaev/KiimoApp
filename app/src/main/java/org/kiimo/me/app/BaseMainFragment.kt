@@ -2,6 +2,9 @@ package org.kiimo.me.app
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.text.Editable
+import android.text.TextWatcher
+import android.widget.EditText
 import androidx.core.content.ContextCompat
 import io.reactivex.disposables.CompositeDisposable
 import org.kiimo.me.main.MainActivity
@@ -66,6 +69,26 @@ abstract class BaseMainFragment : BaseFragment() {
 
     protected open fun onPermissionLocationEnabled() {
 
+    }
+
+    protected fun attachListenerToField(field: EditText, listener: () -> Boolean) {
+        field.addTextChangedListener(
+            object : TextWatcher {
+                override fun afterTextChanged(s: Editable?) {
+                    listener()
+                }
+
+                override fun beforeTextChanged(
+                    s: CharSequence?, start: Int, count: Int, after: Int
+                ) {
+                }
+
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+                }
+
+            }
+        )
     }
 
     override fun onDestroyView() {
