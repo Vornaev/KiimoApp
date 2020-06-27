@@ -52,6 +52,8 @@ class SenderCreateDeliveryFragment : BaseMainFragment() {
     ): View? {
 
         binding = FragmentSenderCreateItemDetailsBinding.inflate(inflater, container, false)
+        binding.havePhoneNumber = true
+        binding.hasDescription = true
         return binding.root
     }
 

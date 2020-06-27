@@ -145,4 +145,5 @@
     <string name="enter_full_phone_number">Enter full phone number</string>
     <string name="receiver_phone_number">Receiver Phone number</string>
     <string name="enter_description_here_hint">Enter description here...</string>
+    <string name="select_package_size">Package size:</string>
 </resources>
