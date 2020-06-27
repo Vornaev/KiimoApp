@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+                name="pickUpText"
+                type="String" />
+
+        <variable
+                name="dropOffText"
+                type="String" />
+    </data>
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/black_curve_rounded"
+            android:orientation="vertical"
+            android:padding="3dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/pin_pick_up_constraint_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/margin_small">
+
+            <ImageView
+                    android:id="@+id/pin_pick_up_image_view"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginStart="@dimen/margin_medium"
+                    android:layout_marginEnd="@dimen/margin_medium"
+                    android:contentDescription="@string/pin_pick_up_content_description"
+                    android:scaleType="fitStart"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/ic_pin_pick_up" />
+
+            <TextView
+                    android:id="@+id/pin_pick_up_text_view"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_small"
+                    android:text="@{pickUpText}"
+                    android:textSize="11sp"
+                    android:hint="Choose Origin"
+                    android:lines="2"
+                    android:textColorHint="@color/colorDarkGray"
+                    android:gravity="start|center_vertical"
+                    android:ellipsize="end"
+                    app:layout_constraintBottom_toBottomOf="@id/pin_pick_up_image_view"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/pin_pick_up_image_view"
+                    app:layout_constraintTop_toTopOf="@id/pin_pick_up_image_view" />
+
+            <TextView
+                    android:id="@+id/pin_pick_up_urgency_text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="12sp"
+                    app:layout_constraintBottom_toBottomOf="@id/pin_pick_up_image_view"
+                    app:layout_constraintStart_toEndOf="@id/pin_pick_up_text_view"
+                    app:layout_constraintTop_toTopOf="@id/pin_pick_up_image_view" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <View
+                android:id="@+id/view"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginStart="@dimen/margin_medium"
+                android:layout_marginEnd="@dimen/margin_medium"
+                android:background="@color/colorPrimaryDark"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/pin_pick_up_image_view" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/pin_drop_off_constraint_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="@dimen/margin_small">
+
+            <ImageView
+                    android:id="@+id/pin_drop_off_image_view"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginStart="@dimen/margin_medium"
+                    android:layout_marginEnd="@dimen/margin_medium"
+                    android:contentDescription="@string/pin_drop_off_content_description"
+                    android:scaleType="fitStart"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/ic_pin_drop_off" />
+
+            <TextView
+                    android:id="@+id/pin_drop_off_text_view"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_small"
+                    android:hint="@string/choose_destination_sender"
+                    android:textColorHint="@color/colorDarkGray"
+                    android:lines="2"
+                    android:gravity="start|center_vertical"
+                    android:ellipsize="end"
+                    android:text="@{dropOffText}"
+                    android:textSize="@dimen/sender_address_text_size"
+                    app:layout_constraintBottom_toBottomOf="@id/pin_drop_off_image_view"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/pin_drop_off_image_view"
+                    app:layout_constraintTop_toTopOf="@id/pin_drop_off_image_view" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </LinearLayout>
+</layout>
