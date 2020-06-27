@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.location.Location
 import android.os.Bundle
+import android.transition.TransitionManager
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -350,7 +351,7 @@ class SenderMapFragment : BaseMainFragment() {
 
     fun receviedCodePickUP(deliveryAccepted: ConfirmPickUpFcmData) {
 
-        if (!deliveryAccepted.carrier.photo.isNullOrBlank()) {
+        if (!deliveryAccepted.carrier.photo.isBlank()) {
             Glide.with(this).load(deliveryAccepted.carrier.photo).override(0, 350).centerCrop()
                 .placeholder(R.drawable.ic_user_profile)
                 .into(binding.imageViewCarrier)
@@ -359,11 +360,9 @@ class SenderMapFragment : BaseMainFragment() {
         binding.notificationCodeReceived = true
 
 
-        binding.carrierPickUpCodeValue.text = deliveryAccepted?.code ?: ""
+        binding.carrierPickUpCodeValue.text = deliveryAccepted.code
 
-        val carrierName =
-            "${deliveryAccepted.carrier.firstName} ${deliveryAccepted.carrier.lastName}"
-
+        val carrierName = "${deliveryAccepted.carrier.firstName} ${deliveryAccepted.carrier.lastName}"
 
         val timeText = "$carrierName will arrive in ${viewModel.senderProperties.deliveryPrice.minutes.roundToInt()} minutes"
 
