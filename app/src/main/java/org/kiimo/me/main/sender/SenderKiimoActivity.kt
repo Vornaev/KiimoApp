@@ -31,6 +31,8 @@ import org.kiimo.me.main.sender.fragment.SenderDeliveryPackageSummaryFragment
 import org.kiimo.me.main.sender.fragment.SenderMapFragment
 import org.kiimo.me.main.sender.fragment.SenderPaymentDetailsFragment
 import org.kiimo.me.main.sender.model.notifications.ConfirmPickUpNotification.ConfirmPickUpFcmData
+import org.kiimo.me.main.sender.model.notifications.ConfirmPickUpNotification.Delivery
+import org.kiimo.me.main.sender.model.notifications.dropOffDeliverySender.DeliveryType
 import org.kiimo.me.main.sender.model.notifications.dropOffDeliverySender.FcmResponseOnDropOffDelivery
 import org.kiimo.me.main.sender.model.request.pay.PayResponse
 import org.kiimo.me.models.FirebasePayload
@@ -56,7 +58,6 @@ class SenderKiimoActivity : KiimoMainNavigationActivity() {
 
         Handler().postDelayed(Runnable { handlePayload(intent) }, 1500)
 
-        openPackageDetailsFragment()
     }
 
     fun setupHeaderView() {

@@ -10,7 +10,6 @@ import org.kiimo.me.databinding.FragmentSenderPaymentDetailsBinding
 import org.kiimo.me.main.menu.mainViewModel.MainMenuViewModel
 import org.kiimo.me.main.sender.model.notifications.deliveryAcceptedNotification.DeliveryAcceptedNotificaiton
 import org.kiimo.me.util.JsonUtil
-import kotlin.math.roundToInt
 
 class SenderPaymentDetailsFragment : BaseMainFragment() {
 
@@ -35,13 +34,14 @@ class SenderPaymentDetailsFragment : BaseMainFragment() {
         val delivery = arguments?.getString("DELIVERY_ACCEPTED", "")
         if (!delivery.isNullOrEmpty()) {
             val result = JsonUtil.loadModelFromJson<DeliveryAcceptedNotificaiton>(delivery)
-            binding.priceDeliveryPackage.text = result.deliveryPrice.getBrutoAmount()
+            val price = "${result.deliveryPrice.getBrutoAmount()} MKD"
+            binding.priceDeliveryPackage.text = price
+            binding.pickUpLocation.text = result.delivery.originAddress
         } else {
             binding.priceDeliveryPackage.text = viewModel.senderProperties.caluclatedPrice
+            binding.pickUpLocation.text = viewModel.senderProperties.pickUpAddressPoint.address
         }
 
-
-        binding.pickUpLocation.text = viewModel.senderProperties.pickUpAddressPoint.address
         binding.payPackgeButtonConfirm.setOnClickListener {
             viewModel.payForFackage()
         }
