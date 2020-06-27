@@ -42,8 +42,12 @@ class SenderCreateDeliveryFragment : BaseMainFragment() {
         viewModel.photoPackageLiveData.observe(viewLifecycleOwner, Observer {
             viewModel.senderProperties.packageDescritpion.images.clear()
             viewModel.senderProperties.packageDescritpion.images.add(it.imageUrl)
+            hideSpinner()
         })
     }
+
+
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -74,8 +78,8 @@ class SenderCreateDeliveryFragment : BaseMainFragment() {
         binding.sendItemCreateDeliveryButton.setOnClickListener {
 
             if (validateFields()) {
-                viewModel.senderProperties.packageDescritpion.description =
-                    binding.sendItemDescriptionEditField.text.toString()
+                viewModel.senderProperties.packageDescritpion.description = binding.sendItemDescriptionEditField.text.toString()
+                viewModel.senderProperties.packageDescritpion.phoneNumber = binding.sendItemDescriptionPhoneField.text.toString()
                 (activity as SenderKiimoActivity).openPackageDetailsFragment()
 
             } else {
@@ -99,7 +103,7 @@ class SenderCreateDeliveryFragment : BaseMainFragment() {
 
     private fun validatePhoneNumber(): Boolean {
         val patternText = binding.sendItemDescriptionPhoneField.text.toString()
-        binding.havePhoneNumber =patternText.length > 9 && TextUtils.isDigitsOnly(patternText.substring(1))
+        binding.havePhoneNumber =patternText.length >= 8 && TextUtils.isDigitsOnly(patternText.substring(1))
         return binding.havePhoneNumber
     }
 
@@ -126,6 +130,7 @@ class SenderCreateDeliveryFragment : BaseMainFragment() {
     }
 
     private fun onSuccessGetImage(bitmap: Bitmap) {
+        showSpinner()
         binding.havePhoto = true
         Glide.with(requireContext()).load(bitmap).override(300, 0).centerCrop()
             .into(binding.imageViewDeliveryPackage)
@@ -202,5 +207,15 @@ class SenderCreateDeliveryFragment : BaseMainFragment() {
         uri?.let {
             //  viewModel.uploadPhotoToServer(UploadPhotoRequest(MediaManager.fileOrigis!!.readBytes(), Type.Packages))
         }
+    }
+
+    private fun showSpinner(){
+        camomileSpinner.visibility = View.VISIBLE
+        camomileSpinner.start()
+    }
+
+    private fun hideSpinner(){
+        camomileSpinner.visibility = View.INVISIBLE
+        camomileSpinner.stop()
     }
 }

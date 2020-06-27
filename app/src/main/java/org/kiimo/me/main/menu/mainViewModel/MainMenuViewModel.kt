@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.gson.JsonElement
 import okhttp3.MultipartBody
-import org.kiimo.me.main.fragments.model.deliveries.DeliveryCarrierItem
 import org.kiimo.me.main.fragments.model.sender.SenderOrderListResponse
 import org.kiimo.me.main.menu.model.CreditCardModel
 import org.kiimo.me.main.menu.model.CreditCardSaveRequest
@@ -204,6 +203,7 @@ class MainMenuViewModel(private var repository: MainViewModelRepository) : ViewM
         var userLocation: LocationModel? = null
         var packageDescritpion: Packages = Packages()
         var caluclatedPrice: String = "0"
+        var deliveryPrice = org.kiimo.me.main.sender.model.notifications.deliveryAcceptedNotification.DeliveryPrice()
 
         fun setPickUpPin(pinOptions: AddressPoint) {
             this.pickUpAddressPoint = pinOptions

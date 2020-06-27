@@ -37,6 +37,8 @@ class SenderPaymentDetailsFragment : BaseMainFragment() {
             val price = "${result.deliveryPrice.getBrutoAmount()} MKD"
             binding.priceDeliveryPackage.text = price
             binding.pickUpLocation.text = result.delivery.originAddress
+
+            viewModel.senderProperties.deliveryPrice = result.deliveryPrice
         } else {
             binding.priceDeliveryPackage.text = viewModel.senderProperties.caluclatedPrice
             binding.pickUpLocation.text = viewModel.senderProperties.pickUpAddressPoint.address

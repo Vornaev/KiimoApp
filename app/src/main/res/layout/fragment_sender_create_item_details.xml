@@ -186,6 +186,20 @@
                 app:layout_constraintStart_toStartOf="@id/imageViewDeliveryPackage"
                 app:layout_constraintTop_toTopOf="@id/imageViewDeliveryPackage" />
 
+            <com.gmail.samehadar.iosdialog.CamomileSpinner
+                android:id="@+id/camomileSpinner"
+                app:spinnerColor="@color/colorWhite"
+                app:duration="500"
+                app:clockwise="true"
+                android:visibility="invisible"
+                android:layout_marginTop="2dp"
+                android:layout_marginStart="6dp"
+                android:elevation="4dp"
+                app:layout_constraintStart_toStartOf="@id/sendItemCreateUploadPhoto"
+                app:layout_constraintTop_toTopOf="@id/sendItemCreateUploadPhoto"
+                android:layout_width="30dp"
+                android:layout_height="30dp"/>
+
             <Button
                 android:id="@+id/sendItemCreateUploadPhoto"
                 android:layout_width="200dp"

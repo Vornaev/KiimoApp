@@ -35,6 +35,7 @@ import org.kiimo.me.util.PreferenceUtils
 import org.kiimo.me.util.RxBus
 import org.kiimo.me.util.StringUtils
 import java.util.concurrent.TimeUnit
+import kotlin.math.roundToInt
 
 class SenderMapFragment : BaseMainFragment() {
 
@@ -356,16 +357,21 @@ class SenderMapFragment : BaseMainFragment() {
         }
         binding.notificationPickUPReceived = true
         binding.notificationCodeReceived = true
-        binding.carrierNameDescription.text = "Its on his way to the destination"
+
+
         binding.carrierPickUpCodeValue.text = deliveryAccepted?.code ?: ""
 
         val carrierName =
             "${deliveryAccepted.carrier.firstName} ${deliveryAccepted.carrier.lastName}"
 
-        binding.pinLayoutDropOffPacakgeCarrier.pickUpText =
-            deliveryAccepted.delivery.originAddress
-        binding.pinLayoutDropOffPacakgeCarrier.dropOffText =
-            deliveryAccepted.delivery.destinationAddress
+
+        val timeText = "$carrierName will arrive in ${viewModel.senderProperties.deliveryPrice.minutes.roundToInt()} minutes"
+
+        binding.carrierNameDescription.text = timeText
+
+        binding.pinLayoutDropOffPacakgeCarrier.pickUpText = deliveryAccepted.delivery.originAddress
+
+        binding.pinLayoutDropOffPacakgeCarrier.dropOffText = deliveryAccepted.delivery.destinationAddress
 
         binding.carrierName.text = carrierName
     }
