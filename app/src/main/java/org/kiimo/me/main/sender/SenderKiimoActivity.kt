@@ -56,7 +56,7 @@ class SenderKiimoActivity : KiimoMainNavigationActivity() {
 
         Handler().postDelayed(Runnable { handlePayload(intent) }, 1500)
 
-        openCreateDeliveryItemDialog()
+        openPackageDetailsFragment()
     }
 
     fun setupHeaderView() {

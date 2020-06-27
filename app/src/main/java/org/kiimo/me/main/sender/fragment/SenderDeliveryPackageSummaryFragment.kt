@@ -40,11 +40,11 @@ class SenderDeliveryPackageSummaryFragment : BaseMainFragment() {
     @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.toolbar.arrow_back_image_view.setOnClickListener {
+        binding.arrowBackImageView.setOnClickListener {
             activity?.supportFragmentManager?.popBackStack()
         }
 
-        binding.toolbar.toolbar_title_text_view.text = getString(R.string.summuty_title)
+    //    binding.toolbar.toolbar_title_text_view.text = getString(R.string.summuty_title)
 
         binding.senderPackageSummaryPin.pickUpText =
             viewModel.senderProperties.pickUpAddressPoint.address

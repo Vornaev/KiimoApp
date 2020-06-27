@@ -37,7 +37,7 @@
 
     <dimen name="marker_size">20dp</dimen>
     <dimen name="sender_address_text_size">11sp</dimen>
-    <dimen name="padding_text_view_background">12dp</dimen>
+    <dimen name="padding_text_view_background">10dp</dimen>
     <dimen name="cash_type_img_size">30dp</dimen>
 
     <dimen name="createDeliveryImageWidth">130dp</dimen>
