@@ -6,25 +6,24 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.telephony.PhoneNumberUtils
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.fragment_sender_create_item_details.*
+import kotlinx.android.synthetic.main.layout_phone_number_input.view.*
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
-import org.kiimo.me.R
 import org.kiimo.me.app.BaseMainFragment
 import org.kiimo.me.databinding.FragmentSenderCreateItemDetailsBinding
 import org.kiimo.me.main.menu.mainViewModel.MainMenuViewModel
 import org.kiimo.me.main.sender.SenderKiimoActivity
 import org.kiimo.me.util.MediaManager
 import org.kiimo.me.util.PACKAGE_SIZE_ID
-import org.w3c.dom.Text
 import java.io.ByteArrayOutputStream
 import java.io.File
 
@@ -47,8 +46,6 @@ class SenderCreateDeliveryFragment : BaseMainFragment() {
     }
 
 
-
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -64,9 +61,12 @@ class SenderCreateDeliveryFragment : BaseMainFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        attachListenerToField(binding.sendItemDescriptionEditField, ::validateDescription)
-        attachListenerToField(binding.sendItemDescriptionPhoneField, ::validatePhoneNumber)
+
         binding.havePhoto = false
+
+        binding.inputPhoneNumberWithFlag.activityRegisterCCpDialog.registerCarrierNumberEditText(
+            binding.inputPhoneNumberWithFlag.phoneNumberValueEditText
+        )
 
         atachPhotoListeners()
         onRadioButtonChanged()
@@ -78,11 +78,16 @@ class SenderCreateDeliveryFragment : BaseMainFragment() {
         binding.sendItemCreateDeliveryButton.setOnClickListener {
 
             if (validateFields()) {
-                viewModel.senderProperties.packageDescritpion.description = binding.sendItemDescriptionEditField.text.toString()
-                viewModel.senderProperties.packageDescritpion.phoneNumber = binding.sendItemDescriptionPhoneField.text.toString()
+                viewModel.senderProperties.packageDescritpion.description =
+                    binding.sendItemDescriptionEditField.text.toString()
+
+                viewModel.senderProperties.packageDescritpion.phoneNumber =
+                    binding.inputPhoneNumberWithFlag.activityRegisterCCpDialog.fullNumberWithPlus
+
                 (activity as SenderKiimoActivity).openPackageDetailsFragment()
 
             } else {
+                attachtextWatchers()
                 return@setOnClickListener
             }
         }
@@ -102,8 +107,9 @@ class SenderCreateDeliveryFragment : BaseMainFragment() {
     }
 
     private fun validatePhoneNumber(): Boolean {
-        val patternText = binding.sendItemDescriptionPhoneField.text.toString()
-        binding.havePhoneNumber =patternText.length >= 8 && TextUtils.isDigitsOnly(patternText.substring(1))
+        val patternText = binding.inputPhoneNumberWithFlag.phoneNumberValueEditText.text.toString()
+        binding.havePhoneNumber = patternText.length >= 8 && TextUtils.isDigitsOnly(patternText)
+        binding.havePhoneNumber = binding.inputPhoneNumberWithFlag.activityRegisterCCpDialog.isValidFullNumber
         return binding.havePhoneNumber
     }
 
@@ -115,6 +121,11 @@ class SenderCreateDeliveryFragment : BaseMainFragment() {
         binding.closeUploadPhotoView.setOnClickListener {
             binding.havePhoto = false
         }
+    }
+
+    private fun attachtextWatchers(){
+        attachListenerToField(binding.sendItemDescriptionEditField, ::validateDescription)
+        attachListenerToField(binding.inputPhoneNumberWithFlag.phoneNumberValueEditText, ::validatePhoneNumber)
     }
 
     private fun onRadioButtonChanged() {
@@ -209,12 +220,12 @@ class SenderCreateDeliveryFragment : BaseMainFragment() {
         }
     }
 
-    private fun showSpinner(){
+    private fun showSpinner() {
         camomileSpinner.visibility = View.VISIBLE
         camomileSpinner.start()
     }
 
-    private fun hideSpinner(){
+    private fun hideSpinner() {
         camomileSpinner.visibility = View.INVISIBLE
         camomileSpinner.stop()
     }

@@ -35,12 +35,12 @@
                 android:id="@+id/sendItemDescriptionTitleDialog"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
                 android:layout_marginTop="40dp"
+                android:fontFamily="@font/roboto_medium"
                 android:gravity="start"
                 android:text="Describe your package"
                 android:textSize="14sp"
-                android:layout_marginStart="8dp"
-                android:fontFamily="@font/roboto_medium"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@id/sendItemDescriptionEditField"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -65,26 +65,24 @@
                 android:id="@+id/sendItemDescriptionPhoneText"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:gravity="start"
                 android:layout_marginStart="8dp"
+                android:layout_marginTop="24dp"
+                android:fontFamily="@font/roboto_medium"
+                android:gravity="start"
                 android:text="@string/receiver_phone_number"
                 android:textSize="14sp"
-                android:fontFamily="@font/roboto_medium"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@id/sendItemDescriptionPhoneField"
+                app:layout_constraintStart_toStartOf="@id/inputPhoneNumberWithFlag"
                 app:layout_constraintTop_toBottomOf="@id/sendItemDescriptionEditField"
                 app:layout_constraintVertical_bias="0.1" />
 
-            <EditText
-                android:id="@+id/sendItemDescriptionPhoneField"
+            <include
+                android:id="@+id/inputPhoneNumberWithFlag"
+                layout="@layout/layout_phone_number_input"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_extra_small"
                 android:background="@{havePhoneNumber ? @drawable/edit_text_cornered_background_gray : @drawable/shape_validation_error }"
-                android:hint="@string/enter_full_phone_number"
-                android:inputType="phone"
-                android:padding="15dp"
                 android:textAppearance="?android:textAppearanceSmall"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -97,13 +95,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_large"
+                android:fontFamily="@font/roboto_medium"
                 android:gravity="center"
                 android:text="@string/select_package_size"
                 android:textSize="15sp"
-                android:fontFamily="@font/roboto_medium"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/sendItemDescriptionPhoneField"
+                app:layout_constraintTop_toBottomOf="@id/inputPhoneNumberWithFlag"
                 app:layout_constraintVertical_bias="0.1" />
 
 
@@ -111,10 +109,10 @@
                 android:id="@+id/radioGroupCreateDeliverySize"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:layout_marginTop="@dimen/margin_small"
-                android:gravity="center"
                 android:layout_marginBottom="@dimen/margin_medium"
+                android:gravity="center"
+                android:orientation="horizontal"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/senderCreateDialogSizeTitle"
@@ -124,39 +122,39 @@
                     android:id="@+id/radioButtonSmallDelivery"
                     style="@style/radioButtonsCreateDelivery"
                     android:layout_width="0dp"
-                    android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:textAlignment="center"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
                     android:background="@drawable/selector_radio_buton_custom"
                     android:button="@android:color/transparent"
                     android:checked="true"
                     android:padding="5dp"
-                    android:layout_margin="5dp"
-                    android:text="Small \n 3kg" />
+                    android:text="Small \n 3kg"
+                    android:textAlignment="center" />
 
                 <RadioButton
-                    android:background="@drawable/selector_radio_buton_custom"
-                    android:button="@android:color/transparent"
                     android:id="@+id/radioButtonMediumDelivery"
                     style="@style/radioButtonsCreateDelivery"
                     android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:textAlignment="center"
-                    android:layout_margin="5dp"
                     android:layout_height="wrap_content"
-                    android:text="Medium \n 6kg" />
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/selector_radio_buton_custom"
+                    android:button="@android:color/transparent"
+                    android:text="Medium \n 6kg"
+                    android:textAlignment="center" />
 
                 <RadioButton
                     android:id="@+id/radioButtonLargeDelivery"
                     style="@style/radioButtonsCreateDelivery"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
                     android:background="@drawable/selector_radio_buton_custom"
                     android:button="@android:color/transparent"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_margin="5dp"
-                    android:textAlignment="center"
-                    android:layout_height="wrap_content"
-                    android:text="Large \n 9kg" />
+                    android:text="Large \n 9kg"
+                    android:textAlignment="center" />
 
             </RadioGroup>
 
@@ -188,17 +186,17 @@
 
             <com.gmail.samehadar.iosdialog.CamomileSpinner
                 android:id="@+id/camomileSpinner"
-                app:spinnerColor="@color/colorWhite"
-                app:duration="500"
-                app:clockwise="true"
-                android:visibility="invisible"
-                android:layout_marginTop="2dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_marginStart="6dp"
+                android:layout_marginTop="2dp"
                 android:elevation="4dp"
+                android:visibility="invisible"
+                app:clockwise="true"
+                app:duration="500"
                 app:layout_constraintStart_toStartOf="@id/sendItemCreateUploadPhoto"
                 app:layout_constraintTop_toTopOf="@id/sendItemCreateUploadPhoto"
-                android:layout_width="30dp"
-                android:layout_height="30dp"/>
+                app:spinnerColor="@color/colorWhite" />
 
             <Button
                 android:id="@+id/sendItemCreateUploadPhoto"
@@ -212,8 +210,8 @@
                 android:textAlignment="center"
                 android:textAllCaps="false"
                 android:textColor="@android:color/white"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toTopOf="@id/sendItemCreateDeliveryButton"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/imageViewDeliveryPackage" />
 
