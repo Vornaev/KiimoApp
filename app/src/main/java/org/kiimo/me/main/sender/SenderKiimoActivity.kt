@@ -82,6 +82,7 @@ class SenderKiimoActivity : KiimoMainNavigationActivity() {
             popToRootMapView()
             Handler().postDelayed(Runnable {
                 dialogSpiner = SendItemDescriptionDialog()
+                dialogSpiner?.isCancelable = false
                 dialogSpiner?.show(
                     supportFragmentManager,
                     AppConstants.DIALOG_SENDER_DESCRIPTION_ITEM

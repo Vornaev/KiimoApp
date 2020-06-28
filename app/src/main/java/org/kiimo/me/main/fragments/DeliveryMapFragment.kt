@@ -751,7 +751,20 @@ class DeliveryMapFragment : BaseMainFragment(), OnMapReadyCallback, GoogleMap.On
 
         setPinText(destinationData)
 
-        googleMap?.addPolyline(polylineOptions)
+        val polyline = googleMap?.addPolyline(polylineOptions)
+        polyline?.let { moveToBounds(it) }
+    }
+
+    private fun moveToBounds(p: Polyline) {
+        val builder = LatLngBounds.Builder()
+        val arr = p.points
+        for (i in arr.indices) {
+            builder.include(arr[i])
+        }
+        val bounds = builder.build()
+        val padding = 180 // offset from edges of the map in pixels
+        val cu = CameraUpdateFactory.newLatLngBounds(bounds, padding)
+        googleMap?.moveCamera(cu)
     }
 
     private fun setPinText(destinationData: DestinationData) {
