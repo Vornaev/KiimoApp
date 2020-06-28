@@ -123,6 +123,8 @@ class MainActivity : KiimoMainNavigationActivity(),
             (messageReceiver),
             IntentFilter(AppConstants.FIREBASE_BROADCAST)
         )
+
+        showPriceBreakdownDialog(DeliveryPrice("0.0", "100", "807", 12.2, 30.1, 20, 12.2, 100))
     }
 
     override fun onStop() {
