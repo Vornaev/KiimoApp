@@ -123,8 +123,6 @@ class MainActivity : KiimoMainNavigationActivity(),
             (messageReceiver),
             IntentFilter(AppConstants.FIREBASE_BROADCAST)
         )
-
-        showDigitCodeDialog()
     }
 
     override fun onStop() {
@@ -160,6 +158,7 @@ class MainActivity : KiimoMainNavigationActivity(),
 
     private fun showDropOffDialog() {
         dropOffDialog = DropOffDialog()
+        dropOffDialog.isCancelable = false
         dropOffDialog.show(supportFragmentManager, AppConstants.DIALOG_PRICE_BREAKDOWN_TAG)
     }
 

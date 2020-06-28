@@ -33,7 +33,7 @@ class DigitCodeDialog : BaseKiimoDialog() {
         )
 
         val builder = AlertDialog.Builder(activity!!)
-        builder.setPositiveButton(getString(R.string.dialog_confirm), null)
+        //builder.setPositiveButton(getString(R.string.dialog_confirm), null)
 
         builder.setView(binding.root)
 
@@ -49,12 +49,12 @@ class DigitCodeDialog : BaseKiimoDialog() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        dialog?.setOnShowListener {
-            val button = (dialog as AlertDialog).getButton(AlertDialog.BUTTON_POSITIVE)
-            button.setOnClickListener {
-                onPositiveButtonClicked()
-            }
-        }
+//        dialog?.setOnShowListener {
+//            val button = (dialog as AlertDialog).getButton(AlertDialog.BUTTON_POSITIVE)
+//            button.setOnClickListener {
+//                onPositiveButtonClicked()
+//            }
+//        }
 
         return super.onCreateView(inflater, container, savedInstanceState)
     }
