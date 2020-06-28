@@ -214,7 +214,7 @@ class SenderMapFragment : BaseMainFragment() {
                 Place.Field.ID, Place.Field.NAME, Place.Field.ADDRESS,
                 Place.Field.LAT_LNG
             )
-        ).setInitialQuery(query).setCountry(myCountrryCode()).build(activity!!)
+        ).setInitialQuery(query.split(" ").first()).setCountry(myCountrryCode()).build(activity!!)
 
         startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE)
     }

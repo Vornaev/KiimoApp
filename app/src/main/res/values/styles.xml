@@ -14,6 +14,7 @@
         <!--<item ntrame="android:textColor"></item>-->
     </style>
 
+    <style name="AppTheme.TextView" parent="Widget.AppCompat.TextView" >
         <item name="android:textSize">14sp</item>
     </style>
 

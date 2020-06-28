@@ -12,6 +12,7 @@ import org.kiimo.me.models.DestinationData
 import org.kiimo.me.models.LocationModel
 import org.kiimo.me.services.LocationServicesKiimo
 
+
 class SenderMapFeatures(private val map: GoogleMap, private val fragment: SenderMapFragment) :
     ISenderMapFeatures {
 
@@ -146,7 +147,7 @@ class SenderMapFeatures(private val map: GoogleMap, private val fragment: Sender
         // Adding all the points in the route to LineOptions
         polylineOptions.addAll(points)
         polylineOptions.width(10f)
-        polylineOptions.color(Color.BLACK)
+        polylineOptions.color(Color.RED)
         polylineOptions.geodesic(true)
 
 
@@ -154,13 +155,23 @@ class SenderMapFeatures(private val map: GoogleMap, private val fragment: Sender
             it.remove()
         }
 
-        markersKiimo.polyline = map?.addPolyline(polylineOptions)
-        map.animateCamera(
-            CameraUpdateFactory.newLatLngZoom(
-                markersKiimo.sendFromMarker!!.position,
-                11.0f
-            )
-        )
+        markersKiimo.polyline = map.addPolyline(polylineOptions)
+        markersKiimo.polyline?.let {
+            moveToBounds(it)
+        }
+    }
+
+    private fun moveToBounds(p: Polyline) {
+        val builder = LatLngBounds.Builder()
+        val arr = p.points
+        for (i in arr.indices) {
+            builder.include(arr[i])
+        }
+        val bounds = builder.build()
+        val padding = 180 // offset from edges of the map in pixels
+        val cu = CameraUpdateFactory.newLatLngBounds(bounds, padding)
+        map.animateCamera(cu)
+       // map.moveCamera(cu)
     }
 
     override fun addDestinationMarker(latLng: LatLng) {
@@ -236,8 +247,8 @@ class SenderMapFeatures(private val map: GoogleMap, private val fragment: Sender
 }
 
 data class MarkerKiimoSender(
-        var sendFromMarker: Marker? = null,
-        var destinationToMarker: Marker? = null,
-        var polyline: Polyline? = null
+    var sendFromMarker: Marker? = null,
+    var destinationToMarker: Marker? = null,
+    var polyline: Polyline? = null
 )
 
