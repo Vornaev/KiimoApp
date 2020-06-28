@@ -67,6 +67,7 @@ class SenderDeliveryPackageSummaryFragment : BaseMainFragment() {
             androidx.lifecycle.Observer {
                 binding.priceDeliveryPackage.text = "${it.getBruttoPrice()} MKD"
                 viewModel.senderProperties.caluclatedPrice = "${it.getBruttoPrice()} MKD"
+
             })
 
 

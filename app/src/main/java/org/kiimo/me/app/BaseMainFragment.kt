@@ -2,6 +2,7 @@ package org.kiimo.me.app
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.os.Build
 import android.text.Editable
 import android.text.TextWatcher
 import android.widget.EditText
@@ -10,6 +11,10 @@ import io.reactivex.disposables.CompositeDisposable
 import org.kiimo.me.main.MainActivity
 import org.kiimo.me.main.fragments.DeliveryMapFragment
 import org.kiimo.me.main.menu.KiimoMainNavigationActivity
+import java.text.DecimalFormat
+import java.text.NumberFormat
+import java.util.*
+
 
 abstract class BaseMainFragment : BaseFragment() {
 
@@ -53,9 +58,9 @@ abstract class BaseMainFragment : BaseFragment() {
     }
 
     override fun onRequestPermissionsResult(
-            requestCode: Int,
-            permissions: Array<out String>,
-            grantResults: IntArray
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
     ) {
         if (requestCode == DeliveryMapFragment.MY_LOCATION_REQUEST_CODE) {
             if (permissions.size == 1 &&
@@ -89,6 +94,22 @@ abstract class BaseMainFragment : BaseFragment() {
 
             }
         )
+    }
+
+    protected fun loadCurrency(code: String, formattedNumber: Double): String? {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            val required = Currency.getAvailableCurrencies()
+            val expted = required.firstOrNull { it.numericCode == code.toInt() }
+
+            val numberFormat = NumberFormat.getNumberInstance()
+            numberFormat.currency = expted
+            return "${numberFormat.format(formattedNumber)} ${numberFormat.currency.displayName}"
+
+        } else {
+            val decimalFormat = DecimalFormat("###")
+            return "${decimalFormat.format(formattedNumber)}  MKD"
+        }
     }
 
     override fun onDestroyView() {

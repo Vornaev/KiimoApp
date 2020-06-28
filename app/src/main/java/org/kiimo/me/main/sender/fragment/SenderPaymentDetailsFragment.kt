@@ -10,6 +10,8 @@ import org.kiimo.me.databinding.FragmentSenderPaymentDetailsBinding
 import org.kiimo.me.main.menu.mainViewModel.MainMenuViewModel
 import org.kiimo.me.main.sender.model.notifications.deliveryAcceptedNotification.DeliveryAcceptedNotificaiton
 import org.kiimo.me.util.JsonUtil
+import java.text.NumberFormat
+import java.util.*
 
 class SenderPaymentDetailsFragment : BaseMainFragment() {
 
@@ -37,8 +39,8 @@ class SenderPaymentDetailsFragment : BaseMainFragment() {
             val price = "${result.deliveryPrice.getBrutoAmount()} MKD"
             binding.priceDeliveryPackage.text = price
             binding.pickUpLocation.text = result.delivery.originAddress
-
             viewModel.senderProperties.deliveryPrice = result.deliveryPrice
+
         } else {
             binding.priceDeliveryPackage.text = viewModel.senderProperties.caluclatedPrice
             binding.pickUpLocation.text = viewModel.senderProperties.pickUpAddressPoint.address
@@ -49,4 +51,5 @@ class SenderPaymentDetailsFragment : BaseMainFragment() {
         }
 
     }
+
 }
