@@ -123,6 +123,8 @@ class MainActivity : KiimoMainNavigationActivity(),
             (messageReceiver),
             IntentFilter(AppConstants.FIREBASE_BROADCAST)
         )
+
+        showDigitCodeDialog()
     }
 
     override fun onStop() {
@@ -144,6 +146,7 @@ class MainActivity : KiimoMainNavigationActivity(),
 
     fun showDigitCodeDialog() {
         digitCodeDialog = DigitCodeDialog()
+        digitCodeDialog.isCancelable = false
         digitCodeDialog.show(supportFragmentManager, AppConstants.DIALOG_DIGIT_CODE_TAG)
     }
 

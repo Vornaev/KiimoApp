@@ -90,6 +90,21 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/layout_pin" />
 
+            <com.gmail.samehadar.iosdialog.CamomileSpinner
+                android:id="@+id/camomileSpinner"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:elevation="4dp"
+                android:visibility="invisible"
+                app:clockwise="true"
+                app:duration="30"
+                app:layout_constraintHorizontal_bias="0.2"
+                app:layout_constraintStart_toStartOf="@id/navigate_package_image"
+                app:layout_constraintTop_toTopOf="@id/navigate_package_image"
+                app:layout_constraintBottom_toBottomOf="@id/navigate_package_image"
+                app:layout_constraintEnd_toEndOf="@id/navigate_package_image"
+                app:spinnerColor="@color/colorPrimary" />
+
             <Button
                     android:id="@+id/navigate_package_image"
                     android:layout_width="0dp"

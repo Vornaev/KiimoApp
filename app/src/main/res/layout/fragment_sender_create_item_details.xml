@@ -193,7 +193,7 @@
                 android:elevation="4dp"
                 android:visibility="invisible"
                 app:clockwise="true"
-                app:duration="500"
+                app:duration="30"
                 app:layout_constraintStart_toStartOf="@id/sendItemCreateUploadPhoto"
                 app:layout_constraintTop_toTopOf="@id/sendItemCreateUploadPhoto"
                 app:spinnerColor="@color/colorWhite" />

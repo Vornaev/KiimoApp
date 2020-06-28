@@ -118,6 +118,7 @@ class SenderCreateDeliveryFragment : BaseMainFragment() {
 
         binding.closeUploadPhotoView.setOnClickListener {
             binding.havePhoto = false
+            hideSpinner()
         }
     }
 
@@ -219,12 +220,12 @@ class SenderCreateDeliveryFragment : BaseMainFragment() {
     }
 
     private fun showSpinner() {
-        camomileSpinner.visibility = View.VISIBLE
-        camomileSpinner.start()
+        binding.camomileSpinner.visibility = View.VISIBLE
+        binding.camomileSpinner.start()
     }
 
     private fun hideSpinner() {
-        camomileSpinner.visibility = View.INVISIBLE
-        camomileSpinner.stop()
+        binding.camomileSpinner.visibility = View.INVISIBLE
+        binding.camomileSpinner.stop()
     }
 }

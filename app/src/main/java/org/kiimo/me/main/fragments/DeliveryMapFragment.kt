@@ -108,6 +108,11 @@ class DeliveryMapFragment : BaseMainFragment(), OnMapReadyCallback, GoogleMap.On
         return binding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+    }
+
     private fun setEarnings() {
         mainDeliveryViewModel().deliveryListLiveData.observe(
             viewLifecycleOwner,
@@ -155,6 +160,9 @@ class DeliveryMapFragment : BaseMainFragment(), OnMapReadyCallback, GoogleMap.On
                 width.toFloat(), height.toFloat()
             )?.apply {
                 uploadBitmap(this)
+
+                binding.camomileSpinner.start()
+                binding.camomileSpinner.visibility = View.VISIBLE
             }
         }
 
@@ -381,7 +389,7 @@ class DeliveryMapFragment : BaseMainFragment(), OnMapReadyCallback, GoogleMap.On
                     when {
                         mapViewModel.pickUpImageUrl.isBlank() -> {
                             DialogUtils.showErrorMessage(
-                                requireActivity(),
+                                requireActivity(), getString(R.string.package_image_dialog_tite),
                                 getString(R.string.error_missing_image)
                             )
                         }
@@ -658,6 +666,8 @@ class DeliveryMapFragment : BaseMainFragment(), OnMapReadyCallback, GoogleMap.On
             androidx.lifecycle.Observer {
                 mapViewModel.pickUpImageUrl = it.imageUrl
                 binding.navigatePackageImage.visibility = View.GONE
+                binding.camomileSpinner.stop()
+                binding.camomileSpinner.visibility = View.INVISIBLE
             })
     }
 

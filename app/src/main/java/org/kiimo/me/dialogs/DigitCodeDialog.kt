@@ -37,6 +37,10 @@ class DigitCodeDialog : BaseKiimoDialog() {
 
         builder.setView(binding.root)
 
+        binding.btnCodePackageConfirm.setOnClickListener {
+            onPositiveButtonClicked()
+        }
+
         return builder.create()
     }
 
