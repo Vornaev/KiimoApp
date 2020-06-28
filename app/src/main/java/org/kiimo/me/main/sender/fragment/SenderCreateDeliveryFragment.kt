@@ -107,8 +107,6 @@ class SenderCreateDeliveryFragment : BaseMainFragment() {
     }
 
     private fun validatePhoneNumber(): Boolean {
-        val patternText = binding.inputPhoneNumberWithFlag.phoneNumberValueEditText.text.toString()
-        binding.havePhoneNumber = patternText.length >= 8 && TextUtils.isDigitsOnly(patternText)
         binding.havePhoneNumber = binding.inputPhoneNumberWithFlag.activityRegisterCCpDialog.isValidFullNumber
         return binding.havePhoneNumber
     }
