@@ -26,10 +26,7 @@ import org.kiimo.me.main.fragments.MenuPaymentTypeFragment
 import org.kiimo.me.main.menu.KiimoMainNavigationActivity
 import org.kiimo.me.main.sender.dialog.DeliverNotFoundDialog
 import org.kiimo.me.main.sender.dialog.SendItemDescriptionDialog
-import org.kiimo.me.main.sender.fragment.SenderCreateDeliveryFragment
-import org.kiimo.me.main.sender.fragment.SenderDeliveryPackageSummaryFragment
-import org.kiimo.me.main.sender.fragment.SenderMapFragment
-import org.kiimo.me.main.sender.fragment.SenderPaymentDetailsFragment
+import org.kiimo.me.main.sender.fragment.*
 import org.kiimo.me.main.sender.model.notifications.ConfirmPickUpNotification.ConfirmPickUpFcmData
 import org.kiimo.me.main.sender.model.notifications.ConfirmPickUpNotification.Delivery
 import org.kiimo.me.main.sender.model.notifications.dropOffDeliverySender.DeliveryType
@@ -129,6 +126,8 @@ class SenderKiimoActivity : KiimoMainNavigationActivity() {
             (messageReceiver),
             IntentFilter(AppConstants.FIREBASE_BROADCAST)
         )
+
+        openMenuFragment(SenderWebViewCardPaymentFragment::class.java, "test")
     }
 
     override fun onStop() {
