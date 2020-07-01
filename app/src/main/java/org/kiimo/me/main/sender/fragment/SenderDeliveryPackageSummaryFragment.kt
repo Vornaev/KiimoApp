@@ -34,6 +34,7 @@ class SenderDeliveryPackageSummaryFragment : BaseMainFragment() {
     @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         binding.arrowBackImageView.setOnClickListener {
             activity?.supportFragmentManager?.popBackStack()
         }

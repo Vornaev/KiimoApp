@@ -10,6 +10,10 @@
         <item name="windowActionBar">false</item>
         <item name="android:textColorPrimary">@color/colorPrimaryDark</item>
         <item name="android:textColor">@color/colorPrimaryDark</item>
+<!--        <item name="alertDialogTheme">@style/AppCompatAlertDialogStyle</item>-->
+<!--        <item name="dialogTheme">@style/AppCompatAlertDialogStyle</item>-->
+<!--        <item name="android:dialogTheme">@style/AppCompatAlertDialogStyle</item>-->
+<!--        <item name="android:alertDialogTheme">@style/AppCompatAlertDialogStyle</item>-->
         <!--<item name="android:windowTranslucentStatus">true</item>-->
         <!--<item ntrame="android:textColor"></item>-->
     </style>
@@ -53,8 +57,11 @@
     </style>
 
     <style name="AppCompatAlertDialogStyle" parent="Theme.MaterialComponents.Light.Dialog.Alert">
-        <item name="android:background">@drawable/cornered_dialog_bacground</item>
+<!--        <item name="android:background">@drawable/cornered_dialog_bacground</item>-->
+<!--        <item name="android:fitsSystemWindows">true</item>-->
+<!--        <item name="android:windowMinWidthMajor">80%</item>-->
     </style>
+
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>

@@ -127,7 +127,7 @@ class SenderKiimoActivity : KiimoMainNavigationActivity() {
             IntentFilter(AppConstants.FIREBASE_BROADCAST)
         )
 
-        openMenuFragment(SenderWebViewCardPaymentFragment::class.java, "test")
+        openPackageDetailsFragment()
     }
 
     override fun onStop() {
@@ -143,6 +143,10 @@ class SenderKiimoActivity : KiimoMainNavigationActivity() {
 
     fun openCreateDeliveryItemDialog() {
         addFragment(SenderCreateDeliveryFragment())
+    }
+
+    fun openPayWithCardFragment() {
+        addFragment(SenderWebViewCardPaymentFragment())
     }
 
     fun openPackageDetailsFragment() {

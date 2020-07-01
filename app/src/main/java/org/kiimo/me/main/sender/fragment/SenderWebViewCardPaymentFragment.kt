@@ -1,5 +1,6 @@
 package org.kiimo.me.main.sender.fragment
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.net.Uri
 import android.os.Bundle
@@ -28,13 +29,16 @@ class SenderWebViewCardPaymentFragment : BaseMainFragment() {
     }
 
 
+    @SuppressLint("SetJavaScriptEnabled")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
+        val amount = mainDeliveryViewModel().senderProperties.deliveryPrice.getBrutoAmount()
         //binding.webViewPayment.webViewClient = WebViewClient()
         binding.webViewPayment.webViewClient = MyWebViewClient()
         binding.webViewPayment.settings.javaScriptEnabled = true
-        binding.webViewPayment.loadUrl("https://kiimo.xyz/?amount=44")
+        binding.webViewPayment.loadUrl("https://kiimo.xyz/?amount=$amount")
         binding.webViewPayment.addJavascriptInterface(
             WebAppInterface(requireContext()),
             "Android"
@@ -50,12 +54,12 @@ class SenderWebViewCardPaymentFragment : BaseMainFragment() {
                 return false
             }
 
-            if(url.equals("https://kiimo.xyz/3DPayResultPage.aspx", true))
-            {
-                mainDeliveryViewModel().payForFackage()
+            if (url.equals("https://kiimo.xyz/3DPayResultPage.aspx", true)) {
+              //  mainDeliveryViewModel().payForFackage()
+                val p = 10000
             }
             // Otherwise, the link is not for a page on my site, so launch another Activity that handles URLs11
-            return true
+            return false
         }
     }
 
@@ -83,15 +87,15 @@ class SenderWebViewCardPaymentFragment : BaseMainFragment() {
             Toast.makeText(mContext, "toasttest", Toast.LENGTH_SHORT).show()
         }
 
-        fun __doPostBack(eventTarget:Any, eventArgs: Any){
+        fun __doPostBack(eventTarget: Any, eventArgs: Any) {
             Toast.makeText(mContext, "toasttest", Toast.LENGTH_SHORT).show()
         }
 
-        fun payResult(status:Any?){
+        fun payResult(status: Any?) {
             Toast.makeText(mContext, "toasttest", Toast.LENGTH_SHORT).show()
         }
 
-        fun payResult(){
+        fun payResult() {
             Toast.makeText(mContext, "toasttest", Toast.LENGTH_SHORT).show()
         }
 
