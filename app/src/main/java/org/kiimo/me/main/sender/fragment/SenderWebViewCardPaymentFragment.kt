@@ -42,12 +42,17 @@ class SenderWebViewCardPaymentFragment : BaseMainFragment() {
 
     }
 
-    private class MyWebViewClient : WebViewClient() {
+    inner class MyWebViewClient : WebViewClient() {
 
         override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
             if (Uri.parse(url).host == "www.example.com") {
                 // This is my web site, so do not override; let my WebView load the page
                 return false
+            }
+
+            if(url.equals("https://kiimo.xyz/3DPayResultPage.aspx", true))
+            {
+                mainDeliveryViewModel().payForFackage()
             }
             // Otherwise, the link is not for a page on my site, so launch another Activity that handles URLs11
             return true
@@ -83,6 +88,10 @@ class SenderWebViewCardPaymentFragment : BaseMainFragment() {
         }
 
         fun payResult(status:Any?){
+            Toast.makeText(mContext, "toasttest", Toast.LENGTH_SHORT).show()
+        }
+
+        fun payResult(){
             Toast.makeText(mContext, "toasttest", Toast.LENGTH_SHORT).show()
         }
 

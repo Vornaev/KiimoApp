@@ -44,7 +44,7 @@ class MainMenuViewModel(private var repository: MainViewModelRepository) : ViewM
     val signatureLiveData = MutableLiveData<UploadImageResponse>()
     val creditCardLiveData = MutableLiveData<BaseDeliveryResponse>()
     val cardExceptionLiveData = MutableLiveData<Throwable>()
-    val removeDevToken  = MutableLiveData<JsonElement>()
+    val removeDevToken = MutableLiveData<JsonElement>()
 
     val userProfileFieldsUpdateLiveData = MutableLiveData<UserRegisterResponse>()
 
@@ -65,7 +65,7 @@ class MainMenuViewModel(private var repository: MainViewModelRepository) : ViewM
         repository.saveUserDeviceToken()
     }
 
-    fun removeDeviceToken(){
+    fun removeDeviceToken() {
         repository.removeDeviceToken(removeDevToken)
     }
 
@@ -168,12 +168,20 @@ class MainMenuViewModel(private var repository: MainViewModelRepository) : ViewM
         repository.saveCreditCard(creditCardSaveRequest, creditCardLiveData, cardExceptionLiveData)
     }
 
-    fun saveCreditCardFields(creditCardSaveRequest: CreditCardSaveRequest){
-        repository.saveCreditCardFields(creditCardSaveRequest, creditCardLiveData, cardExceptionLiveData)
+    fun saveCreditCardFields(creditCardSaveRequest: CreditCardSaveRequest) {
+        repository.saveCreditCardFields(
+            creditCardSaveRequest,
+            creditCardLiveData,
+            cardExceptionLiveData
+        )
     }
 
-    fun saveCreditCardFieldsMutiplart(creditCardSaveRequest: CreditCardSaveRequest){
-        repository.saveCreditCardFieldsMultipart(creditCardSaveRequest, creditCardLiveData, cardExceptionLiveData)
+    fun saveCreditCardFieldsMutiplart(creditCardSaveRequest: CreditCardSaveRequest) {
+        repository.saveCreditCardFieldsMultipart(
+            creditCardSaveRequest,
+            creditCardLiveData,
+            cardExceptionLiveData
+        )
     }
 
     fun updateCreditCardData(creditCardSaveRequest: CreditCardSaveRequest) {
@@ -203,7 +211,9 @@ class MainMenuViewModel(private var repository: MainViewModelRepository) : ViewM
         var userLocation: LocationModel? = null
         var packageDescritpion: Packages = Packages()
         var caluclatedPrice: String = "0"
-        var deliveryPrice = org.kiimo.me.main.sender.model.notifications.deliveryAcceptedNotification.DeliveryPrice()
+        var deliveryPrice =
+            org.kiimo.me.main.sender.model.notifications.deliveryAcceptedNotification.DeliveryPrice()
+        var prefeeredPaymentType: Int = 0
 
         fun setPickUpPin(pinOptions: AddressPoint) {
             this.pickUpAddressPoint = pinOptions
@@ -263,8 +273,8 @@ class MainMenuViewModel(private var repository: MainViewModelRepository) : ViewM
     }
 
     data class AddressPoint(
-            var address: String = "",
-            var locationModel: LocationModel? = null
+        var address: String = "",
+        var locationModel: LocationModel? = null
     )
 }
 
