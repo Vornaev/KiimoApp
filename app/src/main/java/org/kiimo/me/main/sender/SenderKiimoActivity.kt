@@ -127,7 +127,6 @@ class SenderKiimoActivity : KiimoMainNavigationActivity() {
             IntentFilter(AppConstants.FIREBASE_BROADCAST)
         )
 
-        openPackageDetailsFragment()
     }
 
     override fun onStop() {
