@@ -11,7 +11,6 @@ import android.os.Handler
 import android.provider.MediaStore
 import androidx.lifecycle.Observer
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
-import com.google.android.gms.common.util.JsonUtils
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_kiimo_main_navigation.*
 import kotlinx.android.synthetic.main.layout_menu_item.view.*
@@ -28,13 +27,14 @@ import org.kiimo.me.main.sender.dialog.DeliverNotFoundDialog
 import org.kiimo.me.main.sender.dialog.SendItemDescriptionDialog
 import org.kiimo.me.main.sender.fragment.*
 import org.kiimo.me.main.sender.model.notifications.ConfirmPickUpNotification.ConfirmPickUpFcmData
-import org.kiimo.me.main.sender.model.notifications.ConfirmPickUpNotification.Delivery
-import org.kiimo.me.main.sender.model.notifications.dropOffDeliverySender.DeliveryType
 import org.kiimo.me.main.sender.model.notifications.dropOffDeliverySender.FcmResponseOnDropOffDelivery
 import org.kiimo.me.main.sender.model.request.pay.PayResponse
 import org.kiimo.me.models.FirebasePayload
-import org.kiimo.me.util.*
+import org.kiimo.me.util.AppConstants
 import org.kiimo.me.util.Image.BitmapNetworkUtil
+import org.kiimo.me.util.JsonUtil
+import org.kiimo.me.util.MediaManager
+import org.kiimo.me.util.PreferenceUtils
 import timber.log.Timber
 
 class SenderKiimoActivity : KiimoMainNavigationActivity() {

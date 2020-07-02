@@ -4,10 +4,8 @@ import android.annotation.SuppressLint
 import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.DialogFragment
 import com.bumptech.glide.Glide
 import org.kiimo.me.R
 import org.kiimo.me.databinding.DialogDeliveryDetailsBinding
@@ -61,7 +59,8 @@ class DeliveryDetailsDialog : BaseKiimoDialog() {
         if (image.isEmpty()) {
 //            binding.deliveryImageView.visibility = View.GONE
         } else {
-            Glide.with(this).load(image).placeholder(R.drawable.no_image_placeholder).override(500, 0).centerCrop()
+            Glide.with(this).load(image).placeholder(R.drawable.no_image_placeholder)
+                .override(500, 0).centerCrop()
                 .into(binding.deliveryImageView)
         }
     }
@@ -87,8 +86,8 @@ class DeliveryDetailsDialog : BaseKiimoDialog() {
             for (pack in it) {
                 pack?.description?.let { description ->
 
-                    if (description.isBlank()) return "No description available"
-                    else return description
+                    return if (description.isBlank()) "No description available"
+                    else "Description: $description"
                 }
             }
         }
