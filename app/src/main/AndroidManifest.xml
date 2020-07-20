@@ -51,7 +51,7 @@
         <activity android:name=".register.RegisterValidationCodeActivity" />
         <activity
                 android:name=".main.MainActivity"
-                android:screenOrientation="portrait"></activity>
+                android:screenOrientation="portrait"/>
         <activity android:name=".register.RegisterProfileSenderInformationActivity" />
         <activity android:name=".inital.InitialActivity" />
         <activity android:name=".register.RegisterChooseTypeActivity" />
