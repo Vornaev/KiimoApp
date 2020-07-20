@@ -26,10 +26,7 @@ import org.kiimo.me.models.delivery.CalculateDeliveryResponse
 import org.kiimo.me.models.delivery.UploadSignatureRequest
 import org.kiimo.me.models.payment.PreferredPayResponse
 import org.kiimo.me.models.payment.PreferredPaymentUser
-import org.kiimo.me.register.model.SmsValidationRequest
-import org.kiimo.me.register.model.SmsValidationResponse
-import org.kiimo.me.register.model.UserRegisterResponse
-import org.kiimo.me.register.model.UserSmsCodeRequest
+import org.kiimo.me.register.model.*
 import org.kiimo.me.service.network.client.HttpHeaders.AuthorizationHeader
 import org.kiimo.me.service.network.client.HttpHeaders.jsonHeader
 import retrofit2.Response
@@ -47,7 +44,7 @@ interface KiimoDeliverHttpClient {
     @POST("api/sms/send-code")
     fun sendCode(
             @Header(ContentTypeHeader) contentType: String = jsonHeader,
-            @Body smsCodeRequest: UserSmsCodeRequest): Observable<UserRegisterResponse>
+            @Body smsCodeRequest: UserSmsCodeRequest): Observable<SmsUserRegisterResponse>
 
 
     @POST("api/sms/validate-code")

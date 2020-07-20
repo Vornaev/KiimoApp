@@ -43,6 +43,8 @@ class RegisterSyncAccountActivity : BaseRegistrationServicesActivity() {
             startActivity(Intent(this, RegisterValidationCodeActivity::class.java))
             //send sms code api url
         })
+
+        viewModel.smsValidationCodeLiveData.observe( )
     }
 
     private fun setPhoneListener() {

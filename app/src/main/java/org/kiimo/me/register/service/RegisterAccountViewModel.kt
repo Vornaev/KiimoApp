@@ -13,7 +13,7 @@ class RegisterAccountViewModel(private var repository: RegisterAccountRepository
 
     var tokenData: MutableLiveData<String> = MutableLiveData()
     var userProfileData = MutableLiveData<UserRegisterResponse>()
-    var smsCodeLiveData = MutableLiveData<UserRegisterResponse>()
+    var smsCodeLiveData = MutableLiveData<SmsUserRegisterResponse>()
     var smsValidationCodeLiveData = MutableLiveData<SmsValidationResponse>()
     var userLoginLiveData = MutableLiveData<UserLoginResponse>()
     var activateUserLiveData = MutableLiveData<StatusMessageDataResponse>()
