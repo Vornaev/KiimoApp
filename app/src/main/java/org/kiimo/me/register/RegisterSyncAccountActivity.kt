@@ -40,11 +40,15 @@ class RegisterSyncAccountActivity : BaseRegistrationServicesActivity() {
 
             val phoneNumber = activityRegisterCCpDialog.fullNumberWithPlus
             viewModel.sendSmsCodeToUser(phoneNumber)
-            startActivity(Intent(this, RegisterValidationCodeActivity::class.java))
+
             //send sms code api url
         })
 
-        viewModel.smsValidationCodeLiveData.observe( )
+        viewModel.smsCodeLiveData.observe(this, Observer {
+            val intent = Intent(this, RegisterValidationCodeActivity::class.java)
+            intent.putExtra("SMSCODE", it.code)
+            startActivity(intent)
+        })
     }
 
     private fun setPhoneListener() {
@@ -60,7 +64,12 @@ class RegisterSyncAccountActivity : BaseRegistrationServicesActivity() {
                     }
                 }
 
-                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                override fun beforeTextChanged(
+                    s: CharSequence?,
+                    start: Int,
+                    count: Int,
+                    after: Int
+                ) {
 
                 }
 

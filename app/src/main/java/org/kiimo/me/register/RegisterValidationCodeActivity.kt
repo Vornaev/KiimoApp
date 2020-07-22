@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.widget.Toast
 import androidx.lifecycle.Observer
 import kotlinx.android.synthetic.main.activity_register_validation_code.*
 import org.kiimo.me.R
@@ -14,6 +15,12 @@ import org.kiimo.me.util.PreferenceUtils
 
 class RegisterValidationCodeActivity : BaseRegistrationServicesActivity() {
 
+    companion object {
+        val SMS_KEY_CODE = "SMSCODE"
+    }
+
+    var smsCode = ""
+
     override fun getLayoutId(): Int {
         return R.layout.activity_register_validation_code
     }
@@ -21,6 +28,7 @@ class RegisterValidationCodeActivity : BaseRegistrationServicesActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        smsCode = intent.getStringExtra(SMS_KEY_CODE)
 
         setEditTextListner()
 
@@ -50,10 +58,12 @@ class RegisterValidationCodeActivity : BaseRegistrationServicesActivity() {
     }
 
     fun sendSmsCodeValidation() {
-        viewModel.sendSmsCodeValidation(
-            activityVerificationCodeEdit.textValue(),
-            getUserPhoneNumber()
-        )
+        if (smsCode.equals(activityVerificationCodeEdit.textValue(), true)) {
+            viewModel.sendSmsCodeValidation(
+                activityVerificationCodeEdit.textValue(),
+                getUserPhoneNumber()
+            )
+        } else Toast.makeText(this, "Invalid sms code", Toast.LENGTH_SHORT).show()
     }
 
     fun openProfileRegisterInformation() {
