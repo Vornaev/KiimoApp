@@ -59,11 +59,14 @@ class RegisterValidationCodeActivity : BaseRegistrationServicesActivity() {
 
     fun sendSmsCodeValidation() {
         if (smsCode.equals(activityVerificationCodeEdit.textValue(), true)) {
+            PreferenceUtils.saveSMSValidatorCache(true, this)
             viewModel.sendSmsCodeValidation(
                 activityVerificationCodeEdit.textValue(),
                 getUserPhoneNumber()
             )
-        } else Toast.makeText(this, "Invalid sms code", Toast.LENGTH_SHORT).show()
+        } else {
+            Toast.makeText(this, "Invalid sms code", Toast.LENGTH_SHORT).show()
+        }
     }
 
     fun openProfileRegisterInformation() {

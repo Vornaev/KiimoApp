@@ -46,7 +46,7 @@ class RegisterSyncAccountActivity : BaseRegistrationServicesActivity() {
 
         viewModel.smsCodeLiveData.observe(this, Observer {
             val intent = Intent(this, RegisterValidationCodeActivity::class.java)
-            intent.putExtra("SMSCODE", it.code)
+            intent.putExtra(RegisterValidationCodeActivity.SMS_KEY_CODE, it.code)
             startActivity(intent)
         })
     }

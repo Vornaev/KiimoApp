@@ -127,6 +127,7 @@ object PreferenceUtils {
         getPreferences(context)[CARD_DETAILS] = ""
         getPreferences(context)[PAYMENT_TYPE] = 0
         getPreferences(context)[HAS_CARD_IN_BANK] = false
+        getPreferences(context)[SMS_VALIDATION_KEY] = false
     }
 
     //Firebase TOken
@@ -200,6 +201,15 @@ object PreferenceUtils {
 
     fun getRemoteCache(context: Context): Boolean {
         return getPreferences(context).getBoolean(DB_KEY, false)
+    }
+
+    val SMS_VALIDATION_KEY = "kiimo.me.sms.validation"
+    fun saveSMSValidatorCache(value: Boolean, context: Context) {
+        getPreferences(context)[SMS_VALIDATION_KEY] = value
+    }
+
+    fun getSmsValidationCache(context: Context): Boolean {
+        return getPreferences(context).getBoolean(SMS_VALIDATION_KEY, false)
     }
 }
 

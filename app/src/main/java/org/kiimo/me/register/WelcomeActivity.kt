@@ -50,7 +50,7 @@ class WelcomeActivity : BaseRegistrationServicesActivity() {
             }
         })
 
-        if (getUserPhoneNumber().isNotEmpty()) {
+        if (getUserPhoneNumber().isNotEmpty() && PreferenceUtils.getSmsValidationCache(this)) {
             viewModel.userLogin()
         } else {
             startInital()
